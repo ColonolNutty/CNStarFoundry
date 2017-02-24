@@ -4,7 +4,6 @@
   "category" : "other",
   "price" : 50,
   "printable" : false,
-  "objectType" : "wire",
 
   "description" : "Put your swag on display.",
   "shortdescription" : "Mannequin",

@@ -1,6 +1,5 @@
 {
   "objectName" : "liquidtank",
-  "objectType" : "wire",
   "rarity" : "Common",
   "description" : "A tank for storing liquid.",
   "shortdescription" : "Liquid Tank",

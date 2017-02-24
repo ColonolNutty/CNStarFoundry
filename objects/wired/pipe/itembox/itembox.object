@@ -1,6 +1,5 @@
 {
   "objectName" : "itembox",
-  "objectType" : "wire",
   "rarity" : "Common",
   "description" : "Item storage and retrieval.",
   "shortdescription" : "Item Storage Box",

@@ -1,7 +1,6 @@
 {
   "objectName" : "airfan",
   "rarity" : "Common",
-  "objectType" : "wire",
   "category" : "wire",
   "price" : 350,
   "printable" : false,

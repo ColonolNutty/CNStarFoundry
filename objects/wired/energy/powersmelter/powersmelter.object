@@ -5,7 +5,6 @@
   "shortdescription" : "Power Smelter",
   "race" : "generic",
   "price" : 200,
-  "objectType" : "wire",
   "printable" : false,
 
   "inventoryIcon" : "powersmelter.png:idle",

@@ -1,6 +1,5 @@
 {
   "objectName" : "wirelampyellow",
-  "objectType" : "wire",
   "printable" : false,
   "rarity" : "Common",
   "category" : "light",
@@ -19,18 +18,20 @@
 
   "inventoryIcon" : "wirelampyellowicon.png",
   "orientations" : [
-
     {
       "image" : "wirelamp.png:yellow.off",
       "imagePosition" : [0, 0],
-
+	  
       "spaces" : [ [0, 0], [0, 1] ],
       "fgAnchors" : [ [0, -1] ]
     }
   ],
+ 
+  "pointLight" : true,
+  "lightColor" : [220, 220, 0],
 
-  "scripts" : [ "/objects/wired/wirelamp/wirelamp.lua" ],
-  "scriptDelta" : 6,
+  "scripts" : [ "/objects/wired/light/light.lua" ],
+  "scriptDelta" : 60,
 
   "animation" : "/objects/wired/wirelamp/wirelamp.animation",
 
@@ -39,7 +40,5 @@
   },
   "animationPosition" : [0, 0],
 
-  "inboundNodes" : [ [0, 0] ],
-
-  "lampColor" : "yellow"
+  "inputNodes" : [ [0, 0] ]
 }

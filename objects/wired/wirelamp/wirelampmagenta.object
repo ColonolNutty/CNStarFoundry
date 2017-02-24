@@ -1,6 +1,5 @@
 {
   "objectName" : "wirelampmagenta",
-  "objectType" : "wire",
   "printable" : false,
   "rarity" : "Common",
   "category" : "light",
@@ -28,9 +27,12 @@
       "fgAnchors" : [ [0, -1] ]
     }
   ],
+ 
+  "pointLight" : true,
+  "lightColor" : [220, 0, 220],
 
-  "scripts" : [ "/objects/wired/wirelamp/wirelamp.lua" ],
-  "scriptDelta" : 6,
+  "scripts" : [ "/objects/wired/light/light.lua" ],
+  "scriptDelta" : 60,
 
   "animation" : "/objects/wired/wirelamp/wirelamp.animation",
 
@@ -39,7 +41,5 @@
   },
   "animationPosition" : [0, 0],
 
-  "inboundNodes" : [ [0, 0] ],
-
-  "lampColor" : "magenta"
+  "inputNodes" : [ [0, 0] ]
 }

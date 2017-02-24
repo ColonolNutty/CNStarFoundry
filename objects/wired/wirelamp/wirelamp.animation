@@ -1,7 +1,7 @@
 {
   "animatedParts" : {
     "stateTypes" : {
-      "lampState" : {
+      "light" : {
         "default" : "off",
         "states" : {
           "off" : {},
@@ -17,7 +17,7 @@
         },
 
         "partStates" : {
-          "lampState" : {
+          "light" : {
             "off" : {
               "properties" : {
                 "image" : "<partImage>.off"

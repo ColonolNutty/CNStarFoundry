@@ -1,6 +1,5 @@
 {
   "objectName" : "wirelampblue",
-  "objectType" : "wire",
   "printable" : false,
   "rarity" : "Common",
   "category" : "light",
@@ -19,7 +18,6 @@
 
   "inventoryIcon" : "wirelampblueicon.png",
   "orientations" : [
-
     {
       "image" : "wirelamp.png:blue.off",
       "imagePosition" : [0, 0],
@@ -28,9 +26,12 @@
       "fgAnchors" : [ [0, -1] ]
     }
   ],
+ 
+  "pointLight" : true,
+  "lightColor" : [0, 0, 255],
 
-  "scripts" : [ "/objects/wired/wirelamp/wirelamp.lua" ],
-  "scriptDelta" : 6,
+  "scripts" : [ "/objects/wired/light/light.lua" ],
+  "scriptDelta" : 60,
 
   "animation" : "/objects/wired/wirelamp/wirelamp.animation",
 
@@ -39,7 +40,5 @@
   },
   "animationPosition" : [0, 0],
 
-  "inboundNodes" : [ [0, 0] ],
-
-  "lampColor" : "blue"
+  "inputNodes" : [ [0, 0] ]
 }

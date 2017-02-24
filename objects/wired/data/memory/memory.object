@@ -1,7 +1,6 @@
 {
   "objectName" : "memory",
   "rarity" : "Common",
-  "objectType" : "wire",
   "description" : "A memory storage cell.",
   "shortdescription" : "Memory Cell",
   "race" : "generic",

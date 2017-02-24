@@ -1,7 +1,6 @@
 {
   "objectName" : "smallwallswitch",
   "rarity" : "Common",
-  "objectType" : "wire",
   "description" : "Flippin' awesome.",
   "shortdescription" : "Small Wall Switch",
   "race" : "generic",

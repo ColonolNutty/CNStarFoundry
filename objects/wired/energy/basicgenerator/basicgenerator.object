@@ -5,7 +5,6 @@
   "shortdescription" : "Combustion Generator",
   "race" : "generic",
   "price" : 200,
-  "objectType" : "wire",
   "printable" : false,
 
   "breakDropOptions": [],

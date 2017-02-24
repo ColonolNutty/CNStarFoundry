@@ -1,7 +1,6 @@
 {
   "objectName" : "tinywallbutton",
   "rarity" : "Common",
-  "objectType" : "wire",
   "description" : "A compact button that can be toggled on or off.",
   "shortdescription" : "Tiny Wall Button",
   "race" : "generic",
