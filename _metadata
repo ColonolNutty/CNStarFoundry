@@ -1,0 +1,9 @@
+{
+  "author" : "ColonolNutty",
+  "description" : "A comprehensive system of Starbound mods to automate the movement, production, and storage of materials, liquids, items, energy and data.",
+  "friendlyName" : "CN StarFoundry: Back From Deep Space",
+  "name" : "CNStarFoundry",
+  "version" : "2017-02-24",
+  "support_url": "https://github.com/ColonolNutty/CNStarFoundry",
+  "thanks": "Starfoundry Collaborators for the original mod"
+}
