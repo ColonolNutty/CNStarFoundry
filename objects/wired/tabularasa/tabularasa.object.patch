@@ -1,0 +1,11 @@
+[
+	{
+		"op": "add",
+		"path": "/filterButtons/-",
+		"value": {
+			"baseImage" : "/objects/wired/tabularasa/sfbutton.png",
+			"baseImageChecked" : "/objects/wired/tabularasa/sfbuttonchecked.png",
+			"filter" : "sfmod"
+		}
+	}
+]
