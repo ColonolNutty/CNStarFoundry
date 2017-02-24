@@ -2,7 +2,7 @@
   "input" : [ 
     { "item" : "titaniumbar", "count" : 10 },
     { "item" : "laserdiode", "count" : 1 },
-    { "item" : "circuitboard", "count" : 2 },
+    { "item" : "siliconboard", "count" : 2 },
     { "item" : "money", "count" : 500 }
   ],
   "output" : {

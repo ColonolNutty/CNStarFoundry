@@ -1,6 +1,6 @@
 {
   "input" : [
-    { "item" : "steelbar", "count" : 2 }
+    { "item" : "ironbar", "count" : 2 }
   ],
   "output" : {
     "item" : "cleanpipeSW",

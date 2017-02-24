@@ -1,7 +1,7 @@
 {
   "input" : [ ],
   "output" : {
-    "item" : "sewerpipeNW",
+    "item" : "sewerpipe",
     "count" : 1
   },
   "groups" : [ "mod", "sfmod" ]
