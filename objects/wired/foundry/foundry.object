@@ -1,14 +1,45 @@
 {
   "objectName" : "foundry",
+  "colonyTags" : ["crafting"],
+  "category" : "crafting",
   "rarity" : "Legendary",
-  "objectType" : "wire",
-  "printable" : false,
-
+  "description" : "Automation ahead!",
+  "shortdescription" : "Foundry",
+  "race" : "generic",
   "interactAction" : "OpenCraftingInterface",
   "interactData" : {
     "config" : "/interface/windowconfig/foundry.config",
     "filter" : [ "foundry" ]
   },
+  "printable" : false,
+  "price" : 65,
+
+  "apexDescription" : "For testing!",
+  "avianDescription" : "For testing!",
+  "floranDescription" : "For testing!",
+  "glitchDescription" : "For testing!",
+  "humanDescription" : "For testing!",
+  "hylotlDescription" : "For testing!",
+
+  "inventoryIcon" : "foundry.png",
+  "orientations" : [
+    {
+      "image" : "foundry.png",
+      "imagePosition" : [0, 0],
+      "frames" : 5,
+      "animationCycle" : 3.5,
+      
+      "spaceScan" : 0.1,
+      "anchors" : [ "bottom" ],
+      "direction" : "right"
+    }
+  ],
+  
+  "animation" : "/objects/wired/foundry/foundry.animation",
+  "animationParts" : {
+    "tabula" : "foundry.png"
+  },
+  "animationPosition" : [0, 0],
 
   "filterButtons" : [ 
     {
@@ -36,37 +67,5 @@
     "baseImageChecked" : "/objects/wired/foundry/icons/magnetspressed.png",
     "filter" : "magnets"
 	}
-  ],
-  
-  "description" : "Automation ahead!",
-  "shortdescription" : "Foundry",
-  "race" : "generic",
-  "category" : "crafting",
-
-  "apexDescription" : "For testing!",
-  "avianDescription" : "For testing!",
-  "floranDescription" : "For testing!",
-  "glitchDescription" : "For testing!",
-  "humanDescription" : "For testing!",
-  "hylotlDescription" : "For testing!",
-
-  "inventoryIcon" : "foundry.png",
-  "orientations" : [
-    {
-      "image" : "foundry.png",
-      "imagePosition" : [0, 0],
-      "frames" : 5,
-      "animationCycle" : 3.5,
-      
-      "spaceScan" : 0.1,
-      "anchors" : [ "bottom" ],
-      "direction" : "right"
-    }
-  ],
-  
-  "animation" : "/objects/wired/foundry/foundry.animation",
-  "animationParts" : {
-    "tabula" : "foundry.png"
-  },
-  "animationPosition" : [0, 0]
+  ]
 }
