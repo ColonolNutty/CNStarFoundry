@@ -9,48 +9,65 @@
   "printable" : false,
 
   "inventoryIcon" : "relayicon.png",
-
   "orientations" : [
     {
-      //DUMMY ORIENTATION USED FOR PLACEMENT PREVIEW
-      "relayType" : "air",
-
-      "image" : "relay.png:air",
-
-      "collision" : "solid",
-      "anchors" : [ "left", "right", "top", "bottom" ],
-      "direction" : "right",
-
-      "energyCollisionBlocks" : [ [0, 0] ]
-    },
-    {
-      "relayType" : "wall",
-
+	  //left
       "image" : "relay.png:wall",
 
       "collision" : "solid",
-      "anchors" : [ "left", "right" ],
+      "anchors" : [ "left" ],
       "direction" : "right",
+      "fgAnchors" : [ [-1, 0] ],
+      "animationPosition" : [1, 0],
 
-      "energyCollisionBlocks" : [ [0, 0] ]
+      "energyCollisionBlocks" : [ [0, 0] ],
+	  "scriptConfig": {
+		"relayType" : "wall"
+	  }
     },
     {
-      "relayType" : "wall",
-
+	  //right
       "image" : "relay.png:wall",
+      "imagePosition" : [1, 0],
 
       "collision" : "solid",
-      "anchors" : [ "top", "bottom" ],
+      "anchors" : [ "right" ],
       "direction" : "right",
+      "fgAnchors" : [ [1, 0] ],
 
       "energyCollisionBlocks" : [ [0, 0] ]
     },
     {
-      "relayType" : "air",
+	  //bottom
+      "image" : "relay.png:wall",
+      "imagePosition" : [1, 0],
+
+      "collision" : "solid",
+      "anchors" : [ "bottom" ],
+      "direction" : "right",
+      "fgAnchors" : [ [0, -1] ],
+
+      "energyCollisionBlocks" : [ [0, 0] ]
+    },
+    {
+	  //top
+      "image" : "relay.png:wall",
+      "imagePosition" : [1, 0],
+
+      "collision" : "solid",
+      "anchors" : [ "top" ],
+      "direction" : "right",
+      "fgAnchors" : [ [0, 1] ],
+
+      "energyCollisionBlocks" : [ [0, 0] ]
+    },
+    {
 
       "image" : "relay.png:air",
-
+      "imagePosition" : [0, 0],
       "anchors" : [ ],
+      "fgAnchors" : [ ],
+
       "direction" : "right"
     }
   ],

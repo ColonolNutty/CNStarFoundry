@@ -60,7 +60,6 @@
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "ptmagnetblockposstrong" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "ptmagnetblockposweak" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "ptmagnetizer" } },
-	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "ptmagnetizeTech-chip" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "quarry" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "quarrymarker" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "quickwallbutton" } },
