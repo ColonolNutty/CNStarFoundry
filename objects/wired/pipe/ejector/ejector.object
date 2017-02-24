@@ -1,0 +1,93 @@
+{
+  "objectName" : "ejector",
+  "objectType" : "wire",
+  "rarity" : "Common",
+  "description" : "This is a pipe output, for ejecting items.",
+  "shortdescription" : "Ejector",
+  "race" : "generic",
+  "category" : "wire",
+  "printable" : false,
+
+  "apexDescription" : "Ejector",
+  "avianDescription" : "Ejector",
+  "floranDescription" : "Ejector",
+  "glitchDescription" : "Ejector",
+  "humanDescription" : "Ejector",
+  "hylotlDescription" : "Ejector",
+
+  "inventoryIcon" : "ejector.png",
+
+  "animation" : "/objects/wired/pipe/ejector/ejector.animation",
+  "animationParts" : {
+    "ejector" : "ejector.png"
+  },
+  "animationPosition" : [0, 0],
+
+  "orientations" : [
+    {
+      "image" : "ejector.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "background" ]
+    },
+    {
+      "image" : "ejector.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "top" ]
+    },
+    {
+      "image" : "ejector.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "bottom" ]
+    },
+    {
+      "image" : "ejector.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "left" ]
+    },
+    {
+      "image" : "ejector.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "right" ]
+    },
+    {
+      "image" : "ejector.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [0, 1] ]
+    },
+    {
+      "image" : "ejector.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [1, 0] ]
+    },
+    {
+      "image" : "ejector.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [0, -1] ]
+    },
+    {
+      "image" : "ejector.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [-1, 0] ]
+    }
+  ],
+  
+  "scripts" : [
+    "/objects/wired/pipe/ejector/ejector.lua",
+    "/scripts/pipes/itempipes.lua",
+    "/scripts/pipesapi.lua",
+    "/scripts/util.lua",
+    "/scripts/vec2.lua"
+  ],
+  "scriptDelta" : 100,
+  
+  "itemNodes" : [ {"offset": [0, 0], "dir": [-1, 0]}, {"offset": [0, 0], "dir": [0, -1]}, {"offset": [0, 0], "dir": [1, 0]}, {"offset": [0, 0], "dir": [0, 1]} ]
+}

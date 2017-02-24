@@ -1,0 +1,37 @@
+{
+  "objectName" : "wiretap",
+  "rarity" : "Common",
+  "objectType" : "wire",
+  "description" : "Keeps a running log of data received, interact to show the log",
+  "shortdescription" : "Wiretap",
+  "race" : "generic",
+  
+  "category" : "wire",
+  "price" : 500,
+  "printable" : false,
+
+  "inventoryIcon" : "wiretapicon.png",
+  "orientations" : [
+    {
+      "image" : "wiretap.png:<color>.off",
+      "imagePosition" : [-8, -8],
+
+      "spaceScan" : 0.1,
+      "anchors" : [ "background" ]
+    }
+  ],
+
+  "scripts" : [ "/scripts/datawire.lua", "wiretap.lua" ],
+  "scriptDelta" : 5,
+
+  "animation" : "wiretap.animation",
+
+  "animationParts" : {
+    "wiretap" : "wiretap.png"
+  },
+  "animationPosition" : [-8, -8],
+
+  "inboundNodes" : [ [-1, -1] ],
+  "outboundNodes" : [ [ 0, -1] ]
+
+}

@@ -1,0 +1,58 @@
+{
+  "objectName" : "itembox",
+  "objectType" : "wire",
+  "rarity" : "Common",
+  "description" : "Item storage and retrieval.",
+  "shortdescription" : "Item Storage Box",
+  "race" : "generic",
+  "category" : "wire",
+  "printable" : false,
+
+  "apexDescription" : "Storage Box",
+  "avianDescription" : "Storage Box",
+  "floranDescription" : "Storage Box",
+  "glitchDescription" : "Storage Box",
+  "humanDescription" : "Storage Box",
+  "hylotlDescription" : "Storage Box",
+  
+  "breakDropOptions": [],
+
+  "inventoryIcon" : "itembox.png",
+  "orientations" : [
+    {
+      "dualImage" : "itembox.png",
+
+      "imagePosition" : [0, 0],
+      "frames" : 1,
+      "animationCycle" : 1.0,
+
+      "spaceScan" : 0.1,
+      "anchors" : [ "bottom" ],
+      "collision" : "platform"
+    }
+  ],
+  
+  "animation" : "/objects/wired/pipe/itembox/itembox.animation",
+  "animationParts" : {
+    "box" : "itembox.png",
+    "invbar" : "invbar.png"
+  },
+  "animationPosition" : [12, 8],
+  
+  "scripts" : [
+    "/objects/wired/pipe/itembox/itembox.lua",
+    "/scripts/pipes/itempipes.lua",
+    "/scripts/pipesapi.lua",
+    "/scripts/storageapi.lua",
+    "/scripts/util.lua",
+    "/scripts/vec2.lua"
+  ],
+  "scriptDelta" : 30,
+  
+  
+  "inboundNodes" : [[0, 1], [2, 1]],
+  
+  "itemNodes" : [ {"offset": [0, 0], "dir": [-1, 0]}, {"offset": [2, 0], "dir": [1, 0]} ],
+  
+  "itemPushRate" : 0.5
+}

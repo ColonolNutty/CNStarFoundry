@@ -1,0 +1,35 @@
+{
+  "objectName" : "layerswap",
+  "objectType" : "wire",
+  "rarity" : "Common",
+  "description" : "Swaps blocks between foreground and background when activated.",
+  "shortdescription" : "Layer Swapper",
+  "race" : "generic",
+  "category" : "wire",
+  "price" : 1000,
+  "printable" : false,
+
+  "inventoryIcon" : "layerswapicon.png",
+
+  "orientations" : [
+    {
+      "image" : "layerswap.png:default.foreground",
+      "imagePosition" : [0, -8],
+
+      "spaceScan" : 0.1,
+      "anchors" : [ "background" ],
+      "direction" : "right"
+    }
+  ],
+
+  "scripts" : [ "/scripts/datawire.lua", "/scripts/tilemanipulation.lua", "layerswap.lua" ],
+  "scriptDelta" : 2,
+
+  "animation" : "layerswap.animation",
+  "animationParts" : {
+    "switch" : "layerswap.png"
+  },
+  "animationPosition" : [0, -8],
+
+  "inboundNodes" : [ [0, 0] ]
+}

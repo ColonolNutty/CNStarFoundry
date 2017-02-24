@@ -1,0 +1,18 @@
+{
+
+  "frameGrid" : {
+    "size" : [8, 8],
+    "dimensions" : [2, 3],
+    "names" : [
+      [ "air.default", "wall.default" ],
+      [ "air.subtle", "wall.subtle" ],
+      [ "air.hidden", "wall.hidden" ]
+    ]
+  },
+
+  "aliases" : {
+    "off" : "air.default",
+    "air" : "air.default",
+    "wall" : "wall.default"
+  }
+}

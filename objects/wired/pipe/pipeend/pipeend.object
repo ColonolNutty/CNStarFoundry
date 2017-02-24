@@ -1,0 +1,96 @@
+{
+  "objectName" : "pipeend",
+  "objectType" : "wire",
+  "rarity" : "Common",
+  "description" : "A spout that can be used for input or output of liquids.",
+  "shortdescription" : "Pipe Spout",
+  "race" : "generic",
+  "category" : "wire",
+  "printable" : false,
+
+  "apexDescription" : "Pipe spout",
+  "avianDescription" : "Pipe spout",
+  "floranDescription" : "Pipe spout",
+  "glitchDescription" : "Pipe spout",
+  "humanDescription" : "Pipe spout",
+  "hylotlDescription" : "Pipe spout",
+
+  "inventoryIcon" : "pipeend.png",
+
+  "animation" : "/objects/wired/pipe/pipeend/pipeend.animation",
+  "animationParts" : {
+    "pipe" : "pipeend.png"
+  },
+  "animationPosition" : [0, 0],
+  
+  "orientations" : [
+    {
+      "image" : "pipeend.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "background" ]
+    },
+    {
+      "image" : "pipeend.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "top" ]
+    },
+    {
+      "image" : "pipeend.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "bottom" ]
+    },
+    {
+      "image" : "pipeend.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "left" ]
+    },
+    {
+      "image" : "pipeend.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "anchors" : [ "right" ]
+    },
+    {
+      "image" : "pipeend.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [0, 1] ]
+    },
+    {
+      "image" : "pipeend.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [1, 0] ]
+    },
+    {
+      "image" : "pipeend.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [0, -1] ]
+    },
+    {
+      "image" : "pipeend.png",
+      "direction" : "right",
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [-1, 0] ]
+    }
+  ],
+  
+  "scripts" : [
+    "/objects/wired/pipe/pipeend/pipeend.lua",
+    "/scripts/pipes/liquidpipes.lua",
+    "/scripts/pipes/itempipes.lua",
+    "/scripts/pipesapi.lua",
+    "/scripts/util.lua",
+    "/scripts/vec2.lua"
+  ],
+  "scriptDelta" : 5,
+  
+  "liquidNodes" : [ {"offset": [0, 0], "dir": [-1, 0]}, {"offset": [0, 0], "dir": [0, -1]}, {"offset": [0, 0], "dir": [1, 0]}, {"offset": [0, 0], "dir": [0, 1]} ],
+  
+  "liquidConversions": [ [5, 3], [2, 1] ]
+}

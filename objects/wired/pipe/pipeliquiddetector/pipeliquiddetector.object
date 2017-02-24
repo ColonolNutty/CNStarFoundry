@@ -1,0 +1,105 @@
+{
+  "objectName" : "pipeliquiddetector",
+  "rarity" : "Common",
+  "objectType" : "wire",
+  "description" : "Detects when liquids pass through, and outputs the liquid amount.",
+  "shortdescription" : "Liquid Detector Pipe",
+  "race" : "generic",
+
+  "category" : "wire",
+  "price" : 300,
+  "printable" : false,
+
+  "inventoryIcon" : "pipeliquiddetectoricon.png",
+  "orientations" : [
+    {
+      "image" : "pipeliquiddetector.png:<color>.off",
+
+      "spaceScan" : 0.1,
+      "anchors" : [ "background" ]
+    },
+    {
+      "image" : "pipeliquiddetector.png:<color>.off",
+
+      "spaceScan" : 0.1,
+      "anchors" : [ "top" ]
+    },
+    {
+      "image" : "pipeliquiddetector.png:<color>.off",
+
+      "spaceScan" : 0.1,
+      "anchors" : [ "bottom" ]
+    },
+    {
+      "image" : "pipeliquiddetector.png:<color>.off",
+
+      "spaceScan" : 0.1,
+      "anchors" : [ "left" ]
+    },
+    {
+      "image" : "pipeliquiddetector.png:<color>.off",
+
+      "spaceScan" : 0.1,
+      "anchors" : [ "right" ]
+    },
+    {
+      "image" : "pipeliquiddetector.png:<color>.off",
+      
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [0, 1] ]
+    },
+    {
+      "image" : "pipeliquiddetector.png:<color>.off",
+      
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [1, 0] ]
+    },
+    {
+      "image" : "pipeliquiddetector.png:<color>.off",
+      
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [0, -1] ]
+    },
+    {
+      "image" : "pipeliquiddetector.png:<color>.off",
+      
+      "spaceScan" : 0.1,
+      "bgAnchors" : [ [-1, 0] ]
+    }
+  ],
+
+  "scripts" : [
+    "/scripts/datawire.lua",
+    "/objects/wired/pipe/pipeliquiddetector/pipeliquiddetector.lua",
+    "/scripts/pipes/liquidpipes.lua",
+    "/scripts/pipes/itempipes.lua",
+    "/scripts/pipesapi.lua",
+    "/scripts/util.lua",
+    "/scripts/vec2.lua"
+  ],
+  "scriptDelta" : 5,
+
+  "animation" : "/objects/wired/pipe/pipeliquiddetector/pipeliquiddetector.animation",
+
+  "animationParts" : {
+    "detector" : "pipeliquiddetector.png"
+  },
+  "animationPosition" : [0, 0],
+
+  "outboundNodes" : [ [0, 0] ],
+
+  "detectCooldown" : 0.35,
+
+  "liquidNodes" : [
+    {"offset": [0, 0], "dir": [-1, 0]},
+    {"offset": [0, 0], "dir": [1, 0]},
+    {"offset": [0, 0], "dir": [0, -1]},
+    {"offset": [0, 0], "dir": [0, 1]}
+  ],
+  "itemNodes" : [
+    {"offset": [0, 0], "dir": [-1, 0]},
+    {"offset": [0, 0], "dir": [1, 0]},
+    {"offset": [0, 0], "dir": [0, -1]},
+    {"offset": [0, 0], "dir": [0, 1]}
+  ]
+}
