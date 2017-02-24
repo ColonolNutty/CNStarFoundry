@@ -2,7 +2,7 @@
   "projectileName" : "juicecapsule",
   "physics" : "grenade",
   "level" : 1,
-  "frames" : "juicecapsule.png",
+  "image" : "juicecapsule.png",
   "animationCycle" : 1,
   "frameNumber" : 1,
   "timeToLive" : 8,

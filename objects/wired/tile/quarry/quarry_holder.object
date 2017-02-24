@@ -8,6 +8,7 @@
   "description" : "Just for the looks.",
   "shortdescription" : "Quarry holder",
   "race" : "generic",
+  "inventoryIcon": "quarry_holder.png",
 
   "apexDescription" : "A vent.",
   "avianDescription" : "Ventilation.",

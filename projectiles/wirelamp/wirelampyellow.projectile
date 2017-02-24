@@ -1,7 +1,7 @@
 {
   "projectileName" : "wirelampyellow",
   "level" : 1,
-  "frames" : "invisibleprojectile.png",
+  "image" : "invisibleprojectile.png",
  
   "speed" : 0.0,
   "fallSpeed" : 0,

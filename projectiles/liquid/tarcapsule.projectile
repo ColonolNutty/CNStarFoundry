@@ -2,7 +2,7 @@
   "projectileName" : "tarcapsule",
   "physics" : "grenade",
   "level" : 1,
-  "frames" : "tarcapsule.png",
+  "image" : "tarcapsule.png",
   "animationCycle" : 1,
   "frameNumber" : 1,
   "timeToLive" : 8,

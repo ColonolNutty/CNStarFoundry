@@ -6,6 +6,6 @@
   "frameNumber" : 6,
   "level" : 1,
   "timeToLive" : 0.2,
-  "frames" : "magnetexplosion.png",
+  "image" : "magnetexplosion.png",
   "damageKind" : "default"
 }

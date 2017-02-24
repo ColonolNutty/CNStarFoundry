@@ -4,7 +4,7 @@
   //"bounces" : 0,
   "level" : 3,
   "damageKindImage" : "icon.png",
-  "frames" : "energytransfer.png",
+  "image" : "energytransfer.png",
   "animationCycle" : 0.5,
   "frameNumber" : 1,
   "power" : 0,

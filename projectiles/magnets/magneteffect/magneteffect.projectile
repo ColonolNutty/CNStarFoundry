@@ -1,6 +1,6 @@
 {
   "projectileName" : "magnetEffect",
-  "frames" : "magnetEffect.png",
+  "image" : "magnetEffect.png",
   "animationCycle" : 0.55,
   "level" : 1,
   "frameNumber" : 5,

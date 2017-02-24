@@ -2,7 +2,7 @@
   "projectileName" : "lavacapsule",
   "physics" : "grenade",
   "level" : 1,
-  "frames" : "lavacapsule.png",
+  "image" : "lavacapsule.png",
   "animationCycle" : 1,
   "frameNumber" : 1,
   "timeToLive" : 8,

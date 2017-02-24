@@ -2,7 +2,7 @@
   "projectileName" : "acidcapsule",
   "physics" : "grenade",
   "level" : 1,
-  "frames" : "acidcapsule.png",
+  "image" : "acidcapsule.png",
   "animationCycle" : 1,
   "frameNumber" : 1,
   "timeToLive" : 8,

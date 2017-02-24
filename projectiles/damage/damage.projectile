@@ -1,6 +1,6 @@
 {
   "projectileName" : "damage",
-  "frames" : "damage.png",
+  "image" : "damage.png",
   "physics" : "laser",
   "level" : 3,
   "frameNumber" : 1,

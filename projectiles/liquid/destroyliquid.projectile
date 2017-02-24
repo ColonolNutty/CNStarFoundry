@@ -2,7 +2,7 @@
   "projectileName" : "destroyliquid",
   "physics" : "grenade",
   "level" : 1,
-  "frames" : "invisibleprojectile.png",
+  "image" : "invisibleprojectile.png",
   "animationCycle" : 0.5,
   "frameNumber" : 1,
 

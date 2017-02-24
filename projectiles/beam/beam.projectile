@@ -1,6 +1,6 @@
 {
   "projectileName" : "beam",
-  "frames" : "beam.png",
+  "image" : "beam.png",
   "physics" : "laser",
   "level" : 3,
   "frameNumber" : 1,
