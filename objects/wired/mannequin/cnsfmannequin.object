@@ -1,5 +1,5 @@
 {
-  "objectName" : "mannequin",
+  "objectName" : "cnsfmannequin",
   "rarity" : "Common",
   "category" : "other",
   "price" : 50,
@@ -29,7 +29,7 @@
     "type" : "friendly"
   },
 
-  "scripts" : [ "mannequin.lua" ],
+  "scripts" : [ "cnsfmannequin.lua" ],
   "scriptDelta" : 30,
 
   "mannequin" : {

@@ -5,6 +5,12 @@
 	"ouchNoises" : [ "/sfx/humanoid/humanhurt_male1.wav", "/sfx/humanoid/humanhurt_female1.wav" ],
 	"charGenTextLabels" : [ "SKIN COLOR", "HAIR STYLE", "SHIRT", "PANTS", "UNDY COLOR", "HAIR COLOR", "SHIRT COLOR", "PANTS COLOR", "DUMMY", "PERSONALITY" ],
 
+	"charCreationTooltip" : {
+		"title" : "Dummy",
+		"subTitle" : "O2",
+		"description" : "In spite of their long and turbulent history, humans tend to possess a lighthearted and optimistic outlook towards life and the universe. Humanity set about forming a society that would unite the people of the universe - The Terrene Protectorate."
+	},
+  
 	"defaultBlueprints" : {
 		"tier1" : [
 			{ "item" : "humantier1hammer" }

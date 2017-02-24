@@ -11,5 +11,6 @@
   "floranDescription" : "Lying down pipe.",
   "multicolored" : true,
   "footstepSound" : "/sfx/blocks/footstep_lightmetal.wav",
+  "category" : "materials",
   "health" : 10
 }

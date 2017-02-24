@@ -1,7 +1,7 @@
 {
   "input" : [ ],
   "output" : {
-    "item" : "battery",
+    "item" : "cnsfbattery",
     "count" : 1
   },
   "groups" : [ "mod", "sfmod" ]

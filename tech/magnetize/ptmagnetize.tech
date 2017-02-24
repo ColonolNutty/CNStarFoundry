@@ -1,7 +1,13 @@
 {
-  "script" : "ptmagnetize.lua",
+  "name": "ptmagnetize",
+  "type" : "head",
+  "rarity" : "Legendary",
+  "scripts" : ["ptmagnetize.lua"],
   "actions" : [ "magnetizeActivate", "magnetizeDeactivate", "magnetizeReverse" ],
   "animator" : "ptmagnetize.animation",
+  "description" : "Turn into a sphere and become magnetic!",
+  "shortDescription" : "PT Magnetize",
+  "icon" : "/tech/magnetball.png",
 
   "ballCustomMovementParameters" : {
     "standingPoly" : [ [-0.75, -0.75], [0.75, -0.75], [0.75, 0.75], [-0.75, 0.75] ],
