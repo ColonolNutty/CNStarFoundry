@@ -1,5 +1,5 @@
 function init(args)
-  entity.setInteractive(true)
+  object.setInteractive(true)
 
   if storage.state == nil then
     output(false)
@@ -17,15 +17,15 @@ function onInteraction(args)
 end
 
 function onInboundNodeChange(args)
-  checkInboundNodes()
+  checkInputNodes()
 end
 
 function onNodeConnectionChange(args)
-  checkInboundNodes()
+  checkInputNodes()
 end
 
-function checkInboundNodes()
-  if entity.inboundNodeCount() > 0 and entity.getInboundNodeLevel(0) then
+function checkInputNodes()
+  if object.inputNodeCount() > 0 and object.getInputNodeLevel(0) then
     output(not storage.state)
   end
 end
@@ -33,12 +33,12 @@ end
 function output(state)
   storage.state = state
   if state then
-    entity.setAnimationState("switchState", "on")
-    entity.playSound("onSounds");
-    entity.setAllOutboundNodes(true)
+    animator.setAnimationState("switchState", "on")
+    animator.playSound("onSounds");
+    object.setAllOutputNodes(true)
   else
-    entity.setAnimationState("switchState", "off")
-    entity.playSound("offSounds");
-    entity.setAllOutboundNodes(false)
+    animator.setAnimationState("switchState", "off")
+    animator.playSound("offSounds");
+    object.setAllOutputNodes(false)
   end
 end
