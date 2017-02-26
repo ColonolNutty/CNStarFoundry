@@ -28,7 +28,7 @@
 	  "/objects/wired/momentaryswitch.lua",		
 	  "/scripts/npcToyObject.lua"
   ],
-  "scriptDelta" : 5,
+  "scriptDelta" : 60,
 
   "animation" : "/objects/wired/switch/switchtoggle.animation",
 

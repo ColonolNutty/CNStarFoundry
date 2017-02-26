@@ -12,7 +12,9 @@ function init()
 end
 
 function onInteraction(args)
-  output(not storage.state)
+ if storage.state == false then
+  output(true)
+ end
 
   animator.playSound("on");
   storage.timer = self.interval
@@ -37,7 +39,7 @@ function output(state)
   end
 end
 
-function main()
+function update(dt)
   if storage.timer > 0 then
     storage.timer = storage.timer - 1
 
