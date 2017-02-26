@@ -1,5 +1,6 @@
 {
   "objectName" : "quarry_fake",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Mines out blocks for you.",
   "shortdescription" : "Quarry end node",

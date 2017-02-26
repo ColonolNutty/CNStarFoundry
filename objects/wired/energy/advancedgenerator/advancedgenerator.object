@@ -1,5 +1,6 @@
 {
   "objectName" : "advancedgenerator",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "A generator that is powered by an input pipe.",
   "shortdescription" : "Advanced Generator",

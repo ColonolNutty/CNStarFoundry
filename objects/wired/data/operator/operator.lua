@@ -1,6 +1,6 @@
 function init(virtual)
   if not virtual then
-    entity.setInteractive(true)
+    object.setInteractive(true)
 
     if not storage.data1 then
       storage.data1 = 0
@@ -24,7 +24,7 @@ function init(virtual)
     end
 
     self.flipStr = ""
-    if entity.direction() == -1 then
+    if object.direction() == -1 then
       self.flipStr = "flipped."
     end
 
@@ -82,7 +82,7 @@ function operate()
 end
 
 function updateAnimationState()
-  entity.setAnimationState("operatorState", self.flipStr..storage.currentMode)
+  animator.setAnimationState("operatorState", self.flipStr..storage.currentMode)
 end
 
 function main()

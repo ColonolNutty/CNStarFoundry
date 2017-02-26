@@ -2,8 +2,8 @@ function init(v)
   energy.init()
   if storage.active == nil then storage.active = false end
   setActive(storage.active)
-  self.workSound = entity.configParameter("workSound")
-  self.moveSpeed = entity.configParameter("moveSpeed")
+  self.workSound = config.getParameter("workSound")
+  self.moveSpeed = config.getParameter("moveSpeed")
   self.st = 0
   onNodeConnectionChange(nil)
 end
@@ -13,17 +13,17 @@ function die()
 end
 
 function onNodeConnectionChange(args)
-  if entity.isInboundNodeConnected(0) then
-    entity.setInteractive(false)
+  if object.isInputNodeConnected(0) then
+    object.setInteractive(false)
   else
-    entity.setInteractive(true)
+    object.setInteractive(true)
   end
-  onInboundNodeChange(args)
+  onInputNodeChange(args)
 end
 
-function onInboundNodeChange(args)
-  if entity.isInboundNodeConnected(0) then
-    setActive(entity.getInboundNodeLevel(0))
+function onInputNodeChange(args)
+  if object.isInputNodeConnected(0) then
+    setActive(object.getInputNodeLevel(0))
   end
 end
 
@@ -34,8 +34,8 @@ end
 function setActive(flag)
   if not flag or energy.consumeEnergy(nil, true) then
     storage.active = flag
-    if flag then entity.setAnimationState("workState", "work")
-    else entity.setAnimationState("workState", "idle") end
+    if flag then animator.setAnimationState("workState", "work")
+    else animator.setAnimationState("workState", "idle") end
   end
 end
 
@@ -51,9 +51,9 @@ function main()
     if self.st > 7 then 
       self.st = 0
     elseif self.st == 3 then
-      entity.playImmediateSound(self.workSound)
+      object.playImmediateSound(self.workSound)
     end
-    local p = entity.toAbsolutePosition({ -1.8, 1 })
-    entity.setForceRegion({ p[1], p[2], p[1] + 3.6, p[2] }, { self.moveSpeed * entity.direction(), 0})
+    local p = object.toAbsolutePosition({ -1.8, 1 })
+    object.setForceRegion({ p[1], p[2], p[1] + 3.6, p[2] }, { self.moveSpeed * object.direction(), 0})
   end
 end

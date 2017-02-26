@@ -4,7 +4,7 @@ function init(virtual)
     storage.targetAngle = (storage.targetAngle and storage.targetAngle % (2 * math.pi)) or 0
     setTargetPosition()
 
-    entity.setInteractive(true)
+    object.setInteractive(true)
   end
 end
 
@@ -23,8 +23,8 @@ function math.round(num, idp)
 end
 
 function setTargetPosition()
-  entity.rotateGroup("target", self.zeroAngle + storage.targetAngle)
-  local pos = entity.position()
+  object.rotateGroup("target", self.zeroAngle + storage.targetAngle)
+  local pos = object.position()
   local tarX = math.round(math.cos(storage.targetAngle) * 2) + pos[1] + 0.5
   local tarY = math.round(math.sin(storage.targetAngle) * 2) + pos[2] + 0.5
   self.clickPos = {tarX, tarY}
@@ -39,18 +39,18 @@ function onInboundNodeChange(args)
 end
 
 function checkNodes()
-  if entity.getInboundNodeLevel(0) and not storage.state then
+  if object.getInputNodeLevel(0) and not storage.state then
     click()
   end
-  storage.state = entity.getInboundNodeLevel(0)
+  storage.state = object.getInputNodeLevel(0)
 end
 
 function click()
-  if entity.animationState("clickState") ~= "on" then
-    entity.setAnimationState("clickState", "on")
-    local interactArgs = { source = entity.position(), sourceId = entity.id() }
+  if animator.animationState("clickState") ~= "on" then
+    animator.setAnimationState("clickState", "on")
+    local interactArgs = { source = object.position(), sourceId = object.id() }
 
-    local eIds = world.entityLineQuery(self.clickPos, self.clickPos, { withoutEntityId = entity.id() })
+    local eIds = world.entityLineQuery(self.clickPos, self.clickPos, { withoutEntityId = object.id() })
 
     for i, eId in ipairs(eIds) do
       if world.entityType(eId) == "object" then

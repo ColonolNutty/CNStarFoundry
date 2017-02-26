@@ -1,5 +1,6 @@
 {
   "objectName" : "itemsorter",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "objectType" : "container",
   "description" : "Allows you to direct the sweet flow of items",

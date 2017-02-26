@@ -1,5 +1,6 @@
 {
   "objectName" : "hopper",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "objectType" : "container",
 

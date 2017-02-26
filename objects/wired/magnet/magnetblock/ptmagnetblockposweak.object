@@ -1,5 +1,6 @@
 {
   "objectName" : "ptmagnetblockposweak",
+  "colonyTags" : ["wired"],
   "rarity" : "Rare",
   "description" : "A weak magnet, the charge of which is positive.",
   "shortdescription" : "Permanent Positive Magnet",

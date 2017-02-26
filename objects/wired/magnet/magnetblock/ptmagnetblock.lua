@@ -4,31 +4,31 @@ function init(args)
       datawire.init()
     end
     
-    storage.usesEnergy = entity.configParameter("energyAllowConnection", false)
+    storage.usesEnergy = config.getParameter("energyAllowConnection", false)
     if storage.usesEnergy then
       energy.init()
     end
     
     if storage.magnetOnAnim == nil then
-      storage.magnetOnAnim = entity.configParameter("chargeStrength") > 0 and "positiveOn" or "negativeOn"
+      storage.magnetOnAnim = config.getParameter("chargeStrength") > 0 and "positiveOn" or "negativeOn"
     end
     
     if storage.magnetOffAnim == nil then
-      storage.magnetOffAnim = entity.configParameter("chargeStrength") > 0 and "positiveOff" or "negativeOff"
+      storage.magnetOffAnim = config.getParameter("chargeStrength") > 0 and "positiveOff" or "negativeOff"
     end
   
     if storage.charge == nil then
-      storage.charge = clamp(entity.configParameter("chargeStrength"), -magnets.limit, magnets.limit)
+      storage.charge = clamp(config.getParameter("chargeStrength"), -magnets.limit, magnets.limit)
     end
     
     if storage.magnetCenter == nil then
-      storage.magnetCenter = entity.configParameter("magnetCenter", {0.5, 0.5})
+      storage.magnetCenter = config.getParameter("magnetCenter", {0.5, 0.5})
     end
     
     killData()
 	
-    entity.setInteractive(storage.usesEnergy)
-    entity.setColliding(false)
+    object.setInteractive(storage.usesEnergy)
+    object.setColliding(false)
     if storage.state == nil then
       output(not storage.usesEnergy)
     else
@@ -68,16 +68,16 @@ end
 function output(state)
   if storage.state ~= state then
     storage.state = state
-    entity.setAllOutboundNodes(state)
+    object.setAllOutputNodes(state)
 	
     updateMagnetData()
 	
     if state then
-      entity.setAnimationState("magnetState", storage.magnetOnAnim)
-      entity.playSound("onSounds")
+      animator.setAnimationState("magnetState", storage.magnetOnAnim)
+      object.playSound("onSounds")
     else
-      entity.setAnimationState("magnetState", storage.magnetOffAnim)
-      entity.playSound("offSounds")
+      animator.setAnimationState("magnetState", storage.magnetOffAnim)
+      object.playSound("offSounds")
     end
   end
 end
@@ -102,7 +102,7 @@ function main()
     
     -- Push monsters/npcs
     local radius = magnets.radius
-    local pos = entity.position()
+    local pos = object.position()
     local ents = world.entityQuery(pos, radius, { withoutEntityId = storage.dataID, notAnObject = true })
     for key,value in pairs(ents) do
       if magnets.shouldAffect(value) then
@@ -123,7 +123,7 @@ function updateMagnetData()
   
   -- 13/9 Is the level the monster needs for the health to scale by 1
   if storage.state then
-    local pos = entity.position()
+    local pos = object.position()
     pos = magnets.vecSum(pos, { 0.5, 0.5 })
     -- This dummy monster is needed for the magnetize tech to interact with magnets
     storage.dataID = world.spawnMonster("ptmagnetdata", pos, { level = (13/9), statusParameters = { baseMaxHealth = storage.charge }})

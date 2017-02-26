@@ -1,5 +1,6 @@
 {
   "objectName" : "ptmagnetblockposstrong",
+  "colonyTags" : ["wired"],
   "rarity" : "Rare",
   "description" : "A strong magnet, the charge of which can be toggled between positive and neutral.",
   "shortdescription" : "Powered Positive Magnet",
@@ -30,7 +31,7 @@
   },
   "animationPosition" : [0, 0],
   
-  "inboundNodes" : [ [0, 0] ],
+  "inputNodes" : [ [0, 0] ],
   
   "chargeStrength" : 100,
 

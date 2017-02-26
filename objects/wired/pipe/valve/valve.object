@@ -1,5 +1,6 @@
 {
   "objectName" : "valve",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Passes items or liquids between opposite sides when active.",
   "shortdescription" : "Valve Junction",
@@ -84,7 +85,7 @@
   },
   "animationPosition" : [0, 0],
 
-  "inboundNodes" : [ [0, 0] ],
+  "inputNodes" : [ [0, 0] ],
 
   "liquidNodes" : [
     {"offset": [0, 0], "dir": [-1, 0]},

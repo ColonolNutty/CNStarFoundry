@@ -1,5 +1,6 @@
 {
   "objectName" : "ptmagnetizer",
+  "colonyTags" : ["wired"],
   "rarity" : "Rare",
   "description" : "Magnetizes monsters, causing them to be affected by magnets.",
   "shortdescription" : "Magnetizer",
@@ -30,7 +31,7 @@
   },
   "animationPosition" : [0, 0],
   
-  "inboundNodes" : [ [0, 0] ],
+  "inputNodes" : [ [0, 0] ],
   
   "magnetizeDuration" : 5,
   "energyPerMonster" : 10,

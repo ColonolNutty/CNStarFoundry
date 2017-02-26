@@ -1,5 +1,6 @@
 {
   "objectName" : "levitationpad",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "category" : "wire",
   "price" : 350,
@@ -19,7 +20,7 @@
     }
   ],
 
-  "inboundNodes" : [ [0, 0] ],
+  "inputNodes" : [ [0, 0] ],
 
   "scripts" : [ "levitationpad.lua", "/scripts/entityProxy.lua", "/scripts/energy.lua" ],
   "scriptDelta" : 1,

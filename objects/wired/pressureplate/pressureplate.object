@@ -1,5 +1,6 @@
 {
   "objectName" : "pressureplate",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "This device detects when weight is placed on it.",
   "shortdescription" : "Pressure Plate",
@@ -28,7 +29,7 @@
   },
   "animationPosition" : [0, 0],
 
-  "outboundNodes" : [ [1, -1] ],
+  "outputNodes" : [ [1, -1] ],
 
   "timeout" : 0.5,
 

@@ -1,5 +1,6 @@
 {
   "objectName" : "liquidpump",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "This pump is used to move liquids from one point to another.",
   "shortdescription" : "Pump",
@@ -45,8 +46,8 @@
   },
   "animationPosition" : [0, 0],
   
-  "inboundNodes" : [[0, 1]],
-  "outboundNodes" : [[1, 1]],
+  "inputNodes" : [[0, 1]],
+  "outputNodes" : [[1, 1]],
   
   "liquidNodes" : [ {"offset": [0, 0], "dir": [-1, 0]}, {"offset": [1, 0], "dir": [1, 0]} ],
 

@@ -1,5 +1,6 @@
 {
   "objectName" : "freeformmarker",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Selects an arbitrary area of adjacent tiles.",
   "shortdescription" : "Freeform Marker",
@@ -29,7 +30,7 @@
   },
   "animationPosition" : [0, 0],
 
-  "outboundNodes" : [ [0, 0] ],
+  "outputNodes" : [ [0, 0] ],
 
   "markerType" : "freeform",
   "triggerDistance" : 10

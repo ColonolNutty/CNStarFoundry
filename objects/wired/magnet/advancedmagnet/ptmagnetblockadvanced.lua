@@ -8,17 +8,17 @@ function onValidDataReceived(data, dataType, nodeId, sourceEntityId)
   storage.magnetOnAnim = storage.charge == 0 and "positiveOn" or (storage.charge > 0 and "positiveOn" or "negativeOn")
   storage.magnetOffAnim = storage.charge == 0 and "positiveOff" or (storage.charge > 0 and "positiveOff" or "negativeOff")
   if storage.state then
-    entity.setAnimationState("magnetState", storage.magnetOnAnim)
+    animator.setAnimationState("magnetState", storage.magnetOnAnim)
     updateMagnetData()
   else
-    entity.setAnimationState("magnetState", storage.magnetOffAnim)
+    animator.setAnimationState("magnetState", storage.magnetOffAnim)
   end
 end
 
 function getEnergyUsage()
-  return (math.abs(storage.charge) / 100) * 5 * entity.dt()
+  return (math.abs(storage.charge) / 100) * 5 * object.dt()
 end
 
 function energy.getProjectileSourcePosition()
-  return {entity.position()[1] + 1, entity.position()[2] + 1}
+  return {object.position()[1] + 1, object.position()[2] + 1}
 end

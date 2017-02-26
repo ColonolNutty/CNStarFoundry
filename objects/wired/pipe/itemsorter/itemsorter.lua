@@ -30,15 +30,15 @@ end
 --------------------------------------------------------------------------------
 function main(args)
   buildFilter()
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
 end
 
 function showPass(direction)
-  entity.setAnimationState("filterState", "pass." .. direction)
+  animator.setAnimationState("filterState", "pass." .. direction)
 end
 
 function showFail()
-  entity.setAnimationState("filterState", "fail")
+  animator.setAnimationState("filterState", "fail")
 end
 
 function beforeLiquidGet(filter, nodeId)
@@ -151,7 +151,7 @@ function buildFilter()
   self.filterCount = {0, 0, 0, 0}
   local totalCount = 0
 
-  local contents = world.containerItems(entity.id())
+  local contents = world.containerItems(object.id())
   if contents then
     for key, item in pairs(contents) do
       if self.filter[self.filtermap[key]][item.name] then
@@ -164,9 +164,9 @@ function buildFilter()
     end
   end
 
-  if totalCount > 0 and entity.animationState("filterState") == "off" then
-    entity.setAnimationState("filterState", "on")
+  if totalCount > 0 and animator.animationState("filterState") == "off" then
+    animator.setAnimationState("filterState", "on")
   elseif totalCount <= 0 then
-    entity.setAnimationState("filterState", "off")
+    animator.setAnimationState("filterState", "off")
   end
 end

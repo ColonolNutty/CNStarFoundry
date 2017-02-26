@@ -1,6 +1,6 @@
 function init(virtual)
   if not virtual then
-    entity.setInteractive(true)
+    object.setInteractive(true)
 
     if storage.timer == nil then
       storage.timer = 0
@@ -16,7 +16,7 @@ function init(virtual)
       storage.isOrigin = false
     end
 
-    self.triggerDistance = entity.configParameter("triggerDistance")
+    self.triggerDistance = config.getParameter("triggerDistance")
     if self.triggerDistance == nil then
       self.triggerDistance = 50
     end
@@ -36,16 +36,16 @@ function onNodeConnectionChange()
 end
 
 function doScan()
-  local entityIds = world.objectQuery(entity.position(), self.triggerDistance, { name = "rectmarker", order = "nearest", withoutEntityId = entity.id() })
+  local entityIds = world.objectQuery(object.position(), self.triggerDistance, { name = "rectmarker", order = "nearest", withoutEntityId = object.id() })
   if #entityIds > 0 then
-    local corner1 = floorPos(entity.position())
+    local corner1 = floorPos(object.position())
     local corner2 = floorPos(world.entityPosition(entityIds[1]))
     local tileArea = getTileAreaFromRect(corner1, corner2)
     local success = datawire.sendData(tileArea, "area", "all")
     if success then
-      world.spawnItem(entity.configParameter("objectName"), corner1, 2)
-      world.callScriptedEntity(entityIds[1], "entity.smash")
-      entity.smash()
+      world.spawnItem(config.getParameter("objectName"), corner1, 2)
+      world.callScriptedEntity(entityIds[1], "object.smash")
+      object.smash()
     else
       world.logInfo("Unable to send area data; make sure a valid receiver object is connected.")
     end

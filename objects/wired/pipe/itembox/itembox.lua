@@ -1,29 +1,29 @@
 function init(args)
-  entity.setInteractive(true)
+  object.setInteractive(true)
   
   if args == false then
     pipes.init({itemPipe})
     
-    local initInv = entity.configParameter("initialInventory")
+    local initInv = config.getParameter("initialInventory")
     if initInv and storage.sApi == nil then
       storage.sApi = initInv
     end
 
     storageApi.init({ mode = 3, capacity = 16, merge = true })
     
-    entity.scaleGroup("invbar", {2, 0})
+    object.scaleGroup("invbar", {2, 0})
     
-    if entity.direction() < 0 then
-      entity.setAnimationState("flipped", "left")
+    if object.direction() < 0 then
+      animator.setAnimationState("flipped", "left")
     end
     
-    self.pushRate = entity.configParameter("itemPushRate")
+    self.pushRate = config.getParameter("itemPushRate")
     self.pushTimer = 0
   end
 end
 
 function die()
-  local position = entity.position()
+  local position = object.position()
   if storageApi.getCount() == 0 then
     world.spawnItem("itembox", {position[1] + 1.5, position[2] + 1}, 1)
   else
@@ -49,17 +49,17 @@ function onInteraction(args)
 end
 
 function main(args)
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
   
   --Scale inventory bar
   local relStorage = storageApi.getCount() / storageApi.getCapacity()
-  entity.scaleGroup("invbar", {2, relStorage})
+  object.scaleGroup("invbar", {2, relStorage})
   if relStorage < 0.5 then 
-    entity.setAnimationState("invbar", "low")
+    animator.setAnimationState("invbar", "low")
   elseif relStorage < 1 then
-    entity.setAnimationState("invbar", "medium")
+    animator.setAnimationState("invbar", "medium")
   else
-    entity.setAnimationState("invbar", "full")
+    animator.setAnimationState("invbar", "full")
   end
   
   --Push out items if switched on
@@ -67,12 +67,12 @@ function main(args)
     pushItems()
     self.pushTimer = 0
   end
-  self.pushTimer = self.pushTimer + entity.dt()
+  self.pushTimer = self.pushTimer + object.dt()
 end
 
 function pushItems()
   for node = 0, 1 do
-    if entity.getInboundNodeLevel(node) then
+    if object.getInputNodeLevel(node) then
       for i, item in storageApi.getIterator() do
         local result = pushItem(node+1, item)
         if result == true then storageApi.returnItem(i) end --Whole stack was accepted
@@ -84,14 +84,14 @@ function pushItems()
 end
 
 function onItemPut(item, nodeId)
-  if item and not entity.getInboundNodeLevel(nodeId - 1) then
+  if item and not object.getInputNodeLevel(nodeId - 1) then
     return storageApi.storeItem(item.name, item.count, item.data)
   end
   return false
 end
 
 function beforeItemPut(item, nodeId)
-  if item and not entity.getInboundNodeLevel(nodeId - 1) then
+  if item and not object.getInputNodeLevel(nodeId - 1) then
     return not storageApi.isFull() --TODO: Make this use the future function for fitting in a stack of items
   end
   return false

@@ -1,5 +1,6 @@
 {
   "objectName" : "basicgenerator",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "A simple generator fueled by heat from combustion.",
   "shortdescription" : "Combustion Generator",
@@ -32,7 +33,7 @@
   },
   "animationPosition" : [0, 0],
 
-  "inboundNodes" : [ [-1, 0] ],
+  "inputNodes" : [ [-1, 0] ],
 
   "energySendRate" : 20,
   "energyGenerationRate" : 20,

@@ -1,5 +1,6 @@
 {
   "objectName" : "extractorblock",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Liquid is being extracted from this.",
   "shortdescription" : "Extractor tile",

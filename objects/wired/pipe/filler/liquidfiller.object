@@ -1,5 +1,6 @@
 {
   "objectName" : "liquidfiller",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Puts liquids into portable, throwable capsules.",
   "shortdescription" : "Liquid Filler",
@@ -38,7 +39,7 @@
   },
   "animationPosition" : [0, 0],
   
-  "inboundNodes" : [[1, 1]],
+  "inputNodes" : [[1, 1]],
   
   "liquidNodes" : [ {"offset": [-1, -1], "dir": [-1, 0]} ],
   "flippedLiquidNodes" : [ {"offset": [0, -1], "dir": [1, 0]} ],

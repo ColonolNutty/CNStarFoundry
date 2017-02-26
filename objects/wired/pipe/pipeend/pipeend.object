@@ -1,5 +1,6 @@
 {
   "objectName" : "pipeend",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "A spout that can be used for input or output of liquids.",
   "shortdescription" : "Pipe Spout",

@@ -10,7 +10,7 @@ function init(virtual)
   end
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   throughput()
 end
 
@@ -19,14 +19,14 @@ function onNodeConnectionChange()
 end
 
 function throughput()
-  storage.state = entity.getInboundNodeLevel(0)
-  entity.setOutboundNodeLevel(0, storage.state)
+  storage.state = entity.getInputNodeLevel(0)
+  object.setOutputNodeLevel(0, storage.state)
 end
 
 function updateAnimationState()
-  if entity.direction() == 1 then
-    entity.setAnimationState("flipState", "default")
+  if object.direction() == 1 then
+    animator.setAnimationState("flipState", "default")
   else
-    entity.setAnimationState("flipState", "flipped")
+    animator.setAnimationState("flipState", "flipped")
   end
 end

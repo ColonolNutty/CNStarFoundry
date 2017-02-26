@@ -20,21 +20,21 @@ function die()
 end
 
 function setOrientation()
-  local orientation = entity.configParameter("orientation")
-  local pos = entity.position()
+  local orientation = config.getParameter("orientation")
+  local pos = object.position()
   if orientation == "down" then
     self.checkArea = {{pos[1], pos[2] - 2}, {pos[1], pos[2] - 1}, {pos[1], pos[2]}}
   else
     self.checkArea = {{pos[1], pos[2]}, {pos[1], pos[2] + 1}, {pos[1], pos[2] + 2}}
   end
-  entity.setAnimationState("orientState", orientation)
+  animator.setAnimationState("orientState", orientation)
 end
 
 function updateAnimationState()
   if storage.lavaLevel > 0 then
-    entity.setAnimationState("lavaState", "on")
+    animator.setAnimationState("lavaState", "on")
   else
-    entity.setAnimationState("lavaState", "off")
+    animator.setAnimationState("lavaState", "off")
   end
 end
 
@@ -64,12 +64,12 @@ end
 
 --never accept energy from elsewhere
 function onEnergyNeedsCheck(energyNeeds)
-  energyNeeds[tostring(entity.id())] = 0
+  energyNeeds[tostring(object.id())] = 0
   return energyNeeds
 end
 
 function generate()
-  local lavaPerTile = self.lavaConsumptionRate * entity.dt()
+  local lavaPerTile = self.lavaConsumptionRate * object.dt()
   for i, pos in ipairs(self.checkArea) do
     if storage.lavaLevel > 0 then
       --check liquid at the given tile
@@ -91,18 +91,18 @@ function generate()
         storage.lavaLevel = storage.lavaLevel - consumeLava
         energy.addEnergy(self.energyPerLava * consumeLava)
 
-        entity.setParticleEmitterActive("steam"..i, true)
+        object.setParticleEmitterActive("steam"..i, true)
       else
-        entity.setParticleEmitterActive("steam"..i, false)
+        object.setParticleEmitterActive("steam"..i, false)
       end
     else
-      entity.setParticleEmitterActive("steam"..i, false)
+      object.setParticleEmitterActive("steam"..i, false)
     end
   end
 end
 
 function main()
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
 
   pullLava()
   generate()

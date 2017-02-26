@@ -1,5 +1,6 @@
 {
   "objectName" : "thermogenerator",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Connect to lava source and submerge in water to generate energy",
   "shortdescription" : "Thermoelectric Generator",

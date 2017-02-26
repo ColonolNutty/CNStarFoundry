@@ -3,12 +3,13 @@ function init(virtual)
   -- self.linkStates = {"none", "left", "right", "both"}
 
   if not virtual then
-    self.dataFormat = entity.configParameter("dataFormat")
+    self.dataFormat = config.getParameter("dataFormat")
     if self.dataFormat == nil then
       self.dataFormat = "%d"
     end
 
-    self.displaySize = entity.configParameter("displaySize")
+    self.displaySize = config.getParameter("displaySize")
+    self.displaySize = config.getParameter("displaySize")
     if self.displaySize == nil then
       --maybe no point to setting a default since this will totally break if it's wrong
       self.displaySize = 1
@@ -60,8 +61,8 @@ function findAdjacentSegments()
 end
 
 function pingRight()
-  local entityIds = world.entityQuery({entity.position()[1] + self.displaySize, entity.position()[2]}, 1,
-     { callScript = "isLinkedDisplayToRight", callScriptArgs = { {math.floor(entity.position()[1] + self.displaySize), math.floor(entity.position()[2])}, self.displaySize, entity.id() }, withoutEntityId = entity.id()})
+  local entityIds = world.entityQuery({object.position()[1] + self.displaySize, object.position()[2]}, 1,
+     { callScript = "isLinkedDisplayToRight", callScriptArgs = { {math.floor(object.position()[1] + self.displaySize), math.floor(object.position()[2])}, self.displaySize, object.id() }, withoutEntityId = object.id()})
 
   if #entityIds == 1 then
     storage.connectedRight = entityIds[1]
@@ -71,8 +72,8 @@ function pingRight()
 end
 
 function pingLeft()
-  local entityIds = world.entityQuery({entity.position()[1] - self.displaySize, entity.position()[2]}, 1,
-      { callScript = "isLinkedDisplayToLeft", callScriptArgs = { {math.floor(entity.position()[1] - self.displaySize), math.floor(entity.position()[2])}, self.displaySize, entity.id() }, withoutEntityId = entity.id()})
+  local entityIds = world.entityQuery({object.position()[1] - self.displaySize, object.position()[2]}, 1,
+      { callScript = "isLinkedDisplayToLeft", callScriptArgs = { {math.floor(object.position()[1] - self.displaySize), math.floor(object.position()[2])}, self.displaySize, object.id() }, withoutEntityId = object.id()})
 
   if #entityIds == 1 then
     storage.connectedLeft = entityIds[1]
@@ -82,7 +83,7 @@ function pingLeft()
 end
 
 function isLinkedDisplayToRight(pos, displaySize, entityId)
-  if pos[1] == math.floor(entity.position()[1]) and pos[2] == math.floor(entity.position()[2]) and displaySize == self.displaySize then
+  if pos[1] == math.floor(object.position()[1]) and pos[2] == math.floor(object.position()[2]) and displaySize == self.displaySize then
     storage.connectedLeft = entityId
     updateLinkAnimationState()
     return true
@@ -92,7 +93,7 @@ function isLinkedDisplayToRight(pos, displaySize, entityId)
 end
 
 function isLinkedDisplayToLeft(pos, displaySize, entityId)
-  if pos[1] == math.floor(entity.position()[1]) and pos[2] == math.floor(entity.position()[2]) and displaySize == self.displaySize then
+  if pos[1] == math.floor(object.position()[1]) and pos[2] == math.floor(object.position()[2]) and displaySize == self.displaySize then
     storage.connectedRight = entityId
     updateLinkAnimationState()
     return true
@@ -144,33 +145,33 @@ end
 
 function updateLinkAnimationState()
   if storage.connectedRight and storage.connectedLeft then
-    entity.setAnimationState("linkState", "both")
+    animator.setAnimationState("linkState", "both")
   elseif not storage.connectedRight and storage.connectedLeft then
-    if entity.direction() == 1 then
-      entity.setAnimationState("linkState", "left")
+    if object.direction() == 1 then
+      animator.setAnimationState("linkState", "left")
     else
-      entity.setAnimationState("linkState", "right")
+      animator.setAnimationState("linkState", "right")
     end
   elseif storage.connectedRight and not storage.connectedLeft then
-    if entity.direction() == 1 then
-      entity.setAnimationState("linkState", "right")
+    if object.direction() == 1 then
+      animator.setAnimationState("linkState", "right")
     else
-      entity.setAnimationState("linkState", "left")
+      animator.setAnimationState("linkState", "left")
     end
   else
-    entity.setAnimationState("linkState", "none")
+    animator.setAnimationState("linkState", "none")
   end
 end
 
 function updateDisplay(newDisplayData)
   if newDisplayData and newDisplayData ~= "" then
-    if entity.direction() == 1 then
-      entity.setAnimationState("dataState", newDisplayData)
+    if object.direction() == 1 then
+      animator.setAnimationState("dataState", newDisplayData)
     else
-      entity.setAnimationState("dataState", "flipped."..newDisplayData)
+      animator.setAnimationState("dataState", "flipped."..newDisplayData)
     end
   else
-    entity.setAnimationState("dataState", "off")
+    animator.setAnimationState("dataState", "off")
   end
 
   storage.currentDisplayData = newDisplayData

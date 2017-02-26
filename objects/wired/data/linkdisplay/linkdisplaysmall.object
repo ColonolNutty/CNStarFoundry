@@ -1,5 +1,6 @@
 {
   "objectName" : "linkdisplaysmall",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "A micro-sized modular numeric display.",
   "shortdescription" : "Small Linked Display",
@@ -31,7 +32,7 @@
     "digits" : "digitssmall.png"
   },
 
-  "inboundNodes" : [ [0, 0] ],
+  "inputNodes" : [ [0, 0] ],
 
   "displaySize" : 1,
 

@@ -5,7 +5,7 @@ function init(virtual)
     pipes.init({itemPipe})
     --TODO: set up storage api
 
-    entity.setInteractive(true)
+    object.setInteractive(true)
 
     self.turbineAngle = 0
     self.turbineSpeed = 0.2
@@ -27,13 +27,13 @@ end
 
 --never accept energy from elsewhere
 function onEnergyNeedsCheck(energyNeeds)
-  energyNeeds[tostring(entity.id())] = 0
+  energyNeeds[tostring(object.id())] = 0
   return energyNeeds
 end
 
 function rotateTurbine()
   self.turbineAngle = (self.turbineAngle + self.turbineSpeed) % (2 * math.pi)
-  entity.rotateGroup("turbine", self.turbineAngle)
+  object.rotateGroup("turbine", self.turbineAngle)
 end
 
 function main()
@@ -44,5 +44,5 @@ function main()
   end
   energy.update()
   datawire.update()
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
 end

@@ -1,6 +1,6 @@
 function init(virtual)
   if not virtual then
-    entity.setInteractive(true)
+    object.setInteractive(true)
 
     if storage.state == nil then
       storage.state = true
@@ -20,7 +20,7 @@ end
 --------------------------------------------------------------------------------
 
 function onInteraction(args)
-  if not entity.isInboundNodeConnected(0) then
+  if not object.isInputNodeConnected(0) then
     storage.state = not storage.state
     updateAnimationState()
   end
@@ -36,24 +36,24 @@ end
 
 --------------------------------------------------------------------------------
 function main(args)
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
 end
 
 function checkInboundNodes()
-  if entity.isInboundNodeConnected(0) then
-    entity.setInteractive(false)
-    storage.state = entity.getInboundNodeLevel(0)
+  if object.isInputNodeConnected(0) then
+    object.setInteractive(false)
+    storage.state = object.getInputNodeLevel(0)
     updateAnimationState()
   else
-    entity.setInteractive(true)
+    object.setInteractive(true)
   end
 end
 
 function updateAnimationState()
   if storage.state then
-    entity.setAnimationState("switchState", "on")
+    animator.setAnimationState("switchState", "on")
   else
-    entity.setAnimationState("switchState", "off")
+    animator.setAnimationState("switchState", "off")
   end
 end
 

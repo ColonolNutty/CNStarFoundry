@@ -2,16 +2,16 @@ function init(virtual)
   if not virtual then
     if storage.fingerpint == nil then
       -- First Initialization
-      storage.fingerprint = entity.position()[1] .. "." ..entity.position()[2]
+      storage.fingerprint = object.position()[1] .. "." ..object.position()[2]
       storage.name = storage.fingerprint
       storage.logStack = {}
-      entity.setAnimationState("tapState", "on")
+      animator.setAnimationState("tapState", "on")
     else
       -- Re-Initialization
     end
     -- Every Initialization
     datawire.init()
-    entity.setInteractive(true)
+    object.setInteractive(true)
   end
 end
 

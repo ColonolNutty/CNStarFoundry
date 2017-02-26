@@ -1,5 +1,6 @@
 {
   "objectName" : "cnsfbattery",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "A battery that requires recharging after use.",
   "shortdescription" : "Battery",

@@ -1,5 +1,6 @@
 {
   "objectName" : "jumppad1",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
 
   "category" : "wire",

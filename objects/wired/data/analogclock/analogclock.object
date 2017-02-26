@@ -1,5 +1,6 @@
 {
   "objectName" : "analogclock",
+  "colonyTags" : ["wired"],
   "rarity" : "Rare",
   "description" : "Displays planetary day/night and outputs during the day",
   "shortdescription" : "Analog Clock",
@@ -31,7 +32,5 @@
   },
   "animationPosition" : [8, 8],
   
-  "outboundNodes" : [
-    [0, 0]
-  ]
+  "outputNodes" : [ [0, 0]]
 }

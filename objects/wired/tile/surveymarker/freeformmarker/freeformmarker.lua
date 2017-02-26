@@ -1,6 +1,6 @@
 function init(virtual)
   if not virtual then
-    entity.setInteractive(true)
+    object.setInteractive(true)
 
     if storage.timer == nil then
       storage.timer = 0
@@ -16,12 +16,12 @@ function init(virtual)
       storage.isOrigin = false
     end
 
-    self.markerType = entity.configParameter("markerType")
+    self.markerType = config.getParameter("markerType")
     if self.markerType == nil then
       self.markerType = "freeform"
     end
 
-    self.triggerDistance = entity.configParameter("triggerDistance")
+    self.triggerDistance = config.getParameter("triggerDistance")
     if self.triggerDistance == nil then
       self.triggerDistance = 10
     end
@@ -46,7 +46,7 @@ function onTrigger()
 end
 
 function triggerConnectedMarkers(scriptName, scriptArgs)
-  local entityIds = world.objectQuery(entity.position(), self.triggerDistance, {
+  local entityIds = world.objectQuery(object.position(), self.triggerDistance, {
           callScript = scriptName, callScriptArgs = scriptArgs
         })
   return entityIds
@@ -59,9 +59,9 @@ function startScan()
     storage.isOrigin = true
 
     storage.scanTable = {}
-    addScanCoords(entity.position())
+    addScanCoords(object.position())
 
-    triggerConnectedMarkers("receiveSurveyTrigger", { self.markerType, entity.id() })
+    triggerConnectedMarkers("receiveSurveyTrigger", { self.markerType, object.id() })
   end
 end
 
@@ -82,7 +82,7 @@ function receiveSurveyTrigger(markerType, originId)
 end
 
 function sendSurveyResult(originId)
-  world.callScriptedEntity(originId, "receiveSurveyResult", entity.position())
+  world.callScriptedEntity(originId, "receiveSurveyResult", object.position())
 end
 
 function receiveSurveyResult(pos)
@@ -94,7 +94,7 @@ function finalizeSurvey()
   
   local transmitSuccess = datawire.sendData(storage.scanTable, "area", "all")
   if transmitSuccess then
-    smashConnectedMarkers(entity.id())
+    smashConnectedMarkers(object.id())
   else
     storage.triggered = false
     storage.isOrigin = false
@@ -103,8 +103,8 @@ end
 
 function smashConnectedMarkers(originId)
   if not self.smashed then
-    world.spawnItem(entity.configParameter("objectName"), world.entityPosition(originId), 1)
-    entity.smash()
+    world.spawnItem(config.getParameter("objectName"), world.entityPosition(originId), 1)
+    object.smash()
     self.smashed = true
     triggerConnectedMarkers("smashConnectedMarkers", { originId })
   end

@@ -1,5 +1,6 @@
 {
   "objectName" : "detector",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Detects a variety of entity types",
   "shortdescription" : "Entity Detector",
@@ -30,7 +31,7 @@
   },
   "animationPosition" : [-8, -8],
 
-  "outboundNodes" : [ [0, 0] ],
+  "outputNodes" : [ [0, 0] ],
 
   "detectModes" : [ "all", "owner", "player", "monster", "item", "npc" ],
   "detectDuration" : 1

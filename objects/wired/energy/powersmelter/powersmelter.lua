@@ -7,12 +7,12 @@ function init(virtual)
     if storage.ore == nil then storage.ore = {} end
     if storage.state == nil then storage.state = false end
 
-    self.conversions = entity.configParameter("smeltRecipes")
+    self.conversions = config.getParameter("smeltRecipes")
     
-    self.smeltRate = entity.configParameter("smeltRate")
+    self.smeltRate = config.getParameter("smeltRate")
     self.smeltTimer = 0
     
-    entity.setInteractive(not entity.isInboundNodeConnected(0))
+    object.setInteractive(not object.isInputNodeConnected(0))
   end
 end
 
@@ -31,15 +31,15 @@ function onInboundNodeChange(args)
 end
 
 function checkNodes()
-  local isWired = entity.isInboundNodeConnected(0)
+  local isWired = object.isInputNodeConnected(0)
   if isWired then
-    storage.state = entity.getInboundNodeLevel(0)
+    storage.state = object.getInputNodeLevel(0)
   end
-  entity.setInteractive(not isWired)
+  object.setInteractive(not isWired)
 end
 
 function onInteraction(args)
-  if entity.isInboundNodeConnected(0) == false then
+  if object.isInputNodeConnected(0) == false then
     storage.state = not storage.state
   end
 end
@@ -47,7 +47,7 @@ end
 function main()
   energy.update()
   datawire.update()
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
 
   if storage.state and (storage.ore.name == nil or storage.ore.count <= 0) then
     pullOre()
@@ -58,9 +58,9 @@ function main()
     local bar = {name = oreConversion[3], count = oreConversion[2], data = {}}
     
     if peekPushItem(2, bar) then 
-      entity.setAnimationState("smelting", "smelt") 
+      animator.setAnimationState("smelting", "smelt") 
     else
-      entity.setAnimationState("smelting", "error")
+      animator.setAnimationState("smelting", "error")
     end
     
     if self.smeltTimer > self.smeltRate then
@@ -69,12 +69,12 @@ function main()
       end
       self.smeltTimer = 0
     end
-    self.smeltTimer = self.smeltTimer + entity.dt()
+    self.smeltTimer = self.smeltTimer + object.dt()
   else
     if storage.state then
-      entity.setAnimationState("smelting", "error")
+      animator.setAnimationState("smelting", "error")
     else
-      entity.setAnimationState("smelting", "idle")
+      animator.setAnimationState("smelting", "idle")
     end
   end
   
@@ -123,7 +123,7 @@ end
 
 --Temporary function until itempipes api is changed to allow amount filters and returns
 function ejectOre()
-  local position = entity.position()
+  local position = object.position()
   if storage.ore.name and next(storage.ore.data) == nil then
     world.spawnItem(storage.ore.name, {position[1] + 1.5, position[2] + 1}, storage.ore.count)
   elseif storage.ore.name then

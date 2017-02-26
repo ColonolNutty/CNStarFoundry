@@ -13,7 +13,7 @@ function init(virtual)
     end
 
     self.flipStr = ""
-    if entity.direction() == -1 then
+    if object.direction() == -1 then
       self.flipStr = "flipped."
     end
 
@@ -32,22 +32,22 @@ function onNodeConnectionChange()
 end
 
 function onInboundNodeChange(args)
-  storage.lockInbound = entity.getInboundNodeLevel(1)
-  storage.lockOutbound = entity.getInboundNodeLevel(2)
+  storage.lockInbound = object.getInputNodeLevel(1)
+  storage.lockOutbound = object.getInputNodeLevel(2)
 
   output()
   updateAnimationState()
 end
 
 function updateAnimationState()
-  if entity.getInboundNodeLevel(1) and entity.getInboundNodeLevel(2) then
-    entity.setAnimationState("lockState", self.flipStr.."both")
-  elseif entity.getInboundNodeLevel(1) then
-    entity.setAnimationState("lockState", self.flipStr.."in")
-  elseif entity.getInboundNodeLevel(2) then
-    entity.setAnimationState("lockState", self.flipStr.."out")
+  if object.getInputNodeLevel(1) and object.getInputNodeLevel(2) then
+    animator.setAnimationState("lockState", self.flipStr.."both")
+  elseif object.getInputNodeLevel(1) then
+    animator.setAnimationState("lockState", self.flipStr.."in")
+  elseif object.getInputNodeLevel(2) then
+    animator.setAnimationState("lockState", self.flipStr.."out")
   else
-    entity.setAnimationState("lockState", self.flipStr.."none")
+    animator.setAnimationState("lockState", self.flipStr.."none")
   end
 end
 

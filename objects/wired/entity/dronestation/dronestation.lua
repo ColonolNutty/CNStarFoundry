@@ -1,12 +1,12 @@
 function init(v)
-  entity.setInteractive(true)
+  object.setInteractive(true)
   if not v then
     energy.init()
     pipes.init({ itemPipe })
     if storageApi.isInit() then
       storageApi.init({ mode = 2, capacity = 9, ondeath = 1, merge = true })
     end
-    self.pushRate = entity.configParameter("itemPushRate")
+    self.pushRate = config.getParameter("itemPushRate")
     self.pushTimer = 0
     if storage.power == nil then storage.power = 0 end
     if storage.active == nil then setActive(true)
@@ -23,13 +23,13 @@ function die()
 end
 
 function getLandingPos()
-  return entity.toAbsolutePosition({ 0.5, 3 })
+  return object.toAbsolutePosition({ 0.5, 3 })
 end
 
 function setActive(f)
   storage.active = f
-  if f then entity.setAnimationState("workState", "on")
-  else entity.setAnimationState("workState", "off") end
+  if f then animator.setAnimationState("workState", "on")
+  else animator.setAnimationState("workState", "off") end
   if self.droneId ~= nil then
     world.callScriptedEntity(self.droneId, "setActive", f)
   end
@@ -38,14 +38,14 @@ end
 function setStatus(i)
   storage.state = i
   if i > 0 then
-    entity.setAnimationState("droneState", "hide")
+    animator.setAnimationState("droneState", "hide")
     if i > 1 then
       self.droneId = nil
       self.spawnTimer = 5
     end
   else
     self.droneId = nil
-    entity.setAnimationState("droneState", "show")
+    animator.setAnimationState("droneState", "show")
   end
 end
 
@@ -77,7 +77,7 @@ function launchDrone()
     end
     if storage.power >= 50 then
       storage.power = storage.power - 50
-      self.droneId = world.spawnMonster("itemdrone", getLandingPos(), { stationPos = entity.position() })
+      self.droneId = world.spawnMonster("itemdrone", getLandingPos(), { stationPos = object.position() })
       setStatus(1)
     end
   end
@@ -88,8 +88,8 @@ function onInboundNodeChange(args)
 end
 
 function onNodeConnectionChange()
-  entity.setInteractive(not entity.isInboundNodeConnected(0))
-  setActive(entity.getInboundNodeLevel(0))
+  object.setInteractive(not object.isInputNodeConnected(0))
+  setActive(object.getInputNodeLevel(0))
 end
 
 function onInteraction(args)
@@ -97,7 +97,7 @@ function onInteraction(args)
 end
 
 function main()
-  local dt = entity.dt()
+  local dt = object.dt()
   pipes.update(dt)
   energy.update()
   if self.pushTimer > self.pushRate then

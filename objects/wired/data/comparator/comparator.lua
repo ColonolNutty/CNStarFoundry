@@ -1,6 +1,6 @@
 function init(virtual)
   if not virtual then
-    entity.setInteractive(true)
+    object.setInteractive(true)
 
     if not storage.data1 then
       storage.data1 = 0
@@ -24,7 +24,7 @@ function init(virtual)
     end
 
     self.flipStr = ""
-    if entity.direction() == -1 then
+    if object.direction() == -1 then
       self.flipStr = "flipped."
     end
 
@@ -69,7 +69,7 @@ function onValidDataReceived(data, dataType, nodeId, sourceEntityId)
 end
 
 function compare()
-  if entity.isInboundNodeConnected(0) and entity.isInboundNodeConnected(1) then
+  if object.isInputNodeConnected(0) and object.isInputNodeConnected(1) then
     if storage.currentMode == "gt" then
       storage.state = storage.data1 > storage.data2
     elseif storage.currentMode == "lt" then
@@ -78,7 +78,7 @@ function compare()
       storage.state = storage.data1 == storage.data2
     end
 
-    entity.setOutboundNodeLevel(0, storage.state)
+    object.setOutputNodeLevel(0, storage.state)
     
     if (storage.state) then
       datawire.sendData(storage.data1, "number", "all")
@@ -93,16 +93,16 @@ function compare()
 end
 
 function updateAnimationState()
-  entity.setAnimationState("modeState", self.flipStr..storage.currentMode)
+  animator.setAnimationState("modeState", self.flipStr..storage.currentMode)
 
   if storage.state then
-    entity.setAnimationState("comparatorState", self.flipStr.."on")
+    animator.setAnimationState("comparatorState", self.flipStr.."on")
   else
-    entity.setAnimationState("comparatorState", self.flipStr.."off")
+    animator.setAnimationState("comparatorState", self.flipStr.."off")
   end
 end
 
-function main()
+function update(dt)
   datawire.update()
   compare()
 end

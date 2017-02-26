@@ -1,5 +1,6 @@
 {
   "objectName" : "liquidextractor",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "This device creates liquid from moist, slimy, or igneous blocks.",
   "shortdescription" : "Liquid Extractor",
@@ -38,7 +39,7 @@
   },
   "animationPosition" : [12, 12],
   
-  "inboundNodes" : [[1, 1]],
+  "inputNodes" : [[1, 1]],
   
   "itemNodes" : [ {"offset": [0, 0], "dir": [-1, 0]} ],
   "flippedItemNodes" : [ {"offset": [2, 0], "dir": [1, 0]} ],

@@ -6,26 +6,26 @@ function init(virtual)
     self.pickupCooldown = 0.2
 
     self.ignoreIds = {}
-    self.dropPoint = {entity.position()[1] + 1, entity.position()[2] + 1.5}
+    self.dropPoint = {object.position()[1] + 1, object.position()[2] + 1.5}
   end
 end
 
 --------------------------------------------------------------------------------
 function main(args)
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
   
   if self.timer > self.pickupCooldown and (isItemNodeConnected(1) or isItemNodeConnected(2)) then
 
     --Try to push from inventory first
     local result = false;
-    local items = world.containerItems(entity.id())
+    local items = world.containerItems(object.id())
     for key, item in pairs(items) do
       result = pushItem(1, item) or pushItem(2, item)
       if result then
         if result ~= true then
           item.count = result --amount accepted
         end
-        world.containerConsume(entity.id(), item)
+        world.containerConsume(object.id(), item)
 
         break
       end
@@ -37,7 +37,7 @@ function main(args)
       if #itemDropList > 0 then
         for i, itemId in ipairs(itemDropList) do
           if not self.ignoreIds[itemId] then
-            local item = world.takeItemDrop(itemId, entity.id())
+            local item = world.takeItemDrop(itemId, object.id())
             if item then
               outputItem(item)
             end
@@ -47,11 +47,11 @@ function main(args)
     end
     self.timer = 0
   end
-  self.timer = self.timer + entity.dt()
+  self.timer = self.timer + object.dt()
 end
 
 function findItemDrops()
-  local pos = entity.position()
+  local pos = object.position()
   return world.itemDropQuery(pos, {pos[1] + 2, pos[2] + 1})
 end
 

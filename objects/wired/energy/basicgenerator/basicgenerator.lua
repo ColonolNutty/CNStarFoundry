@@ -15,8 +15,8 @@ function init(virtual)
     self.fuelMax = 50
 
     if storage.fuel == nil then
-      if entity.configParameter("initialFuel") then
-        storage.fuel = entity.configParameter("initialFuel")
+      if config.getParameter("initialFuel") then
+        storage.fuel = config.getParameter("initialFuel")
       else
         storage.fuel = 0
       end
@@ -24,7 +24,7 @@ function init(virtual)
 
     self.fuelUseRate = 0.2
 
-    local pos = entity.position()
+    local pos = object.position()
     self.itemPickupArea = {
       {pos[1] - 1, pos[2] - 1},
       {pos[1] + 1, pos[2]}
@@ -34,7 +34,7 @@ function init(virtual)
     --used to track items we spit back out
     self.ignoreDropIds = {}
 
-    entity.setInteractive(not entity.isInboundNodeConnected(0))
+    object.setInteractive(not object.isInputNodeConnected(0))
     updateAnimationState()
 
     -- profilerApi.init()
@@ -42,7 +42,7 @@ function init(virtual)
 end
 
 function die()
-  local position = entity.position()
+  local position = object.position()
   if storage.fuel == 0 then
     world.spawnItem("basicgenerator", {position[1] + 2, position[2] + 1}, 1)
   else
@@ -65,7 +65,7 @@ function onInteraction(args)
   --   profilerApi.logData()
   --   return
   -- end
-  if not entity.isInboundNodeConnected(0) then
+  if not object.isInputNodeConnected(0) then
     if storage.state then
       storage.state = false
     else
@@ -78,28 +78,28 @@ end
 
 function updateAnimationState()
   if storage.state and storage.fuel > 0 then
-    entity.setAnimationState("generatorState", "on")
+    animator.setAnimationState("generatorState", "on")
   elseif storage.state then
-    entity.setAnimationState("generatorState", "error")
+    animator.setAnimationState("generatorState", "error")
   else
-    entity.setAnimationState("generatorState", "off")
+    animator.setAnimationState("generatorState", "off")
   end
 
-  entity.scaleGroup("fuelbar", {math.min(1, storage.fuel / self.fuelMax), 1})
+  animator.scaleGroup("fuelbar", {math.min(1, storage.fuel / self.fuelMax), 1})
 end
 
 function checkNodes()
-  local isWired = entity.isInboundNodeConnected(0)
+  local isWired = object.isInputNodeConnected(0)
   if isWired then
-    storage.state = entity.getInboundNodeLevel(0)
+    storage.state = object.getInputNodeLevel(0)
     updateAnimationState()
   end
-  entity.setInteractive(not isWired)
+  object.setInteractive(not isWired)
 end
 
 --never accept energy from elsewhere
 function onEnergyNeedsCheck(energyNeeds)
-  energyNeeds[tostring(entity.id())] = 0
+  energyNeeds[tostring(object.id())] = 0
   return energyNeeds
 end
 
@@ -118,7 +118,7 @@ function getFuelItems()
     if not self.ignoreDropIds[entityId] then
       local itemName = world.entityName(entityId)
       if self.fuelValues[itemName] then
-        local item = world.takeItemDrop(entityId, entity.id())
+        local item = world.takeItemDrop(entityId, object.id())
         if item then
           if self.fuelValues[item.name] then
             while item.count > 0 and storage.fuel < self.fuelMax do
@@ -150,7 +150,7 @@ function ejectItem(item)
 end
 
 function generate()
-  local tickFuel = self.fuelUseRate * entity.dt()
+  local tickFuel = self.fuelUseRate * object.dt()
   if storage.fuel >= tickFuel then
     storage.fuel = storage.fuel - tickFuel
     energy.addEnergy(tickFuel * energy.fuelEnergyConversion)

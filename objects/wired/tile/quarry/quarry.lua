@@ -3,7 +3,7 @@ function init(args)
         energy.init()
         storageApi.init({mode = 2, capacity = 16, merge = true, join = true, ondeath = 1})
         pipes.init({itemPipe})
-        entity.setInteractive(true)
+        object.setInteractive(true)
         self.state = stateMachine.create({
             "prepareState", "runState", "returnState"
         })
@@ -20,7 +20,7 @@ function init(args)
 end
 
 function main()
-    local dt = entity.dt()
+    local dt = object.dt()
     self.state.update(dt)
     pipes.update(dt)
     energy.update()
@@ -105,7 +105,7 @@ function prepareState.update(dt, data)
 end
 
 function prepareState.findMarker()
-    local quarryPos, markerId, dir = entity.toAbsolutePosition({0,-1}), false, entity.direction()
+    local quarryPos, markerId, dir = object.toAbsolutePosition({0,-1}), false, object.direction()
     for i = 2, self.range, 1 do
         local pos = toAbsolutePosition(quarryPos, {dir*i,0})
         local entityIds = world.entityQuery(pos, 0, {name = "quarry_marker"})
@@ -115,7 +115,7 @@ function prepareState.findMarker()
     end
     local pos, collisionPos = nil, {}
     if markerId then
-        pos = markerId[2], entity.direction()
+        pos = markerId[2], object.direction()
     else
         pos = toAbsolutePosition(quarryPos, {dir*self.range,0})
     end
@@ -136,7 +136,7 @@ function prepareState.findMarker()
             for i = 2, math.abs(pos[1]-quarryPos[1]), 1 do
                 local pos = toAbsolutePosition(quarryPos, {dir*i,h+0.5})
                 if not world.pointCollision(pos) then
-                    world.spawnProjectile("beam", pos, entity.id(), {0,0}, false, {})
+                    world.spawnProjectile("beam", pos, object.id(), {0,0}, false, {})
                 end
             end
         end
@@ -146,7 +146,7 @@ function prepareState.findMarker()
 end
 
 function prepareState.placeStand()
-    local fakeQuarryId = world.placeObject("quarry_fake", storage.quarry.fakePos, -entity.direction() )
+    local fakeQuarryId = world.placeObject("quarry_fake", storage.quarry.fakePos, -object.direction() )
     if fakeQuarryId then
         storage.quarry.fakeId = fakeQuarryId
         return quarryHolders()
@@ -156,7 +156,7 @@ end
 
 function quarryHolders(destroy)
     if not storage.quarry.holders or destroy then
-        local i, dir, pos = 1, entity.direction(), {0, storage.quarry.fakePos[2]}
+        local i, dir, pos = 1, object.direction(), {0, storage.quarry.fakePos[2]}
         while i <= storage.quarry.width+1 do
             pos[1] = i*-dir+storage.quarry.fakePos[1]
             if destroy then
@@ -168,8 +168,8 @@ function quarryHolders(destroy)
         end
         storage.quarry.holders = not destroy
         if not destroy then
-            entity.setAnimationState("quarryState", "idle")
-            local spawnPos = entity.toAbsolutePosition({dir, 0})
+            animator.setAnimationState("quarryState", "idle")
+            local spawnPos = object.toAbsolutePosition({dir, 0})
             if dir > 0 then
                 spawnPos[1] = spawnPos[1] + 1
             end
@@ -189,8 +189,8 @@ function runState.enterWith(args)
     if not args.run or not storage.quarry.id or energy.getEnergy() < 1 then return nil end
     self.stuck = 0
     self.loadTimer = 0
-    self.loadInterval = entity.configParameter("diggingLoadInterval")
-    entity.setAnimationState("quarryState", "run")
+    self.loadInterval = config.getParameter("diggingLoadInterval")
+    animator.setAnimationState("quarryState", "run")
     return storage.quarry
 end
 
@@ -247,7 +247,7 @@ function runState.update(dt, data)
                 runState.loadRegions(data)
                 self.loadTimer = 0
             end
-            self.loadTimer = self.loadTimer + entity.dt()
+            self.loadTimer = self.loadTimer + object.dt()
 
             local movedDown = false
             if (data.curX == 0 and data.curDir == data.dir) or (data.curX == data.width and data.curDir ~= data.dir) then
@@ -342,7 +342,7 @@ function returnState.enterWith(args)
     storage.quarry = args
     updateAnimationState()
     self.loadTimer = 0
-    self.loadInterval = entity.configParameter("returningLoadInterval")
+    self.loadInterval = config.getParameter("returningLoadInterval")
     self.done, self.stuck, self.changeDirection = false, 0, false
     return args
 end
@@ -356,7 +356,7 @@ function returnState.update(dt, data)
         runState.loadRegions(data)
         self.loadTimer = 0
     end
-    self.loadTimer = self.loadTimer + entity.dt()
+    self.loadTimer = self.loadTimer + object.dt()
 
     local quarryPos = world.entityPosition(storage.quarry.id)
     if quarryPos and not self.changeDirection then
@@ -425,7 +425,7 @@ end
 function moveQuarry(distance)
     if not inPosition(distance, 0.04) then
         local chainlength = (storage.quarry.homePos[2] - storage.quarry.pos[2])*8+2
-        local push, max = entity.configParameter("push"), entity.configParameter("maxSpeed")
+        local push, max = config.getParameter("push"), config.getParameter("maxSpeed")
         if distance[1] > 0.04 then
             distance[1] = math.min(distance[1]+push[1], max[1])
         elseif distance[1] < -0.04 then
@@ -452,7 +452,7 @@ function sendItem()
     if next(pipes.nodeEntities) ~= nil and storageApi.getCount() > 0 then
         for i,item in storageApi.getIterator() do
             local tarNode = 1
-            if entity.direction() == -1 then
+            if object.direction() == -1 then
                 tarNode = 2
             end
             local result = pushItem(tarNode, item)
@@ -470,20 +470,20 @@ end
 function updateAnimationState()
     if energy.getEnergy() > 1 then
         if storage.quarry.run then
-            entity.setAnimationState("quarryState", "run")
+            animator.setAnimationState("quarryState", "run")
         elseif storage.quarry.returnPosition then
             if storage.quarry.returnDirection > 0 then
-                entity.setAnimationState("quarryState", "return")
+                animator.setAnimationState("quarryState", "return")
             else
-                entity.setAnimationState("quarryState", "run")
+                animator.setAnimationState("quarryState", "run")
             end
         elseif storageApi.getCount() > 0 then
-            entity.setAnimationState("quarryState", "items")
+            animator.setAnimationState("quarryState", "items")
         else
-            entity.setAnimationState("quarryState", "idle")
+            animator.setAnimationState("quarryState", "idle")
         end
     else
-        entity.setAnimationState("quarryState", "energy")
+        animator.setAnimationState("quarryState", "energy")
     end
 end
 

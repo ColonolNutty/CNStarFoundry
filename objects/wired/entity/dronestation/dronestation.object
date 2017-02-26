@@ -1,5 +1,6 @@
 {
   "objectName" : "dronestation",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Bring some serious automation into your home!",
   "shortdescription" : "Item Drone Station",
@@ -41,7 +42,7 @@
   
   "energyCapacity" : 50,
   
-  "inboundNodes" : [ [0, 0] ],
+  "inputNodes" : [ [0, 0] ],
   
   "itemNodes" : [ { "offset" : [-1, 0], "dir" : [-1, 0] } ],
   

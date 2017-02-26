@@ -1,6 +1,6 @@
 function init(virtual)
   if not virtual then
-    entity.setInteractive(not entity.isInboundNodeConnected(0))
+    object.setInteractive(not object.isInputNodeConnected(0))
 
     if storage.tileArea == nil then
       storage.tileArea = {}
@@ -30,9 +30,9 @@ end
 
 function updateAnimationState()
   if storage.swapState then
-    entity.setAnimationState("layerState", "background")
+    animator.setAnimationState("layerState", "background")
   else
-    entity.setAnimationState("layerState", "foreground")
+    animator.setAnimationState("layerState", "foreground")
   end
 end
 
@@ -44,12 +44,12 @@ function onNodeConnectionChange()
   datawire.onNodeConnectionChange()
 
   checkNodes()
-  entity.setInteractive(not entity.isInboundNodeConnected(0))
+  object.setInteractive(not object.isInputNodeConnected(0))
 end
 
 function checkNodes()
   if storage.transitionState == 0 then
-    swapLayer(entity.getInboundNodeLevel(0))
+    swapLayer(object.getInputNodeLevel(0))
   else
     self.pendingNodeChange = true
   end
@@ -68,7 +68,7 @@ function onValidDataReceived(data, dataType, nodeId, sourceEntityId)
 end
 
 function onInteraction(args)
-  if not entity.isInboundNodeConnected(0) and storage.transitionState == 0 then
+  if not object.isInputNodeConnected(0) and storage.transitionState == 0 then
     swapLayer(not storage.swapState)
   end
 end

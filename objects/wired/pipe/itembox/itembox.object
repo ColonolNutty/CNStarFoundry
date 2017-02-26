@@ -1,5 +1,6 @@
 {
   "objectName" : "itembox",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Item storage and retrieval.",
   "shortdescription" : "Item Storage Box",
@@ -49,7 +50,7 @@
   "scriptDelta" : 30,
   
   
-  "inboundNodes" : [[0, 1], [2, 1]],
+  "inputNodes" : [[0, 1], [2, 1]],
   
   "itemNodes" : [ {"offset": [0, 0], "dir": [-1, 0]}, {"offset": [2, 0], "dir": [1, 0]} ],
   

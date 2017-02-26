@@ -1,5 +1,6 @@
 {
   "objectName" : "airfan",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "category" : "wire",
   "price" : 350,
@@ -18,7 +19,7 @@
     }
   ],
   
-  "inboundNodes" : [ [0, -2] ],
+  "inputNodes" : [ [0, -2] ],
 
   "scripts" : [ "airfan.lua", "/scripts/entityProxy.lua", "/scripts/energy.lua" ],
   "scriptDelta" : 5,

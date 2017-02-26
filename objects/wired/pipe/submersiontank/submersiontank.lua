@@ -1,13 +1,13 @@
 function init(args)  
-  entity.setInteractive(true)
+  object.setInteractive(true)
   if args == false then
     pipes.init({liquidPipe})
-    local initInv = entity.configParameter("initialInventory")
+    local initInv = config.getParameter("initialInventory")
     if initInv and storage.liquid == nil then
       storage.liquid = initInv
     end
     
-    entity.scaleGroup("liquid", {1, 0})
+    object.scaleGroup("liquid", {1, 0})
     self.liquidMap = {}
     self.liquidMap[1] = "water"
     self.liquidMap[3] = "lava"
@@ -15,9 +15,9 @@ function init(args)
     self.liquidMap[6] = "juice"
     self.liquidMap[7] = "tar"
     
-    self.capacity = entity.configParameter("liquidCapacity")
-    self.pushAmount = entity.configParameter("liquidPushAmount")
-    self.pushRate = entity.configParameter("liquidPushRate")
+    self.capacity = config.getParameter("liquidCapacity")
+    self.pushAmount = config.getParameter("liquidPushAmount")
+    self.pushRate = config.getParameter("liquidPushRate")
     
     if storage.liquid == nil then storage.liquid = {} end
     
@@ -26,7 +26,7 @@ function init(args)
 end
 
 function die()
-  local position = entity.position()
+  local position = object.position()
   if storage.liquid[1] ~= nil then
     world.spawnItem("submersiontank", {position[1] + 1.5, position[2] + 1}, 1, {initialInventory = storage.liquid})
   else
@@ -67,34 +67,34 @@ function onInteractionNew(args)
 end
 
 function main(args)
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
   
   local liquidState = self.liquidMap[storage.liquid[1]]
   if liquidState then
-    entity.setAnimationState("liquid", liquidState)
+    animator.setAnimationState("liquid", liquidState)
   else
-    entity.setAnimationState("liquid", "other")
+    animator.setAnimationState("liquid", "other")
   end
   
   if storage.liquid[2] then
     local liquidScale = storage.liquid[2] / self.capacity
-    entity.scaleGroup("liquid", {1, liquidScale})
+    object.scaleGroup("liquid", {1, liquidScale})
   else
-    entity.scaleGroup("liquid", {1, 0})
+    object.scaleGroup("liquid", {1, 0})
   end
   
   if self.pushTimer > self.pushRate and storage.liquid[2] ~= nil then
     local pushedLiquid = {storage.liquid[1], storage.liquid[2]}
     if storage.liquid[2] > self.pushAmount then pushedLiquid[2] = self.pushAmount end
     for i=1,2 do
-      if entity.getInboundNodeLevel(i-1) and pushLiquid(i, pushedLiquid) then
+      if object.getInputNodeLevel(i-1) and pushLiquid(i, pushedLiquid) then
         storage.liquid[2] = storage.liquid[2] - pushedLiquid[2]
         break;
       end
     end
     self.pushTimer = 0
   end
-  self.pushTimer = self.pushTimer + entity.dt()
+  self.pushTimer = self.pushTimer + object.dt()
   
   clearLiquid()
 end

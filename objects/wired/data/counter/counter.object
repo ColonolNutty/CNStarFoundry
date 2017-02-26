@@ -1,5 +1,6 @@
 {
   "objectName" : "counter",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "A counter with options to Increment, Decrement, and Reset.",
   "shortdescription" : "Counter",
@@ -31,6 +32,6 @@
   },
   "animationPosition" : [-8, -8],
 
-  "inboundNodes" : [ [-1, 0], [-1, -1], [0, 0] ],
-  "outboundNodes" : [ [0, -1] ]
+  "inputNodes" : [ [-1, 0], [-1, -1], [0, 0] ],
+  "outputNodes" : [ [0, -1] ]
 }

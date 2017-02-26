@@ -1,5 +1,6 @@
 {
   "objectName" : "layerswap",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Swaps blocks between foreground and background when activated.",
   "shortdescription" : "Layer Swapper",
@@ -30,5 +31,5 @@
   },
   "animationPosition" : [0, -8],
 
-  "inboundNodes" : [ [0, 0] ]
+  "inputNodes" : [ [0, 0] ]
 }

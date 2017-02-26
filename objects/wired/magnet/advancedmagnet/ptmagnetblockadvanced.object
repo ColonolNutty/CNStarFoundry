@@ -30,7 +30,7 @@
   },
   "animationPosition" : [0, 0],
   
-  "inboundNodes" : [ [0, 0] ],
+  "inputNodes" : [ [0, 0] ],
   
   "chargeStrength" : 200,
   "magnetCenter" : [1, 1],

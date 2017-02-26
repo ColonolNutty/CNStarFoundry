@@ -3,12 +3,12 @@ function init(args)
     pipes.init({liquidPipe, itemPipe})
     energy.init()
     
-    if entity.direction() < 0 then
-      pipes.nodes["liquid"] = entity.configParameter("flippedLiquidNodes")
-      pipes.nodes["item"] = entity.configParameter("flippedItemNodes")
+    if object.direction() < 0 then
+      pipes.nodes["liquid"] = config.getParameter("flippedLiquidNodes")
+      pipes.nodes["item"] = config.getParameter("flippedItemNodes")
     end
     
-    entity.setInteractive(true)
+    object.setInteractive(true)
     
     self.conversions = {}
     --Water
@@ -29,11 +29,11 @@ function init(args)
     self.conversions["fleshblock"] = {liquid = 6, material = "fleshblock", input = 20, output = 1400}
     
     
-    self.damageRate = entity.configParameter("damageRate")
-    self.damageAmount = entity.configParameter("damageAmount")
-    self.blockOffset = entity.configParameter("blockOffset")
+    self.damageRate = config.getParameter("damageRate")
+    self.damageAmount = config.getParameter("damageAmount")
+    self.blockOffset = config.getParameter("blockOffset")
     
-    self.energyRate = entity.configParameter("energyConsumptionRate")
+    self.energyRate = config.getParameter("energyConsumptionRate")
     
     self.damageTimer = 0
     
@@ -54,7 +54,7 @@ function die()
   end
   
   if storage.block[1] then
-    local position = entity.position()
+    local position = object.position()
     if next(storage.block[3]) == nil then
       world.spawnItem(storage.block[1], {position[1] + 1.5, position[2] + 1.5}, storage.block[2])
     else
@@ -69,12 +69,12 @@ function onInboundNodeChange(args)
 end
 
 function onNodeConnectionChange()
-  storage.state = entity.getInboundNodeLevel(0)
+  storage.state = object.getInputNodeLevel(0)
 end
 
 function onInteraction(args)
   --pump liquid
-  if entity.isInboundNodeConnected(0) == false then
+  if object.isInputNodeConnected(0) == false then
     storage.state = not storage.state
   end
 end
@@ -111,7 +111,7 @@ function onItemPut(item, nodeId)
 end
 
 function main(args)
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
   energy.update()
   
   if storage.state then
@@ -134,14 +134,14 @@ function main(args)
     if self.damageTimer > self.damageRate then
       if storage.placedBlock[1] == nil then
         if placeBlock() then
-          entity.setAnimationState("extractState", "open")
+          animator.setAnimationState("extractState", "open")
         end
       else
         local blockConversion = self.conversions[storage.placedBlock[1]]
         local liquidOut = {blockConversion.liquid, storage.placedBlock[3]}
         
         if canOutputLiquid(liquidOut) and energy.consumeEnergy(self.energyRate * self.damageRate) then
-          entity.setAnimationState("extractState", "work")
+          animator.setAnimationState("extractState", "work")
           if checkBlock() then
             local placePosition = blockPosition()
             world.callScriptedEntity(storage.blockId, "damageBlock", self.damageAmount)
@@ -156,7 +156,7 @@ function main(args)
       end
       self.damageTimer = 0
     end
-    self.damageTimer = self.damageTimer + entity.dt()
+    self.damageTimer = self.damageTimer + object.dt()
   else
     turnOff()
   end
@@ -164,9 +164,9 @@ end
 
 function turnOff()
   if checkBlock() then
-    entity.setAnimationState("extractState", "error")
+    animator.setAnimationState("extractState", "error")
   else
-    entity.setAnimationState("extractState", "off")
+    animator.setAnimationState("extractState", "off")
   end
 end
 
@@ -179,7 +179,7 @@ function outputLiquid(liquid)
 end
 
 function blockPosition()
-  local position = entity.position()
+  local position = object.position()
   return {position[1] + self.blockOffset[1], position[2] + self.blockOffset[2]}
 end
 
@@ -189,7 +189,7 @@ function placeBlock()
     local blockConversion = self.conversions[storage.block.name]
     if blockConversion then
       local placePosition = blockPosition()
-      local placedObject = world.placeObject("extractorblock", placePosition, entity.direction(), {initState = storage.block.name})
+      local placedObject = world.placeObject("extractorblock", placePosition, object.direction(), {initState = storage.block.name})
       if placedObject then
         local placedBlock = {}
         placedBlock[1] = storage.block.name

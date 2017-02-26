@@ -3,17 +3,17 @@ function init(args)
     pipes.init({liquidPipe, itemPipe})
     energy.init()
     
-    if entity.direction() < 0 then
-      pipes.nodes["liquid"] = entity.configParameter("flippedLiquidNodes")
-      pipes.nodes["item"] = entity.configParameter("flippedItemNodes")
+    if object.direction() < 0 then
+      pipes.nodes["liquid"] = config.getParameter("flippedLiquidNodes")
+      pipes.nodes["item"] = config.getParameter("flippedItemNodes")
     end
     
-    entity.setInteractive(true)
+    object.setInteractive(true)
     
-    self.conversions = entity.configParameter("liquidConversions")
-    self.energyRate = entity.configParameter("energyConsumptionRate")
+    self.conversions = config.getParameter("liquidConversions")
+    self.energyRate = config.getParameter("energyConsumptionRate")
 
-    self.fillInterval = entity.configParameter("fillInterval")
+    self.fillInterval = config.getParameter("fillInterval")
     self.fillTimer = 0
     
     if storage.state == nil then storage.state = false end
@@ -26,19 +26,19 @@ end
 
 function onInboundNodeChange(args)
   storage.state = args.level
-  if storage.state then entity.setAnimationState("fillstate", "on") end
+  if storage.state then animator.setAnimationState("fillstate", "on") end
 end
 
 function onNodeConnectionChange()
-  storage.state = entity.getInboundNodeLevel(0)
-  if storage.state then entity.setAnimationState("fillstate", "on") end
+  storage.state = object.getInputNodeLevel(0)
+  if storage.state then animator.setAnimationState("fillstate", "on") end
 end
 
 function onInteraction(args)
   --pump liquid
-  if entity.isInboundNodeConnected(0) == false then
+  if object.isInputNodeConnected(0) == false then
     storage.state = not storage.state
-  if storage.state then entity.setAnimationState("fillstate", "on") end
+  if storage.state then animator.setAnimationState("fillstate", "on") end
   end
 end
 
@@ -74,7 +74,7 @@ function onItemPut(item, nodeId)
 end
 
 function main(args)
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
   energy.update()
   
   if storage.state then
@@ -91,18 +91,18 @@ function main(args)
         if newCapsule and  energy.consumeEnergy(10) then
           pullLiquid(1, pullFilter)
           pushItem(1, newCapsule)
-          entity.setAnimationState("fillstate", "work")
+          animator.setAnimationState("fillstate", "work")
         else
-          entity.setAnimationState("fillstate", "on")
+          animator.setAnimationState("fillstate", "on")
         end
       else
-        entity.setAnimationState("fillstate", "on")
+        animator.setAnimationState("fillstate", "on")
       end
       self.fillTimer = 0
     end
-    self.fillTimer = self.fillTimer + entity.dt()
+    self.fillTimer = self.fillTimer + object.dt()
   else
-    entity.setAnimationState("fillstate", "off")
+    animator.setAnimationState("fillstate", "off")
   end
 end
 

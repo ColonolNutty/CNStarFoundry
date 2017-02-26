@@ -1,11 +1,11 @@
 function init(virtual)
   if not virtual then
     energy.init()
-    entity.setInteractive(true)
+    object.setInteractive(true)
     
     storage.magnetized = {}
-    storage.magnetizeDuration = entity.configParameter("magnetizeDuration", 5)
-    storage.energyPerMonster = entity.configParameter("energyPerMonster", 10)
+    storage.magnetizeDuration = config.getParameter("magnetizeDuration", 5)
+    storage.energyPerMonster = config.getParameter("energyPerMonster", 10)
     
     if math.magnetizers == nil then
       math.magnetizers = { }
@@ -17,7 +17,7 @@ function init(virtual)
       output(storage.state)
     end
 
-    local pos = entity.position()
+    local pos = object.position()
     self.aoe = {pos, {pos[1] + 1, pos[2] + 5}}
   end
 end
@@ -26,7 +26,7 @@ end
 function die()
   energy.die()
   if math.magnetizers ~= nil then
-    math.magnetizers[entity.id()] = nil
+    math.magnetizers[object.id()] = nil
   end
 end
 
@@ -41,14 +41,14 @@ end
 function output(state)
   if storage.state ~= state then
     storage.state = state
-    entity.setAllOutboundNodes(state)
+    object.setAllOutputNodes(state)
 	
     if state then
-      entity.setAnimationState("magnetizerState", "on")
-      entity.playSound("onSounds")
+      animator.setAnimationState("magnetizerState", "on")
+      object.playSound("onSounds")
     else
-      entity.setAnimationState("magnetizerState", "off")
-      entity.playSound("offSounds")
+      animator.setAnimationState("magnetizerState", "off")
+      object.playSound("offSounds")
     end
   end
 end
@@ -57,8 +57,8 @@ function main()
   energy.update()
 
   -- Ensure that this magnetizer is still in the global table
-  if not math.magnetizers[entity.id()] then
-    math.magnetizers[entity.id()] = true
+  if not math.magnetizers[object.id()] then
+    math.magnetizers[object.id()] = true
   end
 
   -- Update all entities magnetized by this magnetizer
@@ -70,7 +70,7 @@ function main()
       -- Play the magnetized effect
       world.spawnProjectile("magnetEffect", world.entityPosition(key), key, {0, 0}, true)
       -- Update magnetize duration
-      storage.magnetized[key] = value - entity.dt()
+      storage.magnetized[key] = value - object.dt()
     end
   end
 
@@ -84,12 +84,12 @@ function main()
           local durationLeft = world.callScriptedEntity(magnetized, "getMagnetizedDuration", value)
           local energyToConsume = storage.energyPerMonster * (1 - (durationLeft / storage.magnetizeDuration))
           if energy.consumeEnergy(energyToConsume) then
-            entity.setAnimationState("magnetizerState", "activate")
+            animator.setAnimationState("magnetizerState", "activate")
             world.callScriptedEntity(magnetized, "refreshMagnetize", value, storage.magnetizeDuration)
           end
         else
           if energy.consumeEnergy(storage.energyPerMonster) then
-            entity.setAnimationState("magnetizerState", "activate")
+            animator.setAnimationState("magnetizerState", "activate")
             storage.magnetized[value] = storage.magnetizeDuration
           end
         end

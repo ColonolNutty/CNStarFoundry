@@ -3,10 +3,10 @@ function init(virtual)
     energy.init()
 
     -- tile mods to pull
-    self.pullTypes = entity.configParameter("pullTypes") or {}
+    self.pullTypes = config.getParameter("pullTypes") or {}
 
     -- tile mods not worth replacing
-    self.trashTypes = entity.configParameter("trashTypes") or {}
+    self.trashTypes = config.getParameter("trashTypes") or {}
 
     self.cleanupLocs = {}
     self.nullMod = "grass"
@@ -35,7 +35,7 @@ function die()
 end
 
 function onInteraction(args)
-  if not entity.isInboundNodeConnected(0) then
+  if not object.isInputNodeConnected(0) then
     storage.state = not storage.state
     updateAnimationState()
   end
@@ -47,14 +47,14 @@ function main()
   cleanupMods()
 
   if self.findTimer > 0 then
-    self.findTimer = self.findTimer - entity.dt()
+    self.findTimer = self.findTimer - object.dt()
   elseif storage.state then
     findOres()
     self.findTimer = self.findInterval
   end
 
   if self.pullTimer > 0 then
-    self.pullTimer = self.pullTimer - entity.dt()
+    self.pullTimer = self.pullTimer - object.dt()
   elseif storage.state and energy.consumeEnergy(self.energyCost) then
     pullOres()
     self.pullTimer = self.pullInterval
@@ -72,23 +72,23 @@ function onNodeConnectionChange()
 end
 
 function checkNodes()
-  entity.setInteractive(not entity.isInboundNodeConnected(0))
-  if entity.isInboundNodeConnected(0) then
-    storage.state = entity.getInboundNodeLevel(0)
+  object.setInteractive(not object.isInputNodeConnected(0))
+  if object.isInputNodeConnected(0) then
+    storage.state = object.getInputNodeLevel(0)
   end
   updateAnimationState()
 end
 
 function updateAnimationState()
-  if entity.animationState("magnetState") ~= "pulse" then
+  if animator.animationState("magnetState") ~= "pulse" then
     if storage.state then
       if energy.getEnergy() < energy.getCapacity() then
-        entity.setAnimationState("magnetState", "charge")
+        animator.setAnimationState("magnetState", "charge")
       else
-        entity.setAnimationState("magnetState", "on")
+        animator.setAnimationState("magnetState", "on")
       end
     else
-      entity.setAnimationState("magnetState", "off")
+      animator.setAnimationState("magnetState", "off")
     end
   end
   setNeedlePos()
@@ -96,12 +96,12 @@ end
 
 function setNeedlePos()
   local angle = self.needleMinPos - self.needleRange * ((energy.getEnergy() / energy.getCapacity()) + (math.random() * 0.04))
-  entity.rotateGroup("needle", angle)
+  object.rotateGroup("needle", angle)
 end
 
 function findOres()
-  local pos1 = entity.toAbsolutePosition({-self.range, -self.range})
-  local pos2 = entity.toAbsolutePosition({self.range, 5})
+  local pos1 = object.toAbsolutePosition({-self.range, -self.range})
+  local pos2 = object.toAbsolutePosition({self.range, 5})
 
   -- world.logInfo("finding ores in area from %s to %s", pos1, pos2)
 
@@ -121,7 +121,7 @@ function findOres()
 end
 
 function compareDistance(a, b)
-  return world.magnitude(entity.position(), a.position) < world.magnitude(entity.position(), b.position)
+  return world.magnitude(object.position(), a.position) < world.magnitude(object.position(), b.position)
 end
 
 function math.round(num, idp)
@@ -130,12 +130,12 @@ function math.round(num, idp)
 end
 
 function pullOres()
-  entity.setAnimationState("magnetState", "pulse")
+  animator.setAnimationState("magnetState", "pulse")
 
   for i, ore in ipairs(self.oreLocs) do
     if ore.active then
       if world.mod(ore.position, "foreground") == ore.mod then
-        local relPos = {ore.position[1] - entity.position()[1], ore.position[2] - entity.position()[2]}
+        local relPos = {ore.position[1] - object.position()[1], ore.position[2] - object.position()[2]}
         local magnitude = math.sqrt((relPos[1] ^ 2) + (relPos[2] ^ 2)) * 1.2
         local jitter  = {math.random() * 0.8 - 0.4, math.random() * 0.8 - 0.4}
         local newPos = {math.round(ore.position[1] - (relPos[1] / magnitude) + jitter[1]), math.round(ore.position[2] - (relPos[2] / magnitude) + jitter[2])}
@@ -174,7 +174,7 @@ function cleanupMods()
     end
     self.cleanupLocs = {}
     if #finalLocs > 0 then
-      world.damageTiles(finalLocs, "foreground", entity.position(), "plantish", 0.01)
+      world.damageTiles(finalLocs, "foreground", object.position(), "plantish", 0.01)
     end
   end
 end

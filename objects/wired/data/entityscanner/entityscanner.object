@@ -1,5 +1,6 @@
 {
   "objectName" : "entityscanner",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Collects useful data about entities.",
   "shortdescription" : "Entity Scanner",
@@ -31,7 +32,7 @@
   },
   "animationPosition" : [-8, -8],
 
-  "outboundNodes" : [ [0, -1] ],
+  "outputNodes" : [ [0, -1] ],
 
   "detectArea" : 3.5,
   "detectAreaOffset" : [0, 0]

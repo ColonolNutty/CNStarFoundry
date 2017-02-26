@@ -1,6 +1,6 @@
 function init(virtual)
   if not virtual then
-    self.convertLiquid = entity.configParameter("liquidConversions")
+    self.convertLiquid = config.getParameter("liquidConversions")
 
     pipes.init({liquidPipe})
     
@@ -10,9 +10,9 @@ end
 
 --------------------------------------------------------------------------------
 function main(args)
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
   
-  local position = entity.position()
+  local position = object.position()
   local checkDirs = {}
   checkDirs[0] = {-1, 0}
   checkDirs[1] = {0, -1}
@@ -23,7 +23,7 @@ function main(args)
     for i=0,3 do 
       local angle = (math.pi / 2) * i
       if #pipes.nodeEntities["liquid"][i+1] > 0 then
-        entity.rotateGroup("pipe", angle)
+        object.rotateGroup("pipe", angle)
         self.usedNode = i + 1
       elseif i == 3 then --Not connected to an object, check for pipes instead
         for i=0,3 do 
@@ -31,7 +31,7 @@ function main(args)
           local tilePos = {position[1] + checkDirs[i][1], position[2] + checkDirs[i][2]}
           local pipeDirections = pipes.getPipeTileData("liquid", tilePos, "foreground", checkDirs[i])
           if pipeDirections then
-            entity.rotateGroup("pipe", angle)
+            object.rotateGroup("pipe", angle)
             self.usedNode = i + 1
           end
         end
@@ -53,7 +53,7 @@ end
 function canGetLiquid(filter, nodeId)
   if nodeId ~= self.usedNode then return false end
   --Only get liquid if the pipe is emerged in liquid
-  local position = entity.position()
+  local position = object.position()
   local liquidPos = {position[1] + 0.5, position[2] + 0.5}
   local availableLiquid = world.liquidAt(liquidPos)
   if availableLiquid then
@@ -76,7 +76,7 @@ function canPutLiquid(liquid, nodeId)
 end
 
 function onLiquidGet(filter, nodeId)
-  local position = entity.position()
+  local position = object.position()
   local liquidPos = {position[1] + 0.5, position[2] + 0.5}
   local getLiquid = canGetLiquid(filter, nodeId)
   if getLiquid then
@@ -91,7 +91,7 @@ function onLiquidGet(filter, nodeId)
 end
 
 function onLiquidPut(liquid, nodeId)
-  local position = entity.position()
+  local position = object.position()
   local liquidPos = {position[1] + 0.5, position[2] + 0.5}
   if canPutLiquid(liquid, nodeId) then
     local curLiquid = world.liquidAt(liquidPos)

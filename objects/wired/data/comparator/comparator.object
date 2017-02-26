@@ -1,5 +1,6 @@
 {
   "objectName" : "comparator",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Given two inputs, the Comparator displays symbols: <, >, or =.",
   "shortdescription" : "Comparator",
@@ -32,6 +33,6 @@
   },
   "animationPosition" : [0, 0],
 
-  "inboundNodes" : [ [0, 1], [2, 1] ],
-  "outboundNodes" : [ [1, 0] ]
+  "inputNodes" : [ [0, 1], [2, 1] ],
+  "outputNodes" : [ [1, 0] ]
 }

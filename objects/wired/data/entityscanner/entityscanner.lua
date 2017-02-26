@@ -2,23 +2,23 @@
 
 function init(virtual)
   if not virtual then
-    entity.setInteractive(true)
+    object.setInteractive(true)
 
-    self.detectArea = entity.configParameter("detectArea")
-    self.detectAreaOffset = entity.configParameter("detectAreaOffset")
+    self.detectArea = config.getParameter("detectArea")
+    self.detectAreaOffset = config.getParameter("detectAreaOffset")
     if type(self.detectArea) == "table" then
       --build rectangle for detection using object position and specified detectAreaOffset
       if type(self.detectAreaOffset) == "table" then
-        self.detectArea = {entity.position()[1] + self.detectArea[1] + self.detectAreaOffset[1], entity.position()[2] + self.detectArea[2] + self.detectAreaOffset[2]}
+        self.detectArea = {object.position()[1] + self.detectArea[1] + self.detectAreaOffset[1], object.position()[2] + self.detectArea[2] + self.detectAreaOffset[2]}
       else
-        self.detectArea = {entity.position()[1] + self.detectArea[1], entity.position()[2] + self.detectArea[2]}
+        self.detectArea = {object.position()[1] + self.detectArea[1], object.position()[2] + self.detectArea[2]}
       end
     end
 
     if type(self.detectAreaOffset) == "table" then
-      self.detectOrigin = {entity.position()[1] + self.detectAreaOffset[1], entity.position()[2] + self.detectAreaOffset[2]}
+      self.detectOrigin = {object.position()[1] + self.detectAreaOffset[1], object.position()[2] + self.detectAreaOffset[2]}
     else
-      self.detectOrigin = entity.position()
+      self.detectOrigin = object.position()
     end
 
     self.modes = { "maxhp", "currenthp" }
@@ -55,7 +55,7 @@ function cycleMode()
 end
 
 function updateAnimationState()
-  entity.setAnimationState("scannerState", storage.currentMode)
+  animator.setAnimationState("scannerState", storage.currentMode)
 end
 
 function doDetect()
@@ -91,7 +91,7 @@ function firstValidEntity(entityIds)
   return false
 end
 
-function main()
+function update(dt)
   datawire.update()
   doDetect()
 end

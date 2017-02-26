@@ -12,9 +12,9 @@ end
 
 function main()
    energy.update()
-   local lightLevel = onShip() and 1.0 or world.lightLevel(entity.position())
-   if lightLevel >= entity.configParameter("lightLevelThreshold") and checkSolar() then
-      local generatedEnergy = lightLevel*entity.configParameter("energyGenerationRate")*entity.dt()
+   local lightLevel = onShip() and 1.0 or world.lightLevel(object.position())
+   if lightLevel >= config.getParameter("lightLevelThreshold") and checkSolar() then
+      local generatedEnergy = lightLevel*config.getParameter("energyGenerationRate")*object.dt()
       energy.addEnergy(generatedEnergy)
       updateAnimationState()
    end
@@ -22,9 +22,9 @@ end
 
 function updateAnimationState()
    if storage.state then
-      entity.setAnimationState("solarState", "on")
+      animator.setAnimationState("solarState", "on")
    else
-      entity.setAnimationState("solarState", "off")
+      animator.setAnimationState("solarState", "off")
    end
 end
 
@@ -35,12 +35,12 @@ end
 
 -- Check requirements for solar generation
 function checkSolar()
-  return (onShip() or (world.timeOfDay() <= 0.5 and not world.underground(entity.position()))) and clearSkiesAbove()
+  return (onShip() or (world.timeOfDay() <= 0.5 and not world.underground(object.position()))) and clearSkiesAbove()
 end
 
 function clearSkiesAbove()
-  local ll = entity.toAbsolutePosition({ -2.0, 1.0 })
-  local tr = entity.toAbsolutePosition({ 2.0, 16.0 })
+  local ll = object.toAbsolutePosition({ -2.0, 1.0 })
+  local tr = object.toAbsolutePosition({ 2.0, 16.0 })
   
   local bounds = {0, 0, 0, 0}
   bounds[1] = ll[1]
@@ -62,6 +62,6 @@ end
 
 --never accept energy from elsewhere
 function onEnergyNeedsCheck(energyNeeds)
-   energyNeeds[tostring(entity.id())] = 0
+   energyNeeds[tostring(object.id())] = 0
    return energyNeeds
 end

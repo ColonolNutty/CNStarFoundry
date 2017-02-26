@@ -1,5 +1,6 @@
 {
   "objectName" : "wirelampwhite",
+  "colonyTags" : ["wired"],
   "printable" : false,
   "rarity" : "Common",
   "category" : "light",

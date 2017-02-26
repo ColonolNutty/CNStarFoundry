@@ -1,6 +1,6 @@
 function init(virtual)
   if not virtual then
-    entity.setInteractive(true)
+    object.setInteractive(true)
 
     self.range = 70
 
@@ -34,12 +34,12 @@ function cycleMode()
 end
 
 function updateRelays(variant)
-  local relays = world.objectQuery(entity.toAbsolutePosition({-self.range, -self.range}), entity.toAbsolutePosition({self.range, self.range}), {callScript = "setRelayVariant", callScriptArgs = {variant}})
+  local relays = world.objectQuery(object.toAbsolutePosition({-self.range, -self.range}), object.toAbsolutePosition({self.range, self.range}), {callScript = "setRelayVariant", callScriptArgs = {variant}})
   --world.logInfo("successfully updated %d relays: %s", #relays, relays)
 
   updateAnimationState()
 end
 
 function updateAnimationState()
-  entity.setAnimationState("cloakState", storage.currentMode)
+  animator.setAnimationState("cloakState", storage.currentMode)
 end

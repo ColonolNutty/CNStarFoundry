@@ -8,7 +8,7 @@ function init(virtual)
       storage.timer = 0
     end
 
-    self.detectCooldown = entity.configParameter("detectCooldown")
+    self.detectCooldown = config.getParameter("detectCooldown")
 
     updateAnimationState()
 
@@ -30,10 +30,10 @@ end
 --------------------------------------------------------------------------------
 function main(args)
   datawire.update()
-  pipes.update(entity.dt())
+  pipes.update(object.dt())
 
   if storage.timer > 0 then
-    storage.timer = storage.timer - entity.dt()
+    storage.timer = storage.timer - object.dt()
 
     if storage.timer <= 0 then
       deactivate()
@@ -43,23 +43,23 @@ end
 
 function updateAnimationState()
   if storage.state then
-    entity.setAnimationState("switchState", "on")
+    animator.setAnimationState("switchState", "on")
   else
-    entity.setAnimationState("switchState", "off")
+    animator.setAnimationState("switchState", "off")
   end
 end
 
 function activate()
   storage.timer = self.detectCooldown
   storage.state = true
-  entity.setAllOutboundNodes(true)
+  object.setAllOutputNodes(true)
   updateAnimationState()
 end
 
 function deactivate()
   storage.state = false
   updateAnimationState()
-  entity.setAllOutboundNodes(false)
+  object.setAllOutputNodes(false)
 end
 
 function output(item)

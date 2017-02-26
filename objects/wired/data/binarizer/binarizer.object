@@ -1,5 +1,6 @@
 {
   "objectName" : "binarizer",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "The Binarizer strips numerical data and only relays binary signals.",
   "shortdescription" : "Binarizer",
@@ -31,6 +32,6 @@
   },
   "animationPosition" : [0, 0],
 
-  "inboundNodes" : [ [0, 0] ],
-  "outboundNodes" : [ [1, 0] ]
+  "inputNodes" : [ [0, 0] ],
+  "outputNodes" : [ [1, 0] ]
 }

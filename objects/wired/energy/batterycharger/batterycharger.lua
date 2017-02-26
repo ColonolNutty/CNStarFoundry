@@ -3,7 +3,7 @@ function init(virtual)
     energy.init()
     datawire.init()
 
-    entity.setInteractive(true)
+    object.setInteractive(true)
 
     --table of batteries in the charger
     self.batteries = {}
@@ -25,7 +25,7 @@ function init(virtual)
     self.batteryCheckTimer = self.batteryCheckFreq
 
     --store this so that we don't have to compute it repeatedly
-    local pos = entity.position()
+    local pos = object.position()
     self.batteryCheckArea = {
       {pos[1], pos[2] + 1.5},
       1.5
@@ -69,7 +69,7 @@ function checkBatteries()
   self.totalUnusedCapacity = 0
   self.totalStoredEnergy = 0
 
-  local entityIds = world.objectQuery(self.batteryCheckArea[1], self.batteryCheckArea[2], { withoutEntityId = entity.id(), callScript = "isBattery" })
+  local entityIds = world.objectQuery(self.batteryCheckArea[1], self.batteryCheckArea[2], { withoutEntityId = object.id(), callScript = "isBattery" })
   for i, entityId in ipairs(entityIds) do
     local batteryStatus = world.callScriptedEntity(entityId, "getBatteryStatus")
     self.batteries[#self.batteries + 1] = batteryStatus
@@ -93,13 +93,13 @@ end
 
 function updateAnimationState()
   if not self.batteries then
-    entity.setAnimationState("chargeState", "error")
+    animator.setAnimationState("chargeState", "error")
   elseif #self.batteries == 0 then
-    entity.setAnimationState("chargeState", "off")
+    animator.setAnimationState("chargeState", "off")
   elseif storage.discharging then
-    entity.setAnimationState("chargeState", "on")
+    animator.setAnimationState("chargeState", "on")
   else
-    entity.setAnimationState("chargeState", "charge")
+    animator.setAnimationState("chargeState", "charge")
   end
 end
 
@@ -107,9 +107,9 @@ function onEnergyNeedsCheck(energyNeeds)
   if not storage.discharging or not world.callScriptedEntity(energyNeeds.sourceId, "isBatteryCharger") then
     local thisNeed = math.min(self.batteryChargeAmount, self.totalUnusedCapacity)
     energyNeeds["total"] = energyNeeds["total"] + thisNeed
-    energyNeeds[tostring(entity.id())] = thisNeed
+    energyNeeds[tostring(object.id())] = thisNeed
   else
-    energyNeeds[tostring(entity.id())] = 0
+    energyNeeds[tostring(object.id())] = 0
   end
 
   return energyNeeds
@@ -169,12 +169,12 @@ end
 function setWireStates()
   datawire.sendData(self.totalStoredEnergy, "number", 0)
   datawire.sendData(self.totalUnusedCapacity, "number", 1)
-  entity.setOutboundNodeLevel(0, self.totalUnusedCapacity == 0)
-  entity.setOutboundNodeLevel(1, self.totalStoredEnergy == 0)
+  object.setOutputNodeLevel(0, self.totalUnusedCapacity == 0)
+  object.setOutputNodeLevel(1, self.totalStoredEnergy == 0)
 end
 
 function main()
-  self.batteryCheckTimer = self.batteryCheckTimer - entity.dt()
+  self.batteryCheckTimer = self.batteryCheckTimer - object.dt()
   if self.batteryCheckTimer <= 0 then
     checkBatteries()
   end

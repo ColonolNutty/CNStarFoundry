@@ -1,6 +1,6 @@
 function init(args)
   if not virtual then
-    storage.pos = {entity.position(), {entity.position()[1] + 1, entity.position()[2]}, {entity.position()[1] - 1, entity.position()[2]}}
+    storage.pos = {object.position(), {object.position()[1] + 1, object.position()[2]}, {object.position()[1] - 1, object.position()[2]}}
     if storage.state == nil then
       output(false)
     else
@@ -14,9 +14,9 @@ function output(state)
   if state ~= storage.state then
     storage.state = state
     if state then
-      entity.setAnimationState("drainState", "on")
+      animator.setAnimationState("drainState", "on")
     else
-      entity.setAnimationState("drainState", "off")
+      animator.setAnimationState("drainState", "off")
     end
   end
 end
@@ -29,7 +29,7 @@ function drain()
 end
 
 function main()
-  if not entity.isInboundNodeConnected(0) or entity.getInboundNodeLevel(0) then
+  if not object.isInputNodeConnected(0) or object.getInputNodeLevel(0) then
     output(true)
     drain()
   else

@@ -1,5 +1,6 @@
 {
   "objectName" : "powersmelter",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Smelts ores faster than normal at the cost of some energy.",
   "shortdescription" : "Power Smelter",
@@ -36,7 +37,7 @@
   },
   "animationPosition" : [-16, -16],
 
-  "inboundNodes" : [ [0, 0] ],
+  "inputNodes" : [ [0, 0] ],
 
   "itemNodes" : [ {"offset": [-2, -2], "dir": [-1, 0]}, {"offset": [1, -2], "dir": [1, 0]} ],
   

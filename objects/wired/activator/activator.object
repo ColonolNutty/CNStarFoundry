@@ -1,5 +1,6 @@
 {
   "objectName" : "activator",
+  "colonyTags" : ["wired"],
   "printable" : false,
   "rarity" : "Common",
   "price" : 300,
@@ -33,5 +34,5 @@
   },
   "animationPosition" : [-1, -1],
 
-  "inboundNodes" : [ [0, 0] ]
+  "inputNodes" : [ [0, 0] ]
 }

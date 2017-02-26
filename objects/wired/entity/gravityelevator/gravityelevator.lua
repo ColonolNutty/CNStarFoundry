@@ -1,19 +1,19 @@
 function init(virtual)
    if not self.number and not virtual then
       energy.init()
-      self.gravityForce, self.countdown, self.number = entity.configParameter("gravityForce"), 15, 0
+      self.gravityForce, self.countdown, self.number = config.getParameter("gravityForce"), 15, 0
       if self.direction == nil then
          self.state, self.direction, self.animation = false, 0, "back"
-         if entity.configParameter("anchors")[1] == "top" then
+         if config.getParameter("anchors")[1] == "top" then
             self.direction = -1
             self.animation = "top"
-         elseif entity.configParameter("anchors")[1] == "bottom" then
+         elseif config.getParameter("anchors")[1] == "bottom" then
             self.direction = 1
             self.animation = "bottom"
          end
       end
-      entity.setInteractive(true)
-      entity.setAnimationState("beamState", "off")
+      object.setInteractive(true)
+      animator.setAnimationState("beamState", "off")
       onEnergyChange(storage.curEnergy)
    end
 end
@@ -26,11 +26,11 @@ function onEnergyChange(amount)
    --world.logInfo("onEnergyChange %s", amount)
 
    if amount < energy.consumptionRate then
-      entity.setGlobalTag("modePart", "energy")
+      animator.setGlobalTag("modePart", "energy")
    else
-      entity.setGlobalTag("modePart", "default")
+      animator.setGlobalTag("modePart", "default")
    end
-   entity.setAnimationState("gravelevatorState", self.animation)
+   animator.setAnimationState("gravelevatorState", self.animation)
 end
 
 function consumeEnergy()
@@ -41,7 +41,7 @@ function consumeEnergy()
          energyn = energyn * 5
       end
       if not energy.consumeEnergy(energyn) then
-         entity.setGlobalTag("modePart", "energy")
+         animator.setGlobalTag("modePart", "energy")
          self.state = false
          return false
       end
@@ -71,7 +71,7 @@ function main()
    elseif self.lastProj then
       if not world.entityExists(self.lastProj) then
          self.lastProj, self.proj = nil, nil
-         entity.setAnimationState("beamState", "off")
+         animator.setAnimationState("beamState", "off")
       end
    end
 end
@@ -82,7 +82,7 @@ function canConnectGravityShaft(direction)
    if self.direction == 0 or self.direction == direction and checkNode(direction, true) then
       self.setDirection, con = direction, true
    end
-   return {con, entity.position()[2]}
+   return {con, object.position()[2]}
 end
 
 function startGravityShaft(args)
@@ -94,24 +94,24 @@ end
 
 function checkForPlayer()
    local dir = getDirection()
-   if #world.playerQuery(entity.toAbsolutePosition({2, (self.size)*dir-dir}), 2) > 0 then
+   if #world.playerQuery(object.toAbsolutePosition({2, (self.size)*dir-dir}), 2) > 0 then
       return true
    end
    return false
 end
 
 function checkForceRegion()
-   local gravityRange, dir, pos = entity.configParameter("gravityRange"), getDirection(), entity.position()
+   local gravityRange, dir, pos = config.getParameter("gravityRange"), getDirection(), object.position()
    if dir == -1 then
       gravityRange[2] = -gravityRange[2]
    end
-   local endPos = entity.toAbsolutePosition({gravityRange[1], gravityRange[2]})
+   local endPos = object.toAbsolutePosition({gravityRange[1], gravityRange[2]})
    local entities  = world.entityLineQuery(
       pos,
       {pos[1], endPos[2] + dir },
       {
          callScript = "isGravityShaft",
-         withoutEntityId = entity.id()
+         withoutEntityId = object.id()
       }
    )
    -- world.Loginfo("checkForceRegion entities %s (%s - %s)", entities, pos, endPos)
@@ -162,18 +162,18 @@ function setForce(force)
    if dir > 0 then
       force = math.max(force[1][1] - math.pow(self.number/2, force[1][2]), force[1][3])
       regio = {self.forceRegion[1]+2, self.forceRegion[2]}
-      entity.setAnimationState("beamState", "up")
-      entity.scaleGroup("beam", {1, (1+self.size)*8})
+      animator.setAnimationState("beamState", "up")
+      object.scaleGroup("beam", {1, (1+self.size)*8})
    else
       force = math.min(force[2][1] + math.pow(self.number/1.2, force[2][2]), force[2][3])
       regio = { self.forceRegion[1]+2, self.forceRegion[4] }
-      entity.setAnimationState("beamState", "down")
-      entity.scaleGroup("beam", {-1, -(1+self.size)*8})
+      animator.setAnimationState("beamState", "down")
+      object.scaleGroup("beam", {-1, -(1+self.size)*8})
    end
 
    if not self.proj or self.proj >= self.size/2 then
       self.proj = 0
-      self.lastProj = world.spawnProjectile("gravityelevator", regio, entity.id(), {0, dir}, false, { timeToLive = self.size/5 })
+      self.lastProj = world.spawnProjectile("gravityelevator", regio, object.id(), {0, dir}, false, { timeToLive = self.size/5 })
    else
       self.proj = self.proj + 1
    end
@@ -181,7 +181,7 @@ function setForce(force)
    -- world.Loginfo("force1 %s", force)
    force = force * (world.gravity({self.forceRegion[1],self.forceRegion[2]})/100)
    -- world.Loginfo("force2 %s", force)
-   entity.setForceRegion(self.forceRegion, {0, force})
+   object.setForceRegion(self.forceRegion, {0, force})
 end
 
 function onNodeConnectionChange()
@@ -197,8 +197,8 @@ function checkNode(direction, ifnot)
    if direction == -1 then
       node = 1
    end
-   if entity.isInboundNodeConnected(node) then
-      if entity.getInboundNodeLevel(node) then
+   if object.isInputNodeConnected(node) then
+      if object.getInputNodeLevel(node) then
          return true
       end
       return false
@@ -207,14 +207,14 @@ function checkNode(direction, ifnot)
 end
 
 function onNodeChange()
-   if entity.getInboundNodeLevel(0) then
-      --world.logInfo("getInboundNodeLevel %s", 1)
+   if object.getInputNodeLevel(0) then
+      --sb.logInfo("getInputNodeLevel %s", 1)
       local dir = self.direction
       if dir == 0 then dir = 1 end
       return startGravityShaft({direction = dir, number = 0})
    end
-   if entity.getInboundNodeLevel(1) then
-      --world.logInfo("getInboundNodeLevel %s", 2)
+   if object.getInputNodeLevel(1) then
+      --sb.logInfo("getInputNodeLevel %s", 2)
       local dir = self.direction
       if dir == 0 then dir = -1 end
       return startGravityShaft({direction = dir, number = 0})

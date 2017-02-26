@@ -1,47 +1,47 @@
 function init(args)
-  self.detectArea = entity.configParameter("detectArea")
-  self.detectAreaOffset = entity.configParameter("detectAreaOffset")
+  self.detectArea = config.getParameter("detectArea")
+  self.detectAreaOffset = config.getParameter("detectAreaOffset")
 
   --compute the origin or bottom left corner for detection
   if type(self.detectAreaOffset) == "table" then
-    self.detectOrigin = {entity.position()[1] + self.detectAreaOffset[1], entity.position()[2] + self.detectAreaOffset[2]}
+    self.detectOrigin = {object.position()[1] + self.detectAreaOffset[1], object.position()[2] + self.detectAreaOffset[2]}
   else
-    self.detectOrigin = entity.position()
+    self.detectOrigin = object.position()
   end
 
   --compute top right corner for detection (if area rectangular)
   if type(self.detectArea) == "table" then
     
     if type(self.detectAreaOffset) == "table" then
-      self.detectArea = {entity.position()[1] + self.detectArea[1] + self.detectAreaOffset[1], entity.position()[2] + self.detectArea[2] + self.detectAreaOffset[2]}
+      self.detectArea = {object.position()[1] + self.detectArea[1] + self.detectAreaOffset[1], object.position()[2] + self.detectArea[2] + self.detectAreaOffset[2]}
     else
-      self.detectArea = {entity.position()[1] + self.detectArea[1], entity.position()[2] + self.detectArea[2]}
+      self.detectArea = {object.position()[1] + self.detectArea[1], object.position()[2] + self.detectArea[2]}
     end
   end
 
   --allow triggering through manual interaction if specified
-  entity.setInteractive(entity.configParameter("manualTrigger") ~= nil and entity.configParameter("manualTrigger"))
+  object.setInteractive(config.getParameter("manualTrigger") ~= nil and config.getParameter("manualTrigger"))
 
   --define valid entity types (defaults to player, monster and npc)
-  self.detectEntityTypes = entity.configParameter("detectEntityTypes")
+  self.detectEntityTypes = config.getParameter("detectEntityTypes")
   if self.detectEntityTypes == nil then
     self.detectEntityTypes = {"player", "monster", "npc"}
   end
 
   --define time to stay active after detecting
-  self.timeout = entity.configParameter("timeout")
+  self.timeout = config.getParameter("timeout")
   if self.timeout == nil then
     self.timeout = 0.1
   end
 
-  entity.setAllOutboundNodes(false)
-  entity.setAnimationState("switchState", "off")
+  object.setAllOutputNodes(false)
+  animator.setAnimationState("switchState", "off")
   self.cooldown = 0
 end
 
 function trigger()
-  entity.setAllOutboundNodes(true)
-  entity.setAnimationState("switchState", "on")
+  object.setAllOutputNodes(true)
+  animator.setAnimationState("switchState", "on")
   self.cooldown = self.timeout
 end
 
@@ -73,15 +73,15 @@ end
 
 function main() 
   if self.cooldown > 0 then
-    self.cooldown = self.cooldown - entity.dt()
+    self.cooldown = self.cooldown - object.dt()
   else
     if self.cooldown <= 0 then
       local entityIds = world.entityQuery(self.detectOrigin, self.detectArea, { notAnObject = true, order = "nearest" })
       if #entityIds > 0 and validateEntities(entityIds) then
         trigger()
       else
-        entity.setAllOutboundNodes(false)
-        entity.setAnimationState("switchState", "off")
+        object.setAllOutputNodes(false)
+        animator.setAnimationState("switchState", "off")
       end
     end
   end

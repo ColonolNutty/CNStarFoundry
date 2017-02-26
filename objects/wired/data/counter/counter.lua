@@ -8,8 +8,8 @@ function init(virtual)
       storage.nodeStates = {}
     end
 
-    if entity.direction() == -1 then
-      entity.setAnimationState("counterState", "flipped.off")
+    if object.direction() == -1 then
+      animator.setAnimationState("counterState", "flipped.off")
     end
 
     datawire.init()
@@ -26,8 +26,8 @@ end
 
 function checkInboundNodes()
   local nodeIndex = 0
-  while nodeIndex < entity.inboundNodeCount() do
-    local newLevel = entity.getInboundNodeLevel(nodeIndex)
+  while nodeIndex < object.inputNodeCount() do
+    local newLevel = object.getInputNodeLevel(nodeIndex)
     if newLevel ~= storage.nodeStates[nodeIndex] then
       storage.nodeStates[nodeIndex] = newLevel
       if newLevel then

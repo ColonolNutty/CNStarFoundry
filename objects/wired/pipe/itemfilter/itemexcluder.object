@@ -1,5 +1,6 @@
 {
   "objectName" : "itemexcluder",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "objectType" : "container",
 

@@ -1,5 +1,6 @@
 {
   "objectName" : "quarry",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Uses energy to automatically mine an area of blocks.",
   "shortdescription" : "Quarry",
@@ -38,7 +39,7 @@
     "quarry" : "quarry.png"
   },
   "animationPosition" : [-8, -8],
-  "inboundNodes" : [ [0, -1] ],
+  "inputNodes" : [ [0, -1] ],
 
   "maxWidth" : 25,
   "maxSpeed" : [2,6],

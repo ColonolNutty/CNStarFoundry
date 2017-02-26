@@ -1,29 +1,29 @@
 function init(virtual)
    if not virtual then
-      entity.setInteractive(true)
-      entity.setAllOutboundNodes(false)
+      object.setInteractive(true)
+      object.setAllOutputNodes(false)
 
-      self.modes = entity.configParameter("modes") or {"all", "owner", "player", "monster", "item", "npc"}
+      self.modes = config.getParameter("modes") or {"all", "owner", "player", "monster", "item", "npc"}
       storage.currentMode = storage.currentMode or self.modes[1]
-      entity.setGlobalTag("modePart", storage.currentMode)
+      animator.setGlobalTag("modePart", storage.currentMode)
 
-      self.detectDuration = entity.configParameter("detectDuration") or 1
+      self.detectDuration = config.getParameter("detectDuration") or 1
       self.detectCooldown = 0
 
-      self.detectArea = {entity.toAbsolutePosition({-2, -2}), entity.toAbsolutePosition({2, 2})}
+      self.detectArea = {object.toAbsolutePosition({-2, -2}), object.toAbsolutePosition({2, 2})}
    end
 end
 
 function on()
-   entity.setAllOutboundNodes(true)
+   object.setAllOutputNodes(true)
    self.detectCooldown = self.detectDuration
-   entity.setAnimationState("detectorState", "on")
+   animator.setAnimationState("detectorState", "on")
 end
 
 function off()
-   entity.setAllOutboundNodes(false)
+   object.setAllOutputNodes(false)
    self.detectCooldown = 0
-   entity.setAnimationState("detectorState", "off")
+   animator.setAnimationState("detectorState", "off")
 end
 
 function onInteraction(args)
@@ -36,22 +36,22 @@ function cycleMode()
   for i, mode in ipairs(self.modes) do
     if mode == storage.currentMode then
       storage.currentMode = self.modes[(i % #self.modes) + 1]
-      entity.setGlobalTag("modePart", storage.currentMode)
+      animator.setGlobalTag("modePart", storage.currentMode)
       return
     end
   end
 
   --previous mode invalid, default to mode 1
   storage.currentMode = self.modes[1]
-  entity.setGlobalTag("modePart", storage.currentMode)
+  animator.setGlobalTag("modePart", storage.currentMode)
 end
 
 function main()
    --stupid tags don't update properly in init()
-   entity.setGlobalTag("modePart", storage.currentMode)
+   animator.setGlobalTag("modePart", storage.currentMode)
 
    if self.detectCooldown > 0 then
-      self.detectCooldown = self.detectCooldown - entity.dt()
+      self.detectCooldown = self.detectCooldown - object.dt()
    else
       local entityIds = {}
 
@@ -73,7 +73,7 @@ function main()
       elseif storage.currentMode == "npc" then
          entityIds = world.npcQuery(self.detectArea[1], self.detectArea[2], { notAnObject = true })
       elseif storage.currentMode == "solar" then
-         if world.lightLevel(pos) >= entity.configParameter("lightLevel") then
+         if world.lightLevel(pos) >= config.getParameter("lightLevel") then
             entityIds[1] = "test"
          end
       end

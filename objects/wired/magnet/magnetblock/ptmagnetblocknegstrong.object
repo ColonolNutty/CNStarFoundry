@@ -1,5 +1,6 @@
 {
   "objectName" : "ptmagnetblocknegstrong",
+  "colonyTags" : ["wired"],
   "rarity" : "Rare",
   "description" : "A strong magnet, the charge of which can be toggled between negative and neutral.",
   "shortdescription" : "Powered Negative Magnet",
@@ -30,7 +31,7 @@
   },
   "animationPosition" : [0, 0],
   
-  "inboundNodes" : [ [0, 0] ],
+  "inputNodes" : [ [0, 0] ],
   
   "chargeStrength" : -100,
 

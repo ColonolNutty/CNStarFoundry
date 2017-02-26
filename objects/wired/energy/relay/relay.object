@@ -1,5 +1,6 @@
 {
   "objectName" : "relay",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Transfers energy between devices within range.",
   "shortdescription" : "Energy Relay",

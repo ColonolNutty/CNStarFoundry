@@ -1,5 +1,6 @@
 {
   "objectName" : "tempsensor",
+  "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Activates the bottom node in moderate temperatures and the top node in warm temperatures.",
   "shortdescription" : "Thermometer",
@@ -30,7 +31,7 @@
   },
   "animationPosition" : [0, 0],
 
-  "outboundNodes" : [ [0, -1], [0, 1] ],
+  "outputNodes" : [ [0, -1], [0, 1] ],
 
   "detectThresholdLow" : 0,
   "detectThresholdHigh" : 20
