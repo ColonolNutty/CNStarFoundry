@@ -33,7 +33,7 @@
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "itemexcluder" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "itemfilter" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "itemsorter" } },
-	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "jumppad" } },
+	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "jumppad1" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "laserdiode" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "layerswap" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "levitationpad" } },

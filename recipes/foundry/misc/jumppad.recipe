@@ -4,6 +4,6 @@
     { "item" : "energycrystal", "count" : 1 },
     { "item" : "ironbar", "count" : 2}
   ],
-  "output" : { "item" : "jumppad", "count" : 1 },
+  "output" : { "item" : "jumppad1", "count" : 1 },
   "groups" : [ "foundry", "all", "misc" ]
 }

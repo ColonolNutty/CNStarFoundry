@@ -1,0 +1,32 @@
+[
+	{
+		"op": "add",
+		"path": "/scripts/-",
+		"value": "/scripts/datawire.lua"
+	},
+	{
+		"op": "replace",
+		"path": "/scriptDelta",
+		"value": 15
+	},
+	{
+		"op": "remove",
+		"path": "/orientations/0/direction"
+	},
+	{
+		"op": "remove",
+		"path": "/orientations/1/direction"
+	},
+	{
+		"op": "remove",
+		"path": "/orientations/2/direction"
+	},
+	{
+		"op": "remove",
+		"path": "/orientations/3/direction"
+	},
+	{
+		"op": "remove",
+		"path": "/orientations/4/direction"
+	}
+]
