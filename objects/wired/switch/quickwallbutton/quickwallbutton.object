@@ -1,5 +1,7 @@
 {
   "objectName" : "quickwallbutton",
+  "colonyTags" : ["wired"],
+  "printable" : false,
   "rarity" : "Common",
   "description" : "A simple pushbutton that can be toggled on or off.",
   "shortdescription" : "Quick Wall Button",
@@ -10,7 +12,6 @@
 
   "category" : "wire",
   "price" : 300,
-  "printable" : false,
 
   "inventoryIcon" : "quickwallbuttonicon.png",
   "orientations" : [
@@ -23,7 +24,10 @@
     }
   ],
 
-  "scripts" : [ "/objects/wired/momentaryswitch.lua" ],
+  "scripts" : [
+	  "/objects/wired/momentaryswitch.lua",		
+	  "/scripts/npcToyObject.lua"
+  ],
   "scriptDelta" : 5,
 
   "animation" : "/objects/wired/switch/switchtoggle.animation",
@@ -33,7 +37,18 @@
   },
   "animationPosition" : [-8, -8],
 
-  "outboundNodes" : [ [0, -1] ],
+  "outputNodes" : [ [0, -1] ],
 
-  "interval" : 1
+  "interval" : 1,
+
+  "npcToy": {
+    "ownerOnly" : true,
+    "influence" : [
+      "wallswitch"
+    ],
+    "defaultReactions" : {},
+    "preciseStandPositionLeft" : [-1.0, 0.0],
+    "preciseStandPositionRight" : [1.0, 0.0],
+    "maxNpcs" : 1
+  }
 }

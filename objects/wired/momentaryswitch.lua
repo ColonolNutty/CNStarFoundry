@@ -12,24 +12,26 @@ function init()
 end
 
 function onInteraction(args)
-  if storage.state == false then
-    output(true)
-  end
+  output(storage.state == false)
 
-  animator.playSound("onSounds");
+  animator.playSound("on");
   storage.timer = self.interval
+end
+
+function onNpcPlay(npcId)		
+  onInteraction()		
 end
 
 function output(state)
   if storage.state ~= state then
     storage.state = state
-    object.setAllOutboundNodes(state)
+    object.setAllOutputNodes(state)
     if state then
       animator.setAnimationState("switchState", "on")
-      animator.playSound("onSounds");
+      animator.playSound("on");
     else
       animator.setAnimationState("switchState", "off")
-      animator.playSound("offSounds");
+      animator.playSound("off");
     end
   else
   end
