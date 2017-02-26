@@ -1,5 +1,5 @@
-function init(args)
-  entity.setInteractive(true)
+function init()
+ object.setInteractive(true)
   if storage.state == nil then
     output(false)
   else
@@ -8,7 +8,7 @@ function init(args)
   if storage.timer == nil then
     storage.timer = 0
   end
-  self.interval = entity.configParameter("interval")
+  self.interval = config.getParameter("interval")
 end
 
 function onInteraction(args)
@@ -16,20 +16,20 @@ function onInteraction(args)
     output(true)
   end
 
-  entity.playSound("onSounds");
+  animator.playSound("onSounds");
   storage.timer = self.interval
 end
 
 function output(state)
   if storage.state ~= state then
     storage.state = state
-    entity.setAllOutboundNodes(state)
+    object.setAllOutboundNodes(state)
     if state then
-      entity.setAnimationState("switchState", "on")
-      entity.playSound("onSounds");
+      animator.setAnimationState("switchState", "on")
+      animator.playSound("onSounds");
     else
-      entity.setAnimationState("switchState", "off")
-      entity.playSound("offSounds");
+      animator.setAnimationState("switchState", "off")
+      animator.playSound("offSounds");
     end
   else
   end
