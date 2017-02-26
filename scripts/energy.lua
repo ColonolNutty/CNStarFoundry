@@ -71,11 +71,11 @@ function energy.init(args)
 end
 
 -- Performs per-tick updates for energy module (MUST BE CALLED IN OBJECT main() FUNCTION)
-function energy.update()
+function energy.update(dt)
   if self.energyInitialized then
     --periodically reset projectile anti-spam list
     if energy.transferCooldown > 0 then
-      energy.transferCooldown = energy.transferCooldown - entity.dt()
+      energy.transferCooldown = energy.transferCooldown - dt
       if energy.transferCooldown <= 0 then
         energy.transferShown = {}
         energy.transferCooldown = energy.transferInterval
@@ -84,7 +84,7 @@ function energy.update()
 
     --periodic energy transmission pulses
     if energy.sendRate > 0 then
-      energy.sendTimer = energy.sendTimer - entity.dt()
+      energy.sendTimer = energy.sendTimer - dt
       while energy.sendTimer <= 0 do
         local energyToSend = math.min(energy.getAvailableEnergy(), energy.sendRate * energy.sendFreq)
         if energyToSend > 0 then
@@ -95,7 +95,7 @@ function energy.update()
     end
 
     --periodic connection checks
-    energy.connectCheckTimer = energy.connectCheckTimer - entity.dt()
+    energy.connectCheckTimer = energy.connectCheckTimer - dt
     if energy.connectCheckTimer <= 0 then
       energy.checkConnections()
       energy.connectCheckTimer = energy.connectCheckFreq
@@ -165,8 +165,8 @@ end
 
 -- adds the appropriate periodic energy generation based on energyGenerationRate and scriptDelta
 -- @returns amount of energy generated
-function energy.generateEnergy()
-  local amount = energy.generationRate * entity.dt()
+function energy.generateEnergy(dt)
+  local amount = energy.generationRate * dt
   --world.logInfo("generating %f energy", amount)
   return energy.addEnergy(amount)
 end
@@ -203,9 +203,9 @@ end
 --     as determined by energyConsumptionRate and scriptDelta
 -- @param testConsume (optional) if true, will not actually consume energy
 -- @returns false if there is insufficient energy stored (and does not remove energy)
-function energy.consumeEnergy(amount, testConsume)
+function energy.consumeEnergy(amount, testConsume, dt)
   if amount == nil then
-    amount = energy.consumptionRate * entity.dt()
+    amount = energy.consumptionRate * dt
   end
   --world.logInfo("consuming %f energy", amount)
   if amount <= energy.getEnergy() then

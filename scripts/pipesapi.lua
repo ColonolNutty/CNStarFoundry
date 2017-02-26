@@ -9,10 +9,10 @@ function entityConnectsAt(pipeName, position, pipeDirection)
   if pipes == nil or pipes.nodes[pipeName] == nil then
     return false 
   end
-  local entityPos = entity.position()
+  local entityPos = object.position()
   
   for i,node in ipairs(pipes.nodes[pipeName]) do
-    local absNodePos = entity.toAbsolutePosition(node.offset)
+    local absNodePos = object.toAbsolutePosition(node.offset)
     local distance = world.distance(position, absNodePos)
     if distance[1] == 0 and distance[2] == 0 and pipes.pipesConnect(node.dir, {pipeDirection}) then
       return i
@@ -82,7 +82,7 @@ function pipes.init(pipeTypes)
   end
   
   for pipeName,pipeType in pairs(pipes.types) do
-    pipes.nodes[pipeName] = entity.configParameter(pipeType.nodesConfigParameter)
+    pipes.nodes[pipeName] = config.getParameter(pipeType.nodesConfigParameter)
     pipes.nodeEntities[pipeName] = {}
   end
 
@@ -98,7 +98,7 @@ function pipes.push(pipeName, nodeId, args)
   if #pipes.nodeEntities[pipeName][nodeId] > 0 and not pipes.rejectNode[nodeId] then
     for i,entity in ipairs(pipes.nodeEntities[pipeName][nodeId]) do
       pipes.rejectNode[nodeId] = true
-      local entityReturn = world.callScriptedEntity(entity.id, pipes.types[pipeName].hooks.put, args, entity.nodeId)
+      local entityReturn = world.callScriptedEntity(object.id, pipes.types[pipeName].hooks.put, args, object.nodeId)
       pipes.rejectNode[nodeId] = false
       if entityReturn then return entityReturn end
     end
@@ -115,7 +115,7 @@ function pipes.pull(pipeName, nodeId, args)
   if #pipes.nodeEntities[pipeName][nodeId] > 0 and not pipes.rejectNode[nodeId] then
     for i,entity in ipairs(pipes.nodeEntities[pipeName][nodeId]) do
       pipes.rejectNode[nodeId] = true
-      local entityReturn = world.callScriptedEntity(entity.id, pipes.types[pipeName].hooks.get, args, entity.nodeId)
+      local entityReturn = world.callScriptedEntity(object.id, pipes.types[pipeName].hooks.get, args, object.nodeId)
       pipes.rejectNode[nodeId] = false
       if entityReturn then return entityReturn end
     end
@@ -132,7 +132,7 @@ function pipes.peekPush(pipeName, nodeId, args)
   if #pipes.nodeEntities[pipeName][nodeId] > 0 and not pipes.rejectNode[nodeId] then
     for i,entity in ipairs(pipes.nodeEntities[pipeName][nodeId]) do
       pipes.rejectNode[nodeId] = true
-      local entityReturn = world.callScriptedEntity(entity.id, pipes.types[pipeName].hooks.peekPut, args, entity.nodeId)
+      local entityReturn = world.callScriptedEntity(object.id, pipes.types[pipeName].hooks.peekPut, args, object.nodeId)
       pipes.rejectNode[nodeId] = false
       if entityReturn then return entityReturn end
     end
@@ -149,7 +149,7 @@ function pipes.peekPull(pipeName, nodeId, args)
   if #pipes.nodeEntities[pipeName][nodeId] > 0 and not pipes.rejectNode[nodeId] then
     for i,entity in ipairs(pipes.nodeEntities[pipeName][nodeId]) do
       pipes.rejectNode[nodeId] = true
-      local entityReturn = world.callScriptedEntity(entity.id, pipes.types[pipeName].hooks.peekGet, args, entity.nodeId)
+      local entityReturn = world.callScriptedEntity(object.id, pipes.types[pipeName].hooks.peekGet, args, object.nodeId)
       pipes.rejectNode[nodeId] = false
       if entityReturn then return entityReturn end
     end
@@ -214,7 +214,7 @@ end
 -- @param pipeName string - name of the pipe type to use
 -- @returns list of connected entities with format {nodeId = {{id = 1, nodeId = 1, path = {{1,0},{2,0}}}}
 function pipes.getNodeEntities(pipeName)
-  local position = entity.position()
+  local position = object.position()
   local nodeEntities = {}
   local nodesTable = {}
   
@@ -230,7 +230,7 @@ end
 -- @param dt number - delta time
 -- @returns nil
 function pipes.update(dt)
-  local position = entity.position()
+  local position = object.position()
   pipes.updateTimer = pipes.updateTimer + dt
   
   if pipes.updateTimer >= pipes.updateInterval then
@@ -268,7 +268,7 @@ function pipes.walkPipes(pipeName, startOffset, startDir)
   
   while #tilesToVisit > 0 do
     local tile = tilesToVisit[1]
-    local pipeDirections, layerMode = pipes.getPipeTileData(pipeName, entity.toAbsolutePosition(tile.pos), tile.layer, tile.dir)
+    local pipeDirections, layerMode = pipes.getPipeTileData(pipeName, object.toAbsolutePosition(tile.pos), tile.layer, tile.dir)
     
     --If a tile, add connected spaces to the visit list
     if pipeDirections then
@@ -283,13 +283,13 @@ function pipes.walkPipes(pipeName, startOffset, startDir)
       end
     --If not a tile, check for objects that might connect
     elseif not pipeDirections then
-      --local connectedObjects = world.objectQuery(entity.toAbsolutePosition(tile.pos), 2)
-      local absTilePos = entity.toAbsolutePosition(tile.pos)
+      --local connectedObjects = world.objectQuery(object.toAbsolutePosition(tile.pos), 2)
+      local absTilePos = object.toAbsolutePosition(tile.pos)
       local connectedObjects = world.entityLineQuery(absTilePos, {absTilePos[1] + 1, absTilePos[2] + 2})
       if connectedObjects then
         for key,objectId in ipairs(connectedObjects) do
-          local entNode = pipes.validEntity(pipeName, objectId, entity.toAbsolutePosition(tile.pos), tile.dir)
-          if objectId ~= entity.id() and entNode and table.contains(validEntities, objectId) == false then
+          local entNode = pipes.validEntity(pipeName, objectId, object.toAbsolutePosition(tile.pos), tile.dir)
+          if objectId ~= object.id() and entNode and table.contains(validEntities, objectId) == false then
             validEntities[#validEntities+1] = {id = objectId, nodeId = entNode, path = table.copy(tile.path)}
           end
         end

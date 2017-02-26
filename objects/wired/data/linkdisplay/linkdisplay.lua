@@ -177,7 +177,7 @@ function updateDisplay(newDisplayData)
   storage.currentDisplayData = newDisplayData
 end
 
-function main()
+function update(dt)
   datawire.update()
 
   if storage.data then

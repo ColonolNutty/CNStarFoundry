@@ -33,10 +33,10 @@ end
 
 function rotateTurbine()
   self.turbineAngle = (self.turbineAngle + self.turbineSpeed) % (2 * math.pi)
-  object.rotateGroup("turbine", self.turbineAngle)
+  animator.rotateGroup("turbine", self.turbineAngle)
 end
 
-function main()
+function update(dt)
   if storage.state then
     -- yes, it really is that easy. uses the energyGenerationRate config parameter
     energy.generateEnergy()
@@ -44,5 +44,5 @@ function main()
   end
   energy.update()
   datawire.update()
-  pipes.update(object.dt())
+  pipes.update(dt)
 end

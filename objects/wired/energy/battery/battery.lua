@@ -7,7 +7,7 @@ function init(virtual)
 
     self.acceptCharge = config.getParameter("acceptCharge") or true
 
-    object.setParticleEmitterActive("charging", false)
+    animator.setParticleEmitterActive("charging", false)
     updateAnimationState()
   end
 end
@@ -45,7 +45,7 @@ function onEnergyChange(newAmount)
 end
 
 function showChargeEffect()
-  object.setParticleEmitterActive("charging", true)
+  animator.setParticleEmitterActive("charging", true)
   self.particleTimer = self.particleCooldown
 end
 
@@ -54,11 +54,11 @@ function updateAnimationState()
   object.scaleGroup("chargebar", {1, chargeAmt})
 end
 
-function main()
+function update(dt)
   if self.particleTimer > 0 then
-    self.particleTimer = self.particleTimer - object.dt()
+    self.particleTimer = self.particleTimer - dt
     if self.particleTimer <= 0 then
-      object.setParticleEmitterActive("charging", false)
+      animator.setParticleEmitterActive("charging", false)
     end
   end
 

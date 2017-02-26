@@ -53,7 +53,7 @@ function onInteraction(args)
 end
 
 function main(args)
-  pipes.update(object.dt())
+  pipes.update(dt)
   
   local liquidState = self.liquidMap[storage.liquid[1]]
   if liquidState then
@@ -80,7 +80,7 @@ function main(args)
     end
     self.pushTimer = 0
   end
-  self.pushTimer = self.pushTimer + object.dt()
+  self.pushTimer = self.pushTimer + dt
   
   clearLiquid()
 end

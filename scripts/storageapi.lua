@@ -39,15 +39,15 @@ storageApi = {}
 --      -ondeath: (int) Should object 0 do nothing, 1 drop items or 2 store items on death
 function storageApi.init(args)
     if storage.sApi == nil then
-        storage.sApi = args.content or entity.configParameter("storageapi.content") or { }
+        storage.sApi = args.content or config.getParameter("storageapi.content") or { }
     end
-    storageApi.mode = args.mode or entity.configParameter("storageapi.mode") or 0
+    storageApi.mode = args.mode or config.getParameter("storageapi.mode") or 0
     storageApi.isin = storageApi.mode % 2 == 1
     storageApi.isout = storageApi.mode % 4 >= 2
-    storageApi.capacity = math.min(999, args.capacity or entity.configParameter("storageapi.capacity") or 1)
-    storageApi.isjoin = args.merge or entity.configParameter("storageapi.merge")
-    storageApi.dropPosition = args.dropPosition or entity.configParameter("storageapi.dropPosition")
-    storageApi.ondeath = args.ondeath or entity.configParameter("storageapi.ondeath") or 0
+    storageApi.capacity = math.min(999, args.capacity or config.getParameter("storageapi.capacity") or 1)
+    storageApi.isjoin = args.merge or config.getParameter("storageapi.merge")
+    storageApi.dropPosition = args.dropPosition or config.getParameter("storageapi.dropPosition")
+    storageApi.ondeath = args.ondeath or config.getParameter("storageapi.ondeath") or 0
     storageApi.ignoreDropIds = {}
 end
 
@@ -260,7 +260,7 @@ end
 -- @param pos [optional] (vec2f) A position to drop item at
 -- @return (int) ID of dropped item entity or nil
 function storageApi.drop(index, amount, pos)
-    pos = pos or storageApi.dropPosition or entity.position()
+    pos = pos or storageApi.dropPosition or object.position()
     local item, drop = storage.sApi[index], nil
     if item then
         if not amount then amount = item.count or 0 end
@@ -286,7 +286,7 @@ end
 -- @param pos [optional] (vec2f) A position to drop items at
 -- @return (bool) True if all items were dropped successfully
 function storageApi.dropAll(pos)
-    pos = pos or storageApi.dropPosition or entity.position()
+    pos = pos or storageApi.dropPosition or object.position()
     for i in storageApi.getIterator() do
         storageApi.drop(i)
     end
@@ -312,7 +312,7 @@ end
 -- @param takenBy (int) Entity ID to animate item drop to
 -- @return (int) Amount of found items
 function storageApi.take(pos, radius, takenBy)
-    pos = pos or storageApi.dropPosition or entity.position()
+    pos = pos or storageApi.dropPosition or object.position()
     radius = radius or 1
     local itemIds, time, ret = world.itemDropQuery(pos, radius), os.time(), 0
     for _, itemId in ipairs(itemIds) do
@@ -333,8 +333,8 @@ end
 function storageApi.die()
     if storageApi.ondeath == 1 then
         storageApi.dropAll()
-    elseif (storageApi.ondeath == 2) and (world.entityType(entity.id()) == "object") then
-        world.spawnItem(entity.configParameter("objectName"), storageApi.dropPosition, 1, { content = storage.sApi()} )
+    elseif (storageApi.ondeath == 2) and (world.entityType(object.id()) == "object") then
+        world.spawnItem(config.getParameter("objectName"), storageApi.dropPosition, 1, { content = storage.sApi()} )
     end
 end
 

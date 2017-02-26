@@ -4,12 +4,12 @@ function init(virtual)
       storage.dataType = "empty"
     end
 
-    if storage.lockOutbound == nil then
-      storage.lockOutbound = false
+    if storage.lockOutput == nil then
+      storage.lockOutput = false
     end
 
-    if storage.lockInbound == nil then
-      storage.lockInbound = false
+    if storage.lockInput == nil then
+      storage.lockInput = false
     end
 
     self.flipStr = ""
@@ -31,9 +31,9 @@ function onNodeConnectionChange()
   datawire.onNodeConnectionChange()
 end
 
-function onInboundNodeChange(args)
-  storage.lockInbound = object.getInputNodeLevel(1)
-  storage.lockOutbound = object.getInputNodeLevel(2)
+function onInputNodeChange(args)
+  storage.lockInput = object.getInputNodeLevel(1)
+  storage.lockOutput = object.getInputNodeLevel(2)
 
   output()
   updateAnimationState()
@@ -57,19 +57,19 @@ function validateData(data, dataType, nodeId, sourceEntityId)
 end
 
 function onValidDataReceived(data, dataType, nodeId, sourceEntityId)
-  if not storage.lockInbound then
+  if not storage.lockInput then
     storage.data = data
     storage.dataType = dataType
   end
 end
 
 function output()
-  if not storage.lockOutbound and storage.data then
+  if not storage.lockOutput and storage.data then
     datawire.sendData(storage.data, storage.dataType, 0)
   end
 end
 
-function main()
+function update(dt)
   datawire.update()
   output()
 end

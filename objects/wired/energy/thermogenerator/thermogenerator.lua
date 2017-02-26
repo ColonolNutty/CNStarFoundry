@@ -69,7 +69,7 @@ function onEnergyNeedsCheck(energyNeeds)
 end
 
 function generate()
-  local lavaPerTile = self.lavaConsumptionRate * object.dt()
+  local lavaPerTile = self.lavaConsumptionRate * dt
   for i, pos in ipairs(self.checkArea) do
     if storage.lavaLevel > 0 then
       --check liquid at the given tile
@@ -91,18 +91,18 @@ function generate()
         storage.lavaLevel = storage.lavaLevel - consumeLava
         energy.addEnergy(self.energyPerLava * consumeLava)
 
-        object.setParticleEmitterActive("steam"..i, true)
+        animator.setParticleEmitterActive("steam"..i, true)
       else
-        object.setParticleEmitterActive("steam"..i, false)
+        animator.setParticleEmitterActive("steam"..i, false)
       end
     else
-      object.setParticleEmitterActive("steam"..i, false)
+      animator.setParticleEmitterActive("steam"..i, false)
     end
   end
 end
 
-function main()
-  pipes.update(object.dt())
+function update(dt)
+  pipes.update(dt)
 
   pullLava()
   generate()

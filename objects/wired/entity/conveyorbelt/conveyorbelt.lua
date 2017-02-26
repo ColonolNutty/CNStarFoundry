@@ -39,7 +39,7 @@ function setActive(flag)
   end
 end
 
-function main()
+function update(dt)
   energy.update()
   if storage.active then
     if not energy.consumeEnergy() then

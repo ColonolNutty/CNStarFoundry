@@ -15,7 +15,7 @@ end
 --------------------------------------------------------------------------------
 function main(args)
   buildFilter()
-  pipes.update(object.dt())
+  pipes.update(dt)
 end
 
 function showPass()

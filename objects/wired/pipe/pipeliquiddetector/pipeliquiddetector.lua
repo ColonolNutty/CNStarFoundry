@@ -30,10 +30,10 @@ end
 --------------------------------------------------------------------------------
 function main(args)
   datawire.update()
-  pipes.update(object.dt())
+  pipes.update(dt)
 
   if storage.timer > 0 then
-    storage.timer = storage.timer - object.dt()
+    storage.timer = storage.timer - dt
 
     if storage.timer <= 0 then
       deactivate()

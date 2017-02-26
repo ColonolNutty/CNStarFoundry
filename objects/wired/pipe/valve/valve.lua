@@ -26,20 +26,20 @@ function onInteraction(args)
   end
 end
 
-function onInboundNodeChange(args)
-  checkInboundNodes()
+function onInputNodeChange(args)
+  checkInputNodes()
 end
 
 function onNodeConnectionChange()
-  checkInboundNodes()
+  checkInputNodes()
 end
 
 --------------------------------------------------------------------------------
 function main(args)
-  pipes.update(object.dt())
+  pipes.update(dt)
 end
 
-function checkInboundNodes()
+function checkInputNodes()
   if object.isInputNodeConnected(0) then
     object.setInteractive(false)
     storage.state = object.getInputNodeLevel(0)

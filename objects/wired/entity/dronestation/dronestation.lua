@@ -83,7 +83,7 @@ function launchDrone()
   end
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   onNodeConnectionChange()
 end
 
@@ -96,8 +96,8 @@ function onInteraction(args)
   setActive(not storage.active)
 end
 
-function main()
-  local dt = object.dt()
+function update(dt)
+  local dt = dt
   pipes.update(dt)
   energy.update()
   if self.pushTimer > self.pushRate then

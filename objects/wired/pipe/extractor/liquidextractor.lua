@@ -64,7 +64,7 @@ function die()
 end
 
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   storage.state = args.level
 end
 
@@ -111,7 +111,7 @@ function onItemPut(item, nodeId)
 end
 
 function main(args)
-  pipes.update(object.dt())
+  pipes.update(dt)
   energy.update()
   
   if storage.state then
@@ -156,7 +156,7 @@ function main(args)
       end
       self.damageTimer = 0
     end
-    self.damageTimer = self.damageTimer + object.dt()
+    self.damageTimer = self.damageTimer + dt
   else
     turnOff()
   end

@@ -28,7 +28,7 @@ function drain()
   end
 end
 
-function main()
+function update(dt)
   if not object.isInputNodeConnected(0) or object.getInputNodeLevel(0) then
     output(true)
     drain()

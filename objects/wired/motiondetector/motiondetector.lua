@@ -71,9 +71,9 @@ function validateEntities(entityIds)
   return false
 end
 
-function main() 
+function update(dt) 
   if self.cooldown > 0 then
-    self.cooldown = self.cooldown - object.dt()
+    self.cooldown = self.cooldown - dt
   else
     if self.cooldown <= 0 then
       local entityIds = world.entityQuery(self.detectOrigin, self.detectArea, { notAnObject = true, order = "nearest" })

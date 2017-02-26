@@ -54,7 +54,7 @@ end
 
 function startScan()
   local scanInProgress = storage.timer > 0
-  if not scanInProgress and datawire.isOutboundNodeConnected(0) then
+  if not scanInProgress and datawire.isOutputNodeConnected(0) then
     onTrigger()
     storage.isOrigin = true
 
@@ -110,7 +110,7 @@ function smashConnectedMarkers(originId)
   end
 end
 
-function main()
+function update(dt)
   datawire.update()
   
   if storage.timer > 0 then

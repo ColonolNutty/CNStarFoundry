@@ -20,11 +20,11 @@ function onNodeConnectionChange()
   datawire.onNodeConnectionChange()
 end
 
-function onInboundNodeChange(args)
-  checkInboundNodes()
+function onInputNodeChange(args)
+  checkInputNodes()
 end
 
-function checkInboundNodes()
+function checkInputNodes()
   local nodeIndex = 0
   while nodeIndex < object.inputNodeCount() do
     local newLevel = object.getInputNodeLevel(nodeIndex)
@@ -68,7 +68,7 @@ function output()
   datawire.sendData(storage.data, "number", 0)
 end
 
-function main()
+function update(dt)
   datawire.update()
   output()
 end

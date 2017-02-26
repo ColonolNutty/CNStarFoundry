@@ -2,7 +2,7 @@
 -- @param tileArea the list of [x, y] positions to be converted
 -- @returns a converted list of [x, y] positions
 function absTileAreaToRel(tileArea)
-  local ePos = entity.position()
+  local ePos = object.position()
   local newTileArea = {}
   for i, pos in ipairs(tileArea) do
     newTileArea[i] = { pos[1] - ePos[1], pos[2] - ePos[2] }
@@ -14,7 +14,7 @@ end
 -- @param tileArea the list of [x, y] positions to be converted
 -- @returns a converted list of [x, y] positions
 function relTileAreaToAbs(tileArea)
-  local ePos = entity.position()
+  local ePos = object.position()
   local newTileArea = {}
   for i, pos in ipairs(tileArea) do
     newTileArea[i] = { pos[1] + ePos[1], pos[2] + ePos[2] }
@@ -49,9 +49,9 @@ end
 function breakLayer(tileArea, targetLayer, dropItems)
   --world.logInfo("in breakLayer ("..targetLayer..")")
   if dropItems then
-    world.damageTiles(tileArea, targetLayer, entity.position(), "blockish", 9999)
+    world.damageTiles(tileArea, targetLayer, object.position(), "blockish", 9999)
   else
-    world.damageTiles(tileArea, targetLayer, entity.position(), "crushing", 9999)
+    world.damageTiles(tileArea, targetLayer, object.position(), "crushing", 9999)
   end
 end
 
@@ -162,7 +162,7 @@ end
 function cleanupInvisitiles(tileArea)
   for i, pos in ipairs(tileArea) do
     if world.material(pos, "background") == "invisitile" then
-      world.damageTiles({pos}, "background", entity.position(), "crushing", 9999)
+      world.damageTiles({pos}, "background", object.position(), "crushing", 9999)
     end
   end
 end

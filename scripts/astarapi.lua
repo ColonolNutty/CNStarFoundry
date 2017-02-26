@@ -242,11 +242,11 @@ function astarApi.flyTo(fdest, rect)
   if not astarApi.pdone or f then
     if f or (astarApi.pth == nil) then astarApi.pth = coroutine.create(astarApi.getPath) end
     astarApi.pdest = dest
-    local res = { coroutine.resume(astarApi.pth, astarApi.floorVec(entity.position()), dest, rect) }
+    local res = { coroutine.resume(astarApi.pth, astarApi.floorVec(object.position()), dest, rect) }
     if not res[1] then world.logInfo("%s", res)
     elseif not res[2] then
       astarApi.pdone = false
-      entity.fly({ 0, 0 })
+      object.fly({ 0, 0 })
       return true
     else
       astarApi.pdone = true
@@ -255,13 +255,13 @@ function astarApi.flyTo(fdest, rect)
     end
   end
   if astarApi.flyp == nil then return false end
-  local p = entity.position()
+  local p = object.position()
   if astarApi.pnode >= #astarApi.flyp then
-    entity.flyTo(fdest, true)
+    object.flyTo(fdest, true)
   else
     local n = astarApi.flyp[astarApi.pnode]
-    entity.fly(astarApi.dirVec({ n[1] - p[1] + 0.5, n[2] - p[2] + 0.5 }, astarApi.spd))
-    if world.magnitude(entity.position(), n2v(astarApi.flyp[astarApi.pnode])) < 1.25 then
+    object.fly(astarApi.dirVec({ n[1] - p[1] + 0.5, n[2] - p[2] + 0.5 }, astarApi.spd))
+    if world.magnitude(object.position(), n2v(astarApi.flyp[astarApi.pnode])) < 1.25 then
       astarApi.pnode = astarApi.pnode + 1
     end
   end

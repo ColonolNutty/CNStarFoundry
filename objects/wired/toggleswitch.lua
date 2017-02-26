@@ -16,7 +16,7 @@ function onInteraction(args)
   output(not storage.state)
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   checkInputNodes()
 end
 

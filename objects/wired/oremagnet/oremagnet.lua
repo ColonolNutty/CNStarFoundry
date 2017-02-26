@@ -41,20 +41,20 @@ function onInteraction(args)
   end
 end
 
-function main()
+function update(dt)
   energy.update()
 
   cleanupMods()
 
   if self.findTimer > 0 then
-    self.findTimer = self.findTimer - object.dt()
+    self.findTimer = self.findTimer - dt
   elseif storage.state then
     findOres()
     self.findTimer = self.findInterval
   end
 
   if self.pullTimer > 0 then
-    self.pullTimer = self.pullTimer - object.dt()
+    self.pullTimer = self.pullTimer - dt
   elseif storage.state and energy.consumeEnergy(self.energyCost) then
     pullOres()
     self.pullTimer = self.pullInterval
@@ -63,7 +63,7 @@ function main()
   updateAnimationState()
 end
 
-function onInboundNodeChange(args) 
+function onInputNodeChange(args) 
   checkNodes()
 end
  
@@ -96,7 +96,7 @@ end
 
 function setNeedlePos()
   local angle = self.needleMinPos - self.needleRange * ((energy.getEnergy() / energy.getCapacity()) + (math.random() * 0.04))
-  object.rotateGroup("needle", angle)
+  animator.rotateGroup("needle", angle)
 end
 
 function findOres()

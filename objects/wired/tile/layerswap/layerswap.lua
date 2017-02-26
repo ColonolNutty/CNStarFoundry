@@ -36,7 +36,7 @@ function updateAnimationState()
   end
 end
 
-function onInboundNodeChange(args) 
+function onInputNodeChange(args) 
   checkNodes()
 end
  
@@ -91,7 +91,7 @@ function swapLayer(newState)
   end
 end
 
-function main()
+function update(dt)
   datawire.update()
 
   --timer waits for blocks to finish being destroyed before starting placement

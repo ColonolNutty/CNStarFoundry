@@ -65,7 +65,7 @@ function rand()
   return math.random() / 5 + 0.9
 end
 
-function main()
+function update(dt)
   energy.update()
   if storage.active then
     if not energy.consumeEnergy() then

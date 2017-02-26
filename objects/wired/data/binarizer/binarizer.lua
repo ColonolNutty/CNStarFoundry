@@ -19,7 +19,7 @@ function onNodeConnectionChange()
 end
 
 function throughput()
-  storage.state = entity.getInputNodeLevel(0)
+  storage.state = object.getInputNodeLevel(0)
   object.setOutputNodeLevel(0, storage.state)
 end
 

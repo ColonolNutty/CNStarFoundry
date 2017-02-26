@@ -22,8 +22,8 @@ function magnets.applyForce(ent, sourcePos, force)
     local forceMag = qQ * magnets.distanceScale(posDif)
     local theta = math.atan2(posDif[2], posDif[1])
   
-    vel[1] = vel[1] + (forceMag * math.cos(theta) * entity.dt())
-    vel[2] = vel[2] + (forceMag * math.sin(theta) * entity.dt())
+    vel[1] = vel[1] + (forceMag * math.cos(theta) * object.dt())
+    vel[2] = vel[2] + (forceMag * math.sin(theta) * object.dt())
     
     ent.setVelocity(vel)
     return vel
@@ -106,5 +106,5 @@ end
 ------------------------------------------------------------------
 function magnets.isValidTarget(entID)
   local entType = world.entityType(entID)
-  return (entType == "monster" or entType == "npc") and (not world.callScriptedEntity(entID, "entity.configParameter", "isStatic", false)) 
+  return (entType == "monster" or entType == "npc") and (not world.callScriptedEntity(entID, "config.getParameter", "isStatic", false)) 
 end

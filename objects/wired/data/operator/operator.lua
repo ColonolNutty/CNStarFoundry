@@ -85,7 +85,7 @@ function updateAnimationState()
   animator.setAnimationState("operatorState", self.flipStr..storage.currentMode)
 end
 
-function main()
+function update(dt)
   datawire.update()
   operate()
 end

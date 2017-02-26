@@ -25,7 +25,7 @@ function profilerApi.logData()
     end
   end
   table.sort(arr, profilerApi.sortHelp)
-  world.logInfo("Profiler log for EntityID " .. entity.id() .. " (total profiling time: " .. string.format("%.2f", time) .. ")")
+  world.logInfo("Profiler log for EntityID " .. object.id() .. " (total profiling time: " .. string.format("%.2f", time) .. ")")
   world.logInfo(string.format("%" .. len .. "s |        total time | %" .. cnt .. "s |      average time |         last time", "function", "count"))
   for i,k in ipairs(arr) do
     local hook = profilerApi.hooks[k]

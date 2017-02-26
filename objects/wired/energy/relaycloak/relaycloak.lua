@@ -15,7 +15,7 @@ function onInteraction(args)
   cycleMode()
 end
 
-function main()
+function update(dt)
   --updateRelays(storage.currentMode)
 end
 

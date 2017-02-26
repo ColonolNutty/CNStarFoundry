@@ -10,17 +10,17 @@ function onNodeConnectionChange()
   checkNodes()
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   checkNodes()
 end
 
 function checkNodes()
   if object.getInputNodeLevel(0) ~= storage.state then
     storage.state = object.getInputNodeLevel(0)
-    object.setAllOutboundNodes(false)
+    object.setAllOutputNodes(false)
     if storage.state then
       local choice = math.random(0, 3)
-      object.setOutboundNodeLevel(choice, true)
+      object.setOutputNodeLevel(choice, true)
       animator.setAnimationState("randState", self.nodeMap[choice + 1])
     else
       animator.setAnimationState("randState", "off")

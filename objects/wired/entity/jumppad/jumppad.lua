@@ -28,7 +28,7 @@ function firstValidEntity(eids)
   return nil
 end
 
-function main()
+function update(dt)
   energy.update()
   if self.jumpt > 0 then 
     self.jumpt = self.jumpt - 1

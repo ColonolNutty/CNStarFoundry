@@ -49,7 +49,7 @@ function onInteraction(args)
 end
 
 function main(args)
-  pipes.update(object.dt())
+  pipes.update(dt)
   
   --Scale inventory bar
   local relStorage = storageApi.getCount() / storageApi.getCapacity()
@@ -67,7 +67,7 @@ function main(args)
     pushItems()
     self.pushTimer = 0
   end
-  self.pushTimer = self.pushTimer + object.dt()
+  self.pushTimer = self.pushTimer + dt
 end
 
 function pushItems()

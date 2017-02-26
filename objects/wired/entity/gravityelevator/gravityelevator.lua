@@ -49,7 +49,7 @@ function consumeEnergy()
    return true
 end
 
-function main()
+function update(dt)
    energy.update()
    if self.state and consumeEnergy() then
       local force = self.forceRegion or checkForceRegion()
@@ -188,7 +188,7 @@ function onNodeConnectionChange()
    onNodeChange()
 end
 
-function onInboundNodeChange()
+function onInputNodeChange()
    onNodeChange()
 end
 

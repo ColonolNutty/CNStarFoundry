@@ -12,7 +12,7 @@ end
 
 --------------------------------------------------------------------------------
 function main(args)
-  pipes.update(object.dt())
+  pipes.update(dt)
   
   if self.timer > self.pickupCooldown and (isItemNodeConnected(1) or isItemNodeConnected(2)) then
 
@@ -47,7 +47,7 @@ function main(args)
     end
     self.timer = 0
   end
-  self.timer = self.timer + object.dt()
+  self.timer = self.timer + dt
 end
 
 function findItemDrops()

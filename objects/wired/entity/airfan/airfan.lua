@@ -7,8 +7,8 @@ function init(v)
   if object.direction() == -1 then
     self.flipStr = "flip"
   end
-  object.setParticleEmitterActive("fanwind", false)
-  object.setParticleEmitterActive("fanwindflip", false)
+  animator.setParticleEmitterActive("fanwind", false)
+  animator.setParticleEmitterActive("fanwindflip", false)
 
   setActive(storage.active)
   self.affectWidth = config.getParameter("affectWidth")
@@ -29,10 +29,10 @@ function onNodeConnectionChange(args)
   else
     object.setInteractive(true)
   end
-  onInboundNodeChange(args)
+  onInputNodeChange(args)
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   if object.isInputNodeConnected(0) then
     setActive(object.getInputNodeLevel(0))
   end
@@ -42,9 +42,9 @@ function onInteraction(args)
   setActive(not storage.active)
 end
 
-function setActive(flag)
-  if not flag or energy.consumeEnergy(nil, true) then
-    object.setParticleEmitterActive("fanwind" .. self.flipStr, flag)
+function setActive(flag, dt)
+  if not flag or energy.consumeEnergy(nil, true, dt or 0) then
+    animator.setParticleEmitterActive("fanwind" .. self.flipStr, flag)
     if flag then
       animator.setAnimationState("fanState", "work")
     elseif storage.active then
@@ -58,11 +58,11 @@ function setActive(flag)
 end
 
 
-function main()
-  energy.update()
+function update(dt)
+  energy.update(dt)
   if storage.active then
-    if not energy.consumeEnergy() then
-      setActive(false)
+    if not energy.consumeEnergy(nil, nil, dt) then
+      setActive(false, dt)
       return
     end
     self.st = self.st + 1

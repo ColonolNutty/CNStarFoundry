@@ -12,7 +12,7 @@ function init(virtual)
 end
 
 function main(args)
-  pipes.update(object.dt())
+  pipes.update(dt)
 
   connectChest()
   

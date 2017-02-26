@@ -24,7 +24,7 @@ function die()
   energy.die()
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   storage.state = args.level
   if storage.state then animator.setAnimationState("fillstate", "on") end
 end
@@ -74,7 +74,7 @@ function onItemPut(item, nodeId)
 end
 
 function main(args)
-  pipes.update(object.dt())
+  pipes.update(dt)
   energy.update()
   
   if storage.state then
@@ -100,7 +100,7 @@ function main(args)
       end
       self.fillTimer = 0
     end
-    self.fillTimer = self.fillTimer + object.dt()
+    self.fillTimer = self.fillTimer + dt
   else
     animator.setAnimationState("fillstate", "off")
   end

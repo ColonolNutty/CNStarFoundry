@@ -46,12 +46,12 @@ function cycleMode()
   animator.setGlobalTag("modePart", storage.currentMode)
 end
 
-function main()
+function update(dt)
    --stupid tags don't update properly in init()
    animator.setGlobalTag("modePart", storage.currentMode)
 
    if self.detectCooldown > 0 then
-      self.detectCooldown = self.detectCooldown - object.dt()
+      self.detectCooldown = self.detectCooldown - dt
    else
       local entityIds = {}
 

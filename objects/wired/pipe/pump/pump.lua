@@ -17,7 +17,7 @@ function init(virtual)
   end
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   storage.state = args.level
 end
 
@@ -37,7 +37,7 @@ function die()
 end
 
 function main(args)
-  pipes.update(object.dt())
+  pipes.update(dt)
   energy.update()
   
   if storage.state then
@@ -67,7 +67,7 @@ function main(args)
       end
       self.pumpTimer = 0
     end
-    self.pumpTimer = self.pumpTimer + object.dt()
+    self.pumpTimer = self.pumpTimer + dt
   else
     animator.setAnimationState("pumping", "idle")
     object.setAllOutputNodes(false)

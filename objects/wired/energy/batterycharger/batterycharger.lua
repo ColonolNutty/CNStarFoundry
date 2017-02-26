@@ -46,7 +46,7 @@ end
 
 function die()
   for i, batteryStatus in ipairs(self.batteries) do
-    world.callScriptedEntity(batteryStatus.id, "entity.smash")
+    world.callScriptedEntity(batteryStatus.id, "object.smash")
   end
   energy.die()
 end
@@ -165,7 +165,7 @@ function dischargeBatteries()
   --world.logInfo("ended up with %f energy", energy.getEnergy())
 end
 
---updates outbound nodes and sends datawire data
+--updates Output nodes and sends datawire data
 function setWireStates()
   datawire.sendData(self.totalStoredEnergy, "number", 0)
   datawire.sendData(self.totalUnusedCapacity, "number", 1)
@@ -173,8 +173,8 @@ function setWireStates()
   object.setOutputNodeLevel(1, self.totalStoredEnergy == 0)
 end
 
-function main()
-  self.batteryCheckTimer = self.batteryCheckTimer - object.dt()
+function update(dt)
+  self.batteryCheckTimer = self.batteryCheckTimer - dt
   if self.batteryCheckTimer <= 0 then
     checkBatteries()
   end

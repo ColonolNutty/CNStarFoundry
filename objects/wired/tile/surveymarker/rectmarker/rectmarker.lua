@@ -85,6 +85,6 @@ function getTileAreaFromRect(corner1, corner2)
   return locations
 end
 
-function main()
+function update(dt)
   datawire.update()
 end

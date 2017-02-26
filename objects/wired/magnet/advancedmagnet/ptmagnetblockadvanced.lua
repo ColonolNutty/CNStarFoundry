@@ -16,7 +16,7 @@ function onValidDataReceived(data, dataType, nodeId, sourceEntityId)
 end
 
 function getEnergyUsage()
-  return (math.abs(storage.charge) / 100) * 5 * object.dt()
+  return (math.abs(storage.charge) / 100) * 5 * dt
 end
 
 function energy.getProjectileSourcePosition()

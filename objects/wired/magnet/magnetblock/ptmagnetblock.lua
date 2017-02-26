@@ -61,7 +61,7 @@ function onNodeConnectionChange()
   end
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   output(not storage.state)
 end
 
@@ -82,7 +82,7 @@ function output(state)
   end
 end
 
-function main()
+function update(dt)
   if storage.usesEnergy then
     energy.update()
   end

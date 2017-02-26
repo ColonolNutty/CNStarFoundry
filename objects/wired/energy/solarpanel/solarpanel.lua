@@ -10,11 +10,11 @@ function init(virtual)
     end
 end
 
-function main()
+function update(dt)
    energy.update()
    local lightLevel = onShip() and 1.0 or world.lightLevel(object.position())
    if lightLevel >= config.getParameter("lightLevelThreshold") and checkSolar() then
-      local generatedEnergy = lightLevel*config.getParameter("energyGenerationRate")*object.dt()
+      local generatedEnergy = lightLevel*config.getParameter("energyGenerationRate")*dt
       energy.addEnergy(generatedEnergy)
       updateAnimationState()
    end

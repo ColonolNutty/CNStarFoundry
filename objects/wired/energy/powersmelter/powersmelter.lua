@@ -26,7 +26,7 @@ function onNodeConnectionChange()
   datawire.onNodeConnectionChange()
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   checkNodes()
 end
 
@@ -44,10 +44,10 @@ function onInteraction(args)
   end
 end
 
-function main()
+function update(dt)
   energy.update()
   datawire.update()
-  pipes.update(object.dt())
+  pipes.update(dt)
 
   if storage.state and (storage.ore.name == nil or storage.ore.count <= 0) then
     pullOre()
@@ -69,7 +69,7 @@ function main()
       end
       self.smeltTimer = 0
     end
-    self.smeltTimer = self.smeltTimer + object.dt()
+    self.smeltTimer = self.smeltTimer + dt
   else
     if storage.state then
       animator.setAnimationState("smelting", "error")

@@ -19,8 +19,8 @@ function init(args)
     end
 end
 
-function main()
-    local dt = object.dt()
+function update(dt)
+    local dt = dt
     self.state.update(dt)
     pipes.update(dt)
     energy.update()
@@ -247,7 +247,7 @@ function runState.update(dt, data)
                 runState.loadRegions(data)
                 self.loadTimer = 0
             end
-            self.loadTimer = self.loadTimer + object.dt()
+            self.loadTimer = self.loadTimer + dt
 
             local movedDown = false
             if (data.curX == 0 and data.curDir == data.dir) or (data.curX == data.width and data.curDir ~= data.dir) then
@@ -356,7 +356,7 @@ function returnState.update(dt, data)
         runState.loadRegions(data)
         self.loadTimer = 0
     end
-    self.loadTimer = self.loadTimer + object.dt()
+    self.loadTimer = self.loadTimer + dt
 
     local quarryPos = world.entityPosition(storage.quarry.id)
     if quarryPos and not self.changeDirection then
@@ -503,7 +503,7 @@ function onNodeConnectionChange(args)
     updateAnimationState()
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
     onInteraction({}, args.level)
 end
 

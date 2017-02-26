@@ -56,7 +56,7 @@ function onNodeConnectionChange()
   checkNodes()
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   checkNodes()
 end
 
@@ -150,7 +150,7 @@ function ejectItem(item)
 end
 
 function generate()
-  local tickFuel = self.fuelUseRate * object.dt()
+  local tickFuel = self.fuelUseRate * dt
   if storage.fuel >= tickFuel then
     storage.fuel = storage.fuel - tickFuel
     energy.addEnergy(tickFuel * energy.fuelEnergyConversion)
@@ -165,7 +165,7 @@ function generate()
   end
 end 
 
-function main()
+function update(dt)
   if storage.state then
     generate()
     updateAnimationState()

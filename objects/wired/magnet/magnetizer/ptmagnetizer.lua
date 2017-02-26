@@ -34,7 +34,7 @@ function onInteraction(args)
   output(not storage.state)
 end
 
-function onInboundNodeChange(args)
+function onInputNodeChange(args)
   output(not storage.state)
 end
 
@@ -53,7 +53,7 @@ function output(state)
   end
 end
 
-function main()
+function update(dt)
   energy.update()
 
   -- Ensure that this magnetizer is still in the global table
@@ -70,7 +70,7 @@ function main()
       -- Play the magnetized effect
       world.spawnProjectile("magnetEffect", world.entityPosition(key), key, {0, 0}, true)
       -- Update magnetize duration
-      storage.magnetized[key] = value - object.dt()
+      storage.magnetized[key] = value - dt
     end
   end
 
