@@ -2,7 +2,7 @@ function getSample()
   return world.liquidAt(object.position())
 end
 
-function main()
+function update(dt)
   datawire.update()
 
   local sample = getSample()
