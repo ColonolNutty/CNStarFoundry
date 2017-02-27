@@ -1,17 +1,38 @@
+function init(virtual)
+  if not virtual then
+    -- Every Initialization
+    datawire.init()
+  end
+end
+
 function getSample()
   return world.liquidAt(object.position())
 end
 
+function onNodeConnectionChange()
+--sb.logInfo("(liquid) node change")
+  datawire.onNodeConnectionChange()
+end
+
 function update(dt)
   datawire.update()
-
+  
   local sample = getSample()
-  if sample then
-    datawire.sendData(sample[1], "number", "all")
+  if sample == nil then
+	if storage.lastSample ~= nil then
+		datawire.sendData(0, "number", "all")
+	end
+	storage.lastSample = nil
   else
-    datawire.sendData(0, "number", "all")
+	  if storage.lastSample ~= sample[1] then
+	      if storage.lastSample ~= nil then
+			--sb.logInfo(" last sample " .. storage.lastSample)
+		  end
+		  storage.lastSample = sample[1]
+		  datawire.sendData(sample[1], "number", "all")
+	  end
   end
-
+  
   if not sample then
     object.setOutputNodeLevel(0, false)
     animator.setAnimationState("sensorState", "off")

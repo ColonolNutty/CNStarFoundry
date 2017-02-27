@@ -15,7 +15,7 @@ function init(virtual)
   end
 end
 
-function main(args)
+function update(dt)
   datawire.update()
 end
 
@@ -25,6 +25,7 @@ function onInteraction(args)
 end
 
 function onNodeConnectionChange()
+--sb.logInfo("(wiretap) node change")
   datawire.onNodeConnectionChange()
 end
 
@@ -39,6 +40,8 @@ function onValidDataReceived(data, dataType, nodeId, sourceEntityId)
 end
 
 function logInfo(data, dataType)
+
+	--sb.logInfo("(wiretap) saving data to the log")
 
   if dataType == "number" then
     if storage.prevData == nil or data == storage.prevData then
