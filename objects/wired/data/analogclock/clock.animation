@@ -14,7 +14,7 @@
       "hand" : {
         "properties" : {
           "offset" : [ 0, 0 ],
-          "rotationGroup" : "hand"
+          "transformationGroups" : ["hand"]
         },
         "partStates" : {
           "default" : {
@@ -43,7 +43,7 @@
     }
   },
 
-  "rotationGroups" : {
+  "transformationGroups" : {
     "hand" : {
       "rotationCenter" : [ 0, 0 ],
       "angularVelocity" : 10

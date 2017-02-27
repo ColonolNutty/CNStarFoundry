@@ -22,7 +22,7 @@
   ],
 
   "scripts" : [ "analogclock.lua" ],
-  "scriptDelta" : 30,
+  "scriptDelta" : 60,
 
   "animation" : "clock.animation",
 
