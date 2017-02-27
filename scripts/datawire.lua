@@ -13,7 +13,7 @@ function datawire.onNodeConnectionChange()
   datawire.createConnectionTable()
 end
 
---- any datawire operations that need to be run when main() is first called
+--- any datawire operations that need to be run when update() is first called
 function datawire.update()
   if datawire.initialized then
     -- nothing for now

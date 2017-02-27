@@ -33,7 +33,7 @@ end
 
 function rotateTurbine()
   self.turbineAngle = (self.turbineAngle + self.turbineSpeed) % (2 * math.pi)
-  animator.rotateGroup("turbine", self.turbineAngle)
+  animator.rotateTransformationGroup("turbine", self.turbineAngle)
 end
 
 function update(dt)

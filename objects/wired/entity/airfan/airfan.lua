@@ -54,6 +54,8 @@ function setActive(flag, dt)
       animator.setAnimationState("fanState", "idle")
     end
     storage.active = flag
+  else
+	animator.stopAllSounds(self.blowSound)
   end
 end
 
@@ -68,8 +70,8 @@ function update(dt)
     self.st = self.st + 1
     if self.st > 6 then 
       self.st = 0
-    elseif self.st == 3 then 
-      object.playImmediateSound(self.blowSound)
+    elseif self.st == 3 then
+      animator.playSound(self.blowSound)
     end
     local d = object.direction();
     local p = object.position();
@@ -79,10 +81,10 @@ function update(dt)
     else
       region = { p[1] + d * self.affectWidth, p[2] - 1, p[1], p[2] + 1 }
     end
-    object.setForceRegion(region, { self.fanPower * d, 0 })
+    --mcontroller.controlApproachXVelocity(region, { self.fanPower * d, 0 })
   elseif self.timer > 0 then
     if self.timer % 12 == 4 then 
-      object.playImmediateSound(self.blowSound) 
+      animator.playSound(self.blowSound) 
     end
     self.timer = self.timer - 1
     if self.timer == 1 then 

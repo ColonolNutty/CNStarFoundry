@@ -10,13 +10,13 @@ function onNodeConnectionChange()
   datawire.onNodeConnectionChange()
 end
 
-function main()
+function update(dt)
   datawire.update()
 end
 
 --------------------- HOOKS --------------------
 
---- hook for implementing scripts to add their own initialization code when main() is first called
+--- hook for implementing scripts to add their own initialization code when update(dt) is first called
 function initAfterLoading() end
 
 --- Validates data received from another datawire object

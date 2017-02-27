@@ -45,7 +45,7 @@ function update(dt)
   local state = animator.animationState("jumpState")
   if state == "idle" and self.jumpt > 0 then
     animator.setAnimationState("jumpState", "jump")
-    object.playImmediateSound(self.jumpSound)
+    animator.playImmediateSound(self.jumpSound)
   elseif state == "jump" and self.jumpt < 1 then
     animator.setAnimationState("jumpState", "idle") 
   end

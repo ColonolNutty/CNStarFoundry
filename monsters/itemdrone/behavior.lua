@@ -1,18 +1,18 @@
 function init()
   entity.setDeathParticleBurst("deathPoof")
-  entity.setAnimationState("movement", "start")
+  animator.setAnimationState("movement", "start")
   self.rect = { -1, -1, 1, 1 }
   if storageApi.isInit() then
     storageApi.init({ mode = 1, capacity = 4, merge = true, ondeath = 1 })
   end
-  local states = stateMachine.scanScripts(entity.configParameter("scripts"), "(%a+State)%.lua")
+  local states = stateMachine.scanScripts(config.getParameter("scripts"), "(%a+State)%.lua")
   self.state = stateMachine.create(states)
   if storage.stationPos == nil then
-    storage.stationPos = entity.configParameter("stationPos")
+    storage.stationPos = config.getParameter("stationPos")
   end
   if storage.active == nil then storage.active = true end
   if (self.stationId == nil) or not world.entityExists(self.stationId) then
-    local ids = world.objectQuery(storage.stationPos, 1, { name = "dronestation", callScript = "droneRegister", callScriptArgs = { entity.id() } })
+    local ids = world.objectQuery(storage.stationPos, 1, { name = "dronestation", callScript = "droneRegister", callScriptArgs = { object.id() } })
     for _,v in pairs(ids) do
       self.stationId = v
       break
@@ -28,12 +28,12 @@ function setActive(flag)
 end
 
 function die()
-  world.callScriptedEntity(self.stationId or -1, "droneDeath", entity.id())
+  world.callScriptedEntity(self.stationId or -1, "droneDeath", object.id())
   storageApi.die()
 end
 
 function onLanding()
-  entity.setAnimationState("movement", "start")
+  animator.setAnimationState("movement", "start")
   entity.setDeathParticleBurst(nil)
   self.dead = true
   return storage.fuel
@@ -47,17 +47,16 @@ function moveTo(pos, dt)
   return astarApi.flyTo(pos, self.rect)
 end
 
-function main()
+function update(dt)
   if not self.dead then
     if not world.entityExists(self.stationId or -1) then self.dead = true
     elseif self.start > 0 then
       entity.fly({ 0, 0.15 })
-      self.start = self.start - entity.dt()
+      self.start = self.start - dt
       if self.start <= 0 then
-        entity.setAnimationState("movement", "fly")
+        animator.setAnimationState("movement", "fly")
       end
     else
-      local dt = entity.dt()
       if storage.fuel > 0 then storage.fuel = storage.fuel - dt * 2 end
       self.state.update(dt)
     end

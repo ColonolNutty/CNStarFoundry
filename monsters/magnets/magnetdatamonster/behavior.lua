@@ -4,10 +4,10 @@ function init(args)
   -- Data doesn't attack people
   entity.setDamageOnTouch(false)
   entity.setAggressive(false)
-  entity.setAnimationState("default", "idle")
+  animator.setAnimationState("default", "idle")
 end
 
-function main()
+function update(dt)
 end
 
 function damage(args)

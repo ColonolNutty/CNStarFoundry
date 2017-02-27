@@ -45,10 +45,10 @@ function output(state)
 	
     if state then
       animator.setAnimationState("magnetizerState", "on")
-      object.playSound("onSounds")
+      animator.playSound("onSounds")
     else
       animator.setAnimationState("magnetizerState", "off")
-      object.playSound("offSounds")
+      animator.playSound("offSounds")
     end
   end
 end

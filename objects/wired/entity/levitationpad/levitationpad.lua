@@ -75,7 +75,7 @@ function update(dt)
     if self.st > 7 then 
       self.st = 0
     elseif self.st == 3 then 
-      object.playImmediateSound(self.workSound)
+      animator.playImmediateSound(self.workSound)
     end
     local p = object.toAbsolutePosition({ -1.25, 1 })
     local eids = world.entityQuery(p, { p[1] + 2.5, p[2] + self.levitationHeight }, { notAnObject = true, order = "nearest" })

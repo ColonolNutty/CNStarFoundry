@@ -1,5 +1,5 @@
 function init(args)
-    entity.setInteractive(true)
+    object.setInteractive(true)
 end
 
 function initialize(attr, slots)

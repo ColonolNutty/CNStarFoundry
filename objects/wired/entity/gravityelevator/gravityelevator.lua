@@ -163,12 +163,12 @@ function setForce(force)
       force = math.max(force[1][1] - math.pow(self.number/2, force[1][2]), force[1][3])
       regio = {self.forceRegion[1]+2, self.forceRegion[2]}
       animator.setAnimationState("beamState", "up")
-      object.scaleGroup("beam", {1, (1+self.size)*8})
+      animator.scaleTransformationGroup("beam", {1, (1+self.size)*8})
    else
       force = math.min(force[2][1] + math.pow(self.number/1.2, force[2][2]), force[2][3])
       regio = { self.forceRegion[1]+2, self.forceRegion[4] }
       animator.setAnimationState("beamState", "down")
-      object.scaleGroup("beam", {-1, -(1+self.size)*8})
+      animator.scaleTransformationGroup("beam", {-1, -(1+self.size)*8})
    end
 
    if not self.proj or self.proj >= self.size/2 then

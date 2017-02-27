@@ -4,10 +4,10 @@ function init(args)
   -- Data doesn't attack people
   entity.setDamageOnTouch(false)
   entity.setAggressive(false)
-  entity.setAnimationState("default", "idle")
+  animator.setAnimationState("default", "idle")
   
   local velMult = 10
-  local pos = entity.position()
+  local pos = object.position()
   local players = world.playerQuery(pos, 5, { order = "nearest" })
   if #players > 0 then
     local playerPos = world.entityPosition(players[1])
@@ -20,11 +20,11 @@ function init(args)
   self.damageMultiplier = 2
   self.radiusMultiplier = 0.05
   self.velThreshold = 150
-  self.oldVel = lengthSquared(entity.velocity())
+  self.oldVel = lengthSquared(world.entityVelocity(object.id()))
 end
 
-function main()
-  local vel = entity.velocity()
+function update(dt)
+  local vel = world.entityVelocity(object.id())
   local velMag = lengthSquared(vel)
   
   if self.oldVel - velMag > self.velThreshold then
@@ -36,7 +36,7 @@ function main()
 end
 
 function damage(args)
-  if entity.health() <= 0 then
+  if object.health() <= 0 then
     self.dead = true
   end
 end
@@ -46,7 +46,7 @@ function die()
   local radius = self.magSpeed * self.radiusMultiplier
   local r2 = radius * 0.7071
   
-  world.spawnProjectile("magnetexplosion", entity.position(), entity.id(), {0, 0}, false, {
+  world.spawnProjectile("magnetexplosion", object.position(), object.id(), {0, 0}, false, {
     power = damage,
     damagePoly = { {-radius, 0}, {-r2, -r2}, {0, -radius}, {r2, -r2}, {radius, 0}, {r2, r2}, {0, radius}, {-r2, r2} },
     actionOnReap =  {
@@ -59,7 +59,7 @@ function die()
       }
     }
   })
-  world.spawnItem("throwablemagnet", entity.position(), 1)
+  world.spawnItem("throwablemagnet", object.position(), 1)
 end
 
 function shouldDie()

@@ -11,7 +11,7 @@ function init(args)
 
     storageApi.init({ mode = 3, capacity = 16, merge = true })
     
-    object.scaleGroup("invbar", {2, 0})
+    animator.scaleTransformationGroup("invbar", {2, 0})
     
     if object.direction() < 0 then
       animator.setAnimationState("flipped", "left")
@@ -53,7 +53,7 @@ function main(args)
   
   --Scale inventory bar
   local relStorage = storageApi.getCount() / storageApi.getCapacity()
-  object.scaleGroup("invbar", {2, relStorage})
+  animator.scaleTransformationGroup("invbar", {2, relStorage})
   if relStorage < 0.5 then 
     animator.setAnimationState("invbar", "low")
   elseif relStorage < 1 then

@@ -15,8 +15,8 @@ function init(virtual)
   end
 end
 
-function main()
-  energy.update()
+function update(dt)
+  energy.update(dt)
 end
 
 function die()
@@ -26,7 +26,7 @@ end
 --------------------- HOOKS --------------------
 
 --- hook to request a custom amount of energy (defaults to current unused capacity)
--- should return energyNeeds, with energyNeeds[tostring(entity.id())] equal to the requested energy
+-- should return energyNeeds, with energyNeeds[tostring(object.id())] equal to the requested energy
 -- if energy requested > 0, then energyNeeds["total"] should be incremented appropriately
 function onEnergyNeedsCheck(energyNeeds) end
 

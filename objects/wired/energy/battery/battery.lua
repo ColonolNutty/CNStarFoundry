@@ -51,7 +51,7 @@ end
 
 function updateAnimationState()
   local chargeAmt = energy.getEnergy() / energy.getCapacity()
-  object.scaleGroup("chargebar", {1, chargeAmt})
+  animator.scaleTransformationGroup("chargebar", {1, chargeAmt})
 end
 
 function update(dt)

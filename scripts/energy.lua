@@ -47,7 +47,7 @@ function energy.init(args)
   --define custom source position for energy projectiles and LoS checks
   --NOTE: making this too far from the object's position will result in strange behavior (as it is not used in the initial queries for nearby objects)
   local nodeOffset = args["energyNodeOffset"] or entity.energyNodeOffset or {0.5, 0.5}
-  energy.nodePosition = {entity.position()[1] + nodeOffset[1], entity.position()[2] + nodeOffset[2]}
+  energy.nodePosition = {object.position()[1] + nodeOffset[1], object.position()[2] + nodeOffset[2]}
 
   --maximum range (in blocks) that this device will search for entities to connect to
   --NOTE: we may not want to make this configurable, since it will result in strange behavior if asymmetrical
@@ -66,11 +66,11 @@ function energy.init(args)
   --helper table for energy.connections that sorts the id's in order of proximity/precedence
   energy.sortedConnections = {}
 
-  --flag used to run more initialization the first time main() is called (in energy.update())
+  --flag used to run more initialization the first time update(dt) is called (in energy.update())
   self.energyInitialized = false
 end
 
--- Performs per-tick updates for energy module (MUST BE CALLED IN OBJECT main() FUNCTION)
+-- Performs per-tick updates for energy module (MUST BE CALLED IN OBJECT update(dt) FUNCTION)
 function energy.update(dt)
   if self.energyInitialized then
     --periodically reset projectile anti-spam list
@@ -105,7 +105,7 @@ function energy.update(dt)
     local collisionBlocks = entity.energyCollisionBlocks
     if collisionBlocks then
       energy.collisionBlocks = {}
-      local pos = entity.position()
+      local pos = object.position()
       for i, block in ipairs(collisionBlocks) do
         local blockHash = energy.blockHash({block[1] + pos[1], block[2] + pos[2]})
         energy.collisionBlocks[blockHash] = true
@@ -378,7 +378,7 @@ function energy.findConnections()
   energy.sortedConnections = {}
 
   --find nearby energy devices within LoS
-  local entityIds = world.objectQuery(entity.position(), energy.linkRange, { 
+  local entityIds = world.objectQuery(object.position(), energy.linkRange, { 
       withoutEntityId = entity.id(),
       callScript = "energy.canConnect",
       order = "nearest"
@@ -434,7 +434,7 @@ function energy.energyNeedsQuery(energyNeeds)
       end
       
       -- if energyNeeds[tostring(entityId)] == nil then
-      --   world.logInfo("%s %d failed to add itself to energyNeeds table", world.callScriptedEntity(entityId, "entity.configParameter", "objectName"), entityId)
+      --   world.logInfo("%s %d failed to add itself to energyNeeds table", world.callScriptedEntity(entityId, "config.getParameter", "objectName"), entityId)
       -- end
       
       if energyNeeds["total"] > prevTotal then

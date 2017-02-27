@@ -32,7 +32,7 @@
 
   "affectWidth" : 20,
   "fanPower" : 210,
-  "blowSound" : "/sfx/tech/tech_hoverloop.wav",
+  "blowSound" : "on",
 
   "energyConsumptionRate" : 5,
   "energyCapacity" : 5

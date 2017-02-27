@@ -96,7 +96,7 @@ end
 
 function setNeedlePos()
   local angle = self.needleMinPos - self.needleRange * ((energy.getEnergy() / energy.getCapacity()) + (math.random() * 0.04))
-  animator.rotateGroup("needle", angle)
+  animator.rotateTransformationGroup("needle", angle)
 end
 
 function findOres()

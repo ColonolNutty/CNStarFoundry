@@ -7,7 +7,7 @@ function init(args)
       storage.liquid = initInv
     end
     
-    object.scaleGroup("liquid", {1, 0})
+    animator.scaleTransformationGroup("liquid", {1, 0})
     self.liquidMap = {}
     self.liquidMap[1] = "water"
     self.liquidMap[3] = "lava"
@@ -78,9 +78,9 @@ function main(args)
   
   if storage.liquid[2] then
     local liquidScale = storage.liquid[2] / self.capacity
-    object.scaleGroup("liquid", {1, liquidScale})
+    animator.scaleTransformationGroup("liquid", {1, liquidScale})
   else
-    object.scaleGroup("liquid", {1, 0})
+    animator.scaleTransformationGroup("liquid", {1, 0})
   end
   
   if self.pushTimer > self.pushRate and storage.liquid[2] ~= nil then

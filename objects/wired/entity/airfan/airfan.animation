@@ -1,5 +1,8 @@
 {
-  "animatedParts" : {
+  "sounds": {
+  	"on": ["/sfx/tech/tech_hoverloop.ogg"]
+  },
+  "animatedParts" : {	
     "stateTypes" : {
       "fanState" : {
         "default" : "idle",

@@ -246,7 +246,7 @@ function astarApi.flyTo(fdest, rect)
     if not res[1] then world.logInfo("%s", res)
     elseif not res[2] then
       astarApi.pdone = false
-      object.fly({ 0, 0 })
+      entity.fly({ 0, 0 })
       return true
     else
       astarApi.pdone = true
@@ -257,10 +257,10 @@ function astarApi.flyTo(fdest, rect)
   if astarApi.flyp == nil then return false end
   local p = object.position()
   if astarApi.pnode >= #astarApi.flyp then
-    object.flyTo(fdest, true)
+    entity.flyTo(fdest, true)
   else
     local n = astarApi.flyp[astarApi.pnode]
-    object.fly(astarApi.dirVec({ n[1] - p[1] + 0.5, n[2] - p[2] + 0.5 }, astarApi.spd))
+    entity.fly(astarApi.dirVec({ n[1] - p[1] + 0.5, n[2] - p[2] + 0.5 }, astarApi.spd))
     if world.magnitude(object.position(), n2v(astarApi.flyp[astarApi.pnode])) < 1.25 then
       astarApi.pnode = astarApi.pnode + 1
     end

@@ -74,10 +74,10 @@ function output(state)
 	
     if state then
       animator.setAnimationState("magnetState", storage.magnetOnAnim)
-      object.playSound("onSounds")
+      animator.playSound("onSounds")
     else
       animator.setAnimationState("magnetState", storage.magnetOffAnim)
-      object.playSound("offSounds")
+      animator.playSound("offSounds")
     end
   end
 end

@@ -51,7 +51,7 @@ function update(dt)
     if self.st > 7 then 
       self.st = 0
     elseif self.st == 3 then
-      object.playImmediateSound(self.workSound)
+      animator.playImmediateSound(self.workSound)
     end
     local p = object.toAbsolutePosition({ -1.8, 1 })
     object.setForceRegion({ p[1], p[2], p[1] + 3.6, p[2] }, { self.moveSpeed * object.direction(), 0})

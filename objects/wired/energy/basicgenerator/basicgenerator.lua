@@ -85,7 +85,7 @@ function updateAnimationState()
     animator.setAnimationState("generatorState", "off")
   end
 
-  animator.scaleGroup("fuelbar", {math.min(1, storage.fuel / self.fuelMax), 1})
+  animator.scaleTransformationGroup("fuelbar", {math.min(1, storage.fuel / self.fuelMax), 1})
 end
 
 function checkNodes()

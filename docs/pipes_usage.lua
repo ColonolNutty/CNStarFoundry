@@ -9,8 +9,8 @@ function init(virtual)
   end
 end
 
-function main()
-  pipes.update() --Required
+function update(dt)
+  pipes.update(dt) --Required
   
   --Pushing and pulling liquids, simple usage
   local getLiquid = pullLiquid(1) --Returns false/nil if no liquid was pulled, {liquidId, amount} if successful
@@ -60,9 +60,9 @@ end
 --Should return the liquid it would send, or false if no liquid, but not remove any liquid
 function beforeLiquidGet(filter, nodeId)
   if filter == nil then
-    return world.liquidAt(entity.position()) or false
+    return world.liquidAt(object.position()) or false
   else
-    local liquid = world.liquidAt(entity.position())
+    local liquid = world.liquidAt(object.position())
     if filter[1] == liquid[1] then return liquid end
   end
   return false
@@ -71,10 +71,10 @@ end
 --Should return the liquid, or false if there is none, and perform the send action
 function onLiquidGet(filter, nodeId)
   if filter == nil then
-    return world.liquidAt(entity.position()) or false
+    return world.liquidAt(object.position()) or false
   else
-    local liquid = world.liquidAt(entity.position())
-    if filter[1] == liquid[1] then return world.destroyLiquiod(entity.position()) end
+    local liquid = world.liquidAt(object.position())
+    if filter[1] == liquid[1] then return world.destroyLiquiod(object.position()) end
   end
   return false
 end

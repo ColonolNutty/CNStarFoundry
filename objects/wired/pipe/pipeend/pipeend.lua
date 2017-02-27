@@ -23,7 +23,7 @@ function main(args)
     for i=0,3 do 
       local angle = (math.pi / 2) * i
       if #pipes.nodeEntities["liquid"][i+1] > 0 then
-        animator.rotateGroup("pipe", angle)
+        animator.rotateTransformationGroup("pipe", angle)
         self.usedNode = i + 1
       elseif i == 3 then --Not connected to an object, check for pipes instead
         for i=0,3 do 
@@ -31,7 +31,7 @@ function main(args)
           local tilePos = {position[1] + checkDirs[i][1], position[2] + checkDirs[i][2]}
           local pipeDirections = pipes.getPipeTileData("liquid", tilePos, "foreground", checkDirs[i])
           if pipeDirections then
-            animator.rotateGroup("pipe", angle)
+            animator.rotateTransformationGroup("pipe", angle)
             self.usedNode = i + 1
           end
         end

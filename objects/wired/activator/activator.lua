@@ -23,7 +23,7 @@ function math.round(num, idp)
 end
 
 function setTargetPosition()
-  animator.rotateGroup("target", self.zeroAngle + storage.targetAngle)
+  animator.rotateTransformationGroup("target", self.zeroAngle + storage.targetAngle)
   local pos = object.position()
   local tarX = math.round(math.cos(storage.targetAngle) * 2) + pos[1] + 0.5
   local tarY = math.round(math.sin(storage.targetAngle) * 2) + pos[2] + 0.5

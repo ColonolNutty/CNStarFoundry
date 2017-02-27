@@ -16,11 +16,11 @@ function getSample()
   return false
 end
 
-function main()
-  datawire.update()
+function update(dt)
+  datawire.update(dt)
   
   local sample = getSample()
-  datawire.sendData(sample, "number", "all")
+  datawire.sendData(sample, "number", "all", dt)
 
   if sample >= self.detectThresholdLow then
     object.setOutputNodeLevel(0, true)
