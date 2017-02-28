@@ -31,8 +31,8 @@ function onInteraction(args)
   setActive(not storage.active)
 end
 
-function setActive(flag)
-  if not flag or energy.consumeEnergy(nil, true) then
+function setActive(flag, dt)
+  if not flag or energy.consumeEnergy(nil, true, dt or 0) then
     storage.active = flag
     if flag then animator.setAnimationState("workState", "work")
     else animator.setAnimationState("workState", "idle") end
@@ -40,10 +40,10 @@ function setActive(flag)
 end
 
 function update(dt)
-  energy.update()
+  energy.update(dt)
   if storage.active then
-    if not energy.consumeEnergy() then
-      setActive(false)
+    if not energy.consumeEnergy(nil, nil, dt) then
+      setActive(false, dt)
       return
     end
 

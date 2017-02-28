@@ -26,7 +26,7 @@
         "properties" : {
           "centered" : false,
           "offset" : [-1, 1],
-          "rotationGroup" : "target"
+          "transformationGroups" : ["target"]
         },
 
         "partStates" : {
@@ -47,7 +47,7 @@
       }
     }
   },
-  "rotationGroups" : {
+  "transformationGroups" : {
     "target" : {
       "rotationCenter" : [0.5, 0.5],
       "angularVelocity" : 10

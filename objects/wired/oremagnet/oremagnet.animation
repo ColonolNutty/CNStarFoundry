@@ -58,13 +58,13 @@
           "centered" : false,
           "image" : "<partImage>",
           "offset" : [1.45, 3],
-          "rotationGroup" : "needle",
+          "transformationGroups" : ["needle"],
           "zLevel" : 2
         }
       }
     }
   },
-  "rotationGroups" : {
+  "transformationGroups" : {
     "needle" : {
       "rotationCenter" : [1.45, 3],
       "angularVelocity" : 10

@@ -22,12 +22,12 @@
           "centered" : false,
           "offset" : [0.375, 0.375],
           "zLevel" : 1,
-          "rotationGroup" : "turbine"
+          "transformationGroups" : ["turbine"]
         }
       }
     }
   },
-  "rotationGroups" : {
+  "transformationGroups" : {
     "turbine" : {
       "rotationCenter" : [1.5625, 1.5625],
       "angularVelocity" : 2

@@ -43,7 +43,7 @@
         "properties" : {
           "image" : "<partImage>",
           "centered" : false,
-          "scalingGroup" : "fuelbar",
+          "transformationGroups" : ["fuelbar"],
           "offset" : [-1.625, 0.375],
           "zLevel" : 2
         }
@@ -51,7 +51,7 @@
     }
   },
 
-  "scalingGroups" : {
+  "transformationGroups" : {
     "fuelbar" : {
       "pivot" : [-1.625, 0.375]
     }

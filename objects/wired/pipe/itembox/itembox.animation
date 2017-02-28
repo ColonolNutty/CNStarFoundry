@@ -58,7 +58,7 @@
           "offset" : [-0.375, -0.5],
           "centered" : false,
           "zLevel" : 2,
-          "scalingGroup" : "invbar"
+          "transformationGroups" : ["invbar"]
         },
         "partStates" : {
           "invbar" : {
@@ -82,7 +82,7 @@
       }
     }
   },
-  "scalingGroups" : {
+  "transformationGroups" : {
     "invbar" : {
       "pivot" : [0, 0]
     }

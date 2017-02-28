@@ -13,12 +13,12 @@
         "properties" : {
           "image" : "<partImage>",
           "centered" : false,
-          "rotationGroup" : "ejector"
+          "transformationGroups" : ["ejector"]
         }
       }
     }
   },
-  "rotationGroups" : {
+  "transformationGroups" : {
     "ejector" : {
       "rotationCenter" : [0.5, 0.5],
       "angularVelocity" : 1000
