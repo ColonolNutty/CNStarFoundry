@@ -20,7 +20,7 @@
         "properties" : {
           "image" : "<partImage>",
           "centered" : false,
-          "scalingGroup" : "chargebar",
+          "transformationGroups" : ["chargebar"],
           "offset" : [0.125, 0.375],
           "zLevel" : 2
         }
@@ -35,7 +35,7 @@
     }
   },
 
-  "scalingGroups" : {
+  "transformationGroups" : {
     "chargebar" : {
       "pivot" : [0.125, 0.375]
     }

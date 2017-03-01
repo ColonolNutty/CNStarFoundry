@@ -85,6 +85,7 @@ function updateAnimationState()
     animator.setAnimationState("generatorState", "off")
   end
 
+  animator.resetTransformationGroup("fuelbar")
   animator.scaleTransformationGroup("fuelbar", {math.min(1, storage.fuel / self.fuelMax), 1})
 end
 
@@ -99,7 +100,7 @@ end
 
 --never accept energy from elsewhere
 function onEnergyNeedsCheck(energyNeeds)
-  energyNeeds[tostring(object.id())] = 0
+  energyNeeds[tostring(entity.id())] = 0
   return energyNeeds
 end
 
@@ -118,7 +119,7 @@ function getFuelItems()
     if not self.ignoreDropIds[entityId] then
       local itemName = world.entityName(entityId)
       if self.fuelValues[itemName] then
-        local item = world.takeItemDrop(entityId, object.id())
+        local item = world.takeItemDrop(entityId, entity.id())
         if item then
           if self.fuelValues[item.name] then
             while item.count > 0 and storage.fuel < self.fuelMax do
@@ -141,7 +142,7 @@ end
 
 function ejectItem(item)
   local itemDropId
-  if next(item.data) == nil then
+  if item.data == nil or next(item.data) == nil then
     itemDropId = world.spawnItem(item.name, self.dropPoint, item.count)
   else
     itemDropId = world.spawnItem(item.name, self.dropPoint, item.count, item.data)
@@ -149,7 +150,7 @@ function ejectItem(item)
   self.ignoreDropIds[itemDropId] = true
 end
 
-function generate()
+function generate(dt)
   local tickFuel = self.fuelUseRate * dt
   if storage.fuel >= tickFuel then
     storage.fuel = storage.fuel - tickFuel
@@ -167,7 +168,7 @@ end
 
 function update(dt)
   if storage.state then
-    generate()
+    generate(dt)
     updateAnimationState()
   end
 
@@ -175,5 +176,5 @@ function update(dt)
     getFuelItems()
   end
 
-  energy.update()
+  energy.update(dt)
 end

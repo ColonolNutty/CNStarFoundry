@@ -10,31 +10,31 @@ function energy.init(args)
   energy.fuelEnergyConversion = 100
 
   --can be used to disallow direct connection (e.g. for batteries)
-  energy.allowConnection = args["energyAllowConnection"]
+  energy.allowConnection = args["energyAllowConnection"] or config.getParameter("energyAllowConnection")
   if energy.allowConnection == nil then
-    energy.allowConnection = entity.energyAllowConnection
+    energy.allowConnection = object.energyAllowConnection
     if energy.allowConnection == nil then
       energy.allowConnection = true
     end
   end
 
   --capacity of internal energy storage
-  energy.capacity = args["energyCapacity"] or entity.energyCapacity or 0
+  energy.capacity = args["energyCapacity"] or config.getParameter("energyCapacity") or object.energyCapacity or 0
 
   --amount of energy generated per second when active
-  energy.generationRate = args["energyGenerationRate"] or entity.energyGenerationRate or 0
+  energy.generationRate = args["energyGenerationRate"] or config.getParameter("energyGenerationRate") or object.energyGenerationRate or 0
 
   --amount of energy consumed per second when active
-  energy.consumptionRate = args["energyConsumptionRate"] or entity.energyConsumptionRate or 0
+  energy.consumptionRate = args["energyConsumptionRate"] or config.getParameter("energyConsumptionRate") or object.energyConsumptionRate or 0
 
   --current energy storage
-  storage.curEnergy = storage.curEnergy or entity.savedEnergy or  0
+  storage.curEnergy = storage.curEnergy or object.savedEnergy or  0
 
   --maximum amount of energy transmitted per second
-  energy.sendRate = args["energySendRate"] or entity.energySendRate or 0
+  energy.sendRate = args["energySendRate"] or config.getParameter("energySendRate") or object.energySendRate or 0
 
   --frequency (in seconds) to push energy (maybe make this hard coded)
-  energy.sendFreq = args["energySendFreq"] or entity.energySendFreq or 0.5
+  energy.sendFreq = args["energySendFreq"] or config.getParameter("energySendFreq") or object.energySendFreq or 0.5
 
   --timer variable that tracks the cooldown until next transmission pulse
   energy.sendTimer = energy.sendFreq
@@ -46,12 +46,12 @@ function energy.init(args)
 
   --define custom source position for energy projectiles and LoS checks
   --NOTE: making this too far from the object's position will result in strange behavior (as it is not used in the initial queries for nearby objects)
-  local nodeOffset = args["energyNodeOffset"] or entity.energyNodeOffset or {0.5, 0.5}
+  local nodeOffset = args["energyNodeOffset"] or config.getParameter("energyNodeOffset") or object.energyNodeOffset or {0.5, 0.5}
   energy.nodePosition = {object.position()[1] + nodeOffset[1], object.position()[2] + nodeOffset[2]}
 
   --maximum range (in blocks) that this device will search for entities to connect to
   --NOTE: we may not want to make this configurable, since it will result in strange behavior if asymmetrical
-  energy.linkRange = args["energyLinkRange"] or entity.energyLinkRange or 10
+  energy.linkRange = args["energyLinkRange"] or config.getParameter("energyLinkRange") or object.energyLinkRange or 10
 
   --frequency (in seconds) to perform LoS checks on connected entities
   energy.connectCheckFreq = 0.5
@@ -102,7 +102,7 @@ function energy.update(dt)
     end
   else
     -- create table of locations this object occupies, which will be ignored in LoS checks
-    local collisionBlocks = entity.energyCollisionBlocks
+    local collisionBlocks = object.energyCollisionBlocks
     if collisionBlocks then
       energy.collisionBlocks = {}
       local pos = object.position()

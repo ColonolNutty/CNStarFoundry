@@ -46,7 +46,9 @@ end
 
 function die()
   for i, batteryStatus in ipairs(self.batteries) do
-    world.callScriptedEntity(batteryStatus.id, "object.smash")
+    if world.entityExists(batteryStatus.id) then
+      world.callScriptedEntity(batteryStatus.id, "object.smash")
+    end
   end
   energy.die()
 end
@@ -69,7 +71,7 @@ function checkBatteries()
   self.totalUnusedCapacity = 0
   self.totalStoredEnergy = 0
 
-  local entityIds = world.objectQuery(self.batteryCheckArea[1], self.batteryCheckArea[2], { withoutEntityId = object.id(), callScript = "isBattery" })
+  local entityIds = world.objectQuery(self.batteryCheckArea[1], self.batteryCheckArea[2], { withoutEntityId = entity.id(), callScript = "isBattery" })
   for i, entityId in ipairs(entityIds) do
     local batteryStatus = world.callScriptedEntity(entityId, "getBatteryStatus")
     self.batteries[#self.batteries + 1] = batteryStatus
@@ -107,9 +109,9 @@ function onEnergyNeedsCheck(energyNeeds)
   if not storage.discharging or not world.callScriptedEntity(energyNeeds.sourceId, "isBatteryCharger") then
     local thisNeed = math.min(self.batteryChargeAmount, self.totalUnusedCapacity)
     energyNeeds["total"] = energyNeeds["total"] + thisNeed
-    energyNeeds[tostring(object.id())] = thisNeed
+    energyNeeds[tostring(entity.id())] = thisNeed
   else
-    energyNeeds[tostring(object.id())] = 0
+    energyNeeds[tostring(entity.id())] = 0
   end
 
   return energyNeeds
@@ -155,10 +157,12 @@ function dischargeBatteries()
   --world.logInfo("discharging batteries starting with %f energy", energy.getEnergy())
   while sourceBatt >= 1 and energyNeeded > 0 do
     
-    local discharge = world.callScriptedEntity(self.batteries[sourceBatt].id, "energy.removeEnergy", energyNeeded)
-    if discharge and discharge > 0 then
-      energy.addEnergy(discharge)
-      energyNeeded = energyNeeded - discharge
+    if world.entityExists(self.batteries[sourceBatt].id) then
+      local discharge = world.callScriptedEntity(self.batteries[sourceBatt].id, "energy.removeEnergy", energyNeeded)
+      if discharge and discharge > 0 then
+        energy.addEnergy(discharge)
+        energyNeeded = energyNeeded - discharge
+      end
     end
     sourceBatt = sourceBatt - 1
   end
@@ -169,8 +173,8 @@ end
 function setWireStates()
   datawire.sendData(self.totalStoredEnergy, "number", 0)
   datawire.sendData(self.totalUnusedCapacity, "number", 1)
-  object.setOutputNodeLevel(0, self.totalUnusedCapacity == 0)
-  object.setOutputNodeLevel(1, self.totalStoredEnergy == 0)
+  object.setOutputNodeLevel(0, self.totalUnusedCapacity > 0)
+  object.setOutputNodeLevel(1, self.totalStoredEnergy > 0)
 end
 
 function update(dt)
@@ -186,5 +190,5 @@ function update(dt)
   setWireStates()
 
   datawire.update()
-  energy.update()
+  energy.update(dt)
 end
