@@ -26,7 +26,8 @@
         "properties" : {
           "centered" : false,
           "offset" : [-1, 1],
-          "transformationGroups" : ["target"]
+          "transformationGroups" : ["target"],
+		  "zLevel": 24
         },
 
         "partStates" : {
@@ -49,7 +50,7 @@
   },
   "transformationGroups" : {
     "target" : {
-      "rotationCenter" : [0.5, 0.5],
+      "rotationCenter" : [0, 0],
       "angularVelocity" : 10
     }
   }

@@ -1,7 +1,6 @@
 function init(virtual)
   if not virtual then
-    self.zeroAngle = -math.pi / 2
-    storage.targetAngle = (storage.targetAngle and storage.targetAngle % (2 * math.pi)) or 0
+    storage.targetAngle = 0
     setTargetPosition()
 
     object.setInteractive(true)
@@ -13,7 +12,7 @@ function onInteraction(args)
 end
 
 function cycleTarget()
-  storage.targetAngle = storage.targetAngle - (math.pi / 2)
+  storage.targetAngle = (storage.targetAngle + (math.pi / 2)) % (2 * math.pi)
   setTargetPosition()
 end
 
@@ -23,10 +22,45 @@ function math.round(num, idp)
 end
 
 function setTargetPosition()
-  animator.rotateTransformationGroup("target", self.zeroAngle + storage.targetAngle)
+  animator.resetTransformationGroup("target")
+  local rotationAngle = storage.targetAngle
+  local currentLocation = rotationAngle / (math.pi * 2)
+  local targetXtranslation = 0
+  local targetYtranslation = 0
+  if currentLocation >= 0.5 and currentLocation < 1.0 then
+    targetXtranslation = -1
+  end
+  if currentLocation <= 0.5 and currentLocation > 0.0 then
+    targetYtranslation = -1
+  end
+  -- 1 is up, 2 is left, 3 is down, 4 is right
+  local targetDirection = (currentLocation / 0.25) + 1
+  animator.translateTransformationGroup("target", {targetXtranslation, targetYtranslation})
+  animator.rotateTransformationGroup("target", rotationAngle)
   local pos = object.position()
-  local tarX = math.round(math.cos(storage.targetAngle) * 2) + pos[1] + 0.5
-  local tarY = math.round(math.sin(storage.targetAngle) * 2) + pos[2] + 0.5
+  local tarX
+  local tarY
+  --up
+  if targetDirection == 1 then
+    tarX = pos[1]
+    tarY = pos[2] + 2
+  else
+   --left
+    if targetDirection == 2 then
+      tarX = pos[1] - 2
+      tarY = pos[2]
+    else
+      --down
+      if targetDirection == 3 then
+        tarX = pos[1]
+        tarY = pos[2] - 2
+      --right
+      else
+        tarX = pos[1] + 2
+        tarY = pos[2]
+      end
+    end
+  end
   self.clickPos = {tarX, tarY}
 end
 
@@ -48,13 +82,15 @@ end
 function click()
   if animator.animationState("clickState") ~= "on" then
     animator.setAnimationState("clickState", "on")
-    local interactArgs = { source = object.position(), sourceId = object.id() }
+    local interactArgs = { source = object.position(), sourceId = entity.id() }
 
-    local eIds = world.entityLineQuery(self.clickPos, self.clickPos, { withoutEntityId = object.id() })
+    local eIds = world.entityQuery(self.clickPos, 1.5, { 
+      withoutEntityId = entity.id(),
+      boundMode  = "position"
+    })
 
     for i, eId in ipairs(eIds) do
       if world.entityType(eId) == "object" then
-        --world.logInfo("clicking %d the %s", eId, world.entityName(eId))
         world.callScriptedEntity(eId, "onInteraction", interactArgs)
       end
     end

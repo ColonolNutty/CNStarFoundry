@@ -12,7 +12,6 @@
 
   "inventoryIcon" : "ekey.png",
   "orientations" : [
-
     {
       "image" : "ekey.png",
       "imagePosition" : [-1, -1],
