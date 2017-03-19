@@ -9,10 +9,11 @@ function init(v)
   end
   animator.setParticleEmitterActive("fanwind", false)
   animator.setParticleEmitterActive("fanwindflip", false)
+  physics.setForceEnabled("right", false)
+  physics.setForceEnabled("left", false)
 
   setActive(storage.active)
   self.affectWidth = config.getParameter("affectWidth")
-  self.blowSound = config.getParameter("blowSound")
   self.fanPower = config.getParameter("fanPower")
   self.timer = 0
   self.st = 0
@@ -55,7 +56,9 @@ function setActive(flag, dt)
     end
     storage.active = flag
   else
-	animator.stopAllSounds(self.blowSound)
+    sb.logInfo("stopping all")
+    physics.setForceEnabled("right", false)
+    physics.setForceEnabled("left", false)
   end
 end
 
@@ -70,26 +73,39 @@ function update(dt)
     self.st = self.st + 1
     if self.st > 6 then 
       self.st = 0
-    elseif self.st == 3 then
-      animator.playSound(self.blowSound)
     end
     local d = object.direction();
     local p = object.position();
     local region;
+    local x1;
+    local x2;
+    local y1;
+    local y2;
     if d == 1 then
-      region = { p[1], p[2] - 1, p[1] + d * self.affectWidth, p[2] + 1 }
+      x1 = p[1]
+      x2 = p[2] - 1
+      y1 = p[1] + d * self.affectWidth
+      y2 = p[2] + 1
     else
-      region = { p[1] + d * self.affectWidth, p[2] - 1, p[1], p[2] + 1 }
+      x1 = p[1] + d * self.affectWidth
+      x2 = p[2] - 1
+      y1 = p[1]
+      y2 = p[2] + 1
     end
-    --mcontroller.controlApproachXVelocity(region, { self.fanPower * d, 0 })
+    physics.setForceEnabled("right", false)
+    physics.setForceEnabled("left", false)
+    physics.setForceEnabled(object.direction() > 0 and "right" or "left", true)
+    --entity.setForceRegion(region, { self.fanPower * d, 0 })
   elseif self.timer > 0 then
-    if self.timer % 12 == 4 then 
-      animator.playSound(self.blowSound) 
-    end
     self.timer = self.timer - 1
     if self.timer == 1 then 
       animator.setAnimationState("fanState", "idle") 
     end
+    physics.setForceEnabled("right", false)
+    physics.setForceEnabled("left", false)
+  else
+    physics.setForceEnabled("right", false)
+    physics.setForceEnabled("left", false)
   end
   
 end
