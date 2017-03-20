@@ -20,7 +20,7 @@
     }
   ],
   
-  "inputNodes" : [ [0, -2] ],
+  "inputNodes" : [ [0, -2], [2, -2], [-2, -2], [-2, 2] ],
 
   "scripts" : [ "airfan.lua", "/scripts/energy.lua" ],
   "scriptDelta" : 5,
@@ -29,8 +29,9 @@
     "right" : {
       "type" : "DirectionalForceRegion",
       //-2, 0, 1, 5
-      "rectRegion" : [-40, 0, 1, 5],
-      "xTargetVelocity" : 4.0,
+      //x1, y1, x2, y2
+      "rectRegion" : [20, 20, -20, -20],
+      "xTargetVelocity" : 400.0,
       "yTargetVelocity" : 0,
       "controlForce" : 210,
       "enabled" : false
@@ -38,8 +39,9 @@
     "left" : {
       "type" : "DirectionalForceRegion",
       //-1, 0, 2, 5
-      "rectRegion" : [-200, 0, 2, 5],
-      "xTargetVelocity" : -4.0,
+      //x1, y1, x2, y2
+      "rectRegion" : [-20, -20, 20, 20],
+      "xTargetVelocity" : -400.0,
       "yTargetVelocity" : 0,
       "controlForce" : 210,
       "enabled" : false

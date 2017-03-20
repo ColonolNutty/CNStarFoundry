@@ -1,3 +1,5 @@
+require "/scripts/rect.lua"
+
 function init(v)
   energy.init()
 
@@ -78,23 +80,35 @@ function update(dt)
     local p = object.position();
     local region;
     local x1;
-    local x2;
     local y1;
+    local x2;
     local y2;
     if d == 1 then
       x1 = p[1]
-      x2 = p[2] - 1
-      y1 = p[1] + d * self.affectWidth
+      y1 = p[2] - 1
+      x2 = p[1] + d * self.affectWidth
       y2 = p[2] + 1
     else
       x1 = p[1] + d * self.affectWidth
-      x2 = p[2] - 1
-      y1 = p[1]
+      y1 = p[2] - 1
+      x2 = p[1]
       y2 = p[2] + 1
     end
+    sb.logInfo("1a: " .. x1)
+    sb.logInfo("2a: " .. y1)
+    sb.logInfo("3a: " .. x2)
+    sb.logInfo("4a: " .. y2)
+    region = {x1, y1, x2, y2};
+    local otherRegion = rect.flipX(region);
+    
+    sb.logInfo("1b: " .. otherRegion[1])
+    sb.logInfo("2b: " .. otherRegion[2])
+    sb.logInfo("3b: " .. otherRegion[3])
+    sb.logInfo("4b: " .. otherRegion[4])
+    --sb.logInfo("D: " .. d)
     physics.setForceEnabled("right", false)
     physics.setForceEnabled("left", false)
-    physics.setForceEnabled(object.direction() > 0 and "right" or "left", true)
+    physics.setForceEnabled((d > 0 and "right") or "left", true)
     --entity.setForceRegion(region, { self.fanPower * d, 0 })
   elseif self.timer > 0 then
     self.timer = self.timer - 1
