@@ -13,10 +13,10 @@ function init(v)
   animator.setParticleEmitterActive("fanwindflip", false)
   physics.setForceEnabled("right", false)
   physics.setForceEnabled("left", false)
-
+ 
   setActive(storage.active)
-  self.affectWidth = config.getParameter("affectWidth")
-  self.fanPower = config.getParameter("fanPower")
+  -- self.affectWidth = config.getParameter("affectWidth")
+  -- self.fanPower = config.getParameter("fanPower")
   self.timer = 0
   self.st = 0
   onNodeConnectionChange(nil)
@@ -77,48 +77,43 @@ function update(dt)
       self.st = 0
     end
     local d = object.direction();
-    local p = object.position();
-    local region;
-    local x1;
-    local y1;
-    local x2;
-    local y2;
-    if d == 1 then
-      x1 = p[1]
-      y1 = p[2] - 1
-      x2 = p[1] + d * self.affectWidth
-      y2 = p[2] + 1
-    else
-      x1 = p[1] + d * self.affectWidth
-      y1 = p[2] - 1
-      x2 = p[1]
-      y2 = p[2] + 1
-    end
-    sb.logInfo("Direction: " .. d)
-    sb.logInfo("current position of air fan:")
-    sb.logInfo("X1: " .. p[1])
-    sb.logInfo("Y1: " .. p[2])
-    sb.logInfo("Rect region of air fan:")
-    sb.logInfo("1a: " .. x1)
-    sb.logInfo("2a: " .. y1)
-    sb.logInfo("3a: " .. x2)
-    sb.logInfo("4a: " .. y2)
-    region = {x1, y1, x2, y2};
-    --sb.logInfo("D: " .. d)
+    -- local p = object.position();
+    -- local region;
+    -- local x1;
+    -- local y1;
+    -- local x2;
+    -- local y2;
+    -- if d == 1 then
+      -- x1 = p[1]
+      -- y1 = p[2] - 1
+      -- x2 = p[1] + d * self.affectWidth
+      -- y2 = p[2] + 1
+    -- else
+      -- x1 = p[1] + d * self.affectWidth
+      -- y1 = p[2] - 1
+      -- x2 = p[1]
+      -- y2 = p[2] + 1
+    -- end
+    -- sb.logInfo("Direction: " .. d)
+    -- sb.logInfo("current position of air fan:")
+    -- sb.logInfo("X1: " .. p[1])
+    -- sb.logInfo("Y1: " .. p[2])
+    -- sb.logInfo("Rect region of air fan:")
+    -- sb.logInfo("1a: " .. x1)
+    -- sb.logInfo("2a: " .. y1)
+    -- sb.logInfo("3a: " .. x2)
+    -- sb.logInfo("4a: " .. y2)
+    -- region = {x1, y1, x2, y2};
     physics.setForceEnabled("right", false)
     physics.setForceEnabled("left", false)
     physics.setForceEnabled((d > 0 and "right") or "left", true)
-    --entity.setForceRegion(region, { self.fanPower * d, 0 })
+    return
   elseif self.timer > 0 then
     self.timer = self.timer - 1
     if self.timer == 1 then 
       animator.setAnimationState("fanState", "idle") 
     end
-    physics.setForceEnabled("right", false)
-    physics.setForceEnabled("left", false)
-  else
-    physics.setForceEnabled("right", false)
-    physics.setForceEnabled("left", false)
   end
-  
+  physics.setForceEnabled("right", false)
+  physics.setForceEnabled("left", false)
 end
