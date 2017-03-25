@@ -13,7 +13,7 @@
         "properties" : {
           "image" : "<partImage>",
           "centered" : false,
-          "zLevel" : 1
+          "zLevel" : 2
         }
       },
       "chargebar" : {
@@ -22,14 +22,14 @@
           "centered" : false,
           "transformationGroups" : ["chargebar"],
           "offset" : [0.125, 0.375],
-          "zLevel" : 2
+          "zLevel" : 3
         }
       },
       "overlay" : {
         "properties" : {
           "image" : "<partImage>",
           "centered" : false,
-          "zLevel" : 3
+          "zLevel" : 4
         }
       }
     }

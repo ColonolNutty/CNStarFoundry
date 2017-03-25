@@ -33,12 +33,12 @@ function init(virtual)
 
     --used to track items we spit back out
     self.ignoreDropIds = {}
-
-    object.setInteractive(not object.isInputNodeConnected(0))
+    
     updateAnimationState()
 
     -- profilerApi.init()
   end
+  object.setInteractive(true)
 end
 
 function die()
@@ -65,15 +65,9 @@ function onInteraction(args)
   --   profilerApi.logData()
   --   return
   -- end
-  if not object.isInputNodeConnected(0) then
-    if storage.state then
-      storage.state = false
-    else
-      storage.state = true
-    end
+  storage.state = not storage.state
 
-    updateAnimationState()
-  end
+  updateAnimationState()
 end
 
 function updateAnimationState()
@@ -95,7 +89,6 @@ function checkNodes()
     storage.state = object.getInputNodeLevel(0)
     updateAnimationState()
   end
-  object.setInteractive(not isWired)
 end
 
 --never accept energy from elsewhere
@@ -137,7 +130,6 @@ function getFuelItems()
       end
     end
   end
-  updateAnimationState()
 end
 
 function ejectItem(item)
@@ -161,20 +153,18 @@ function generate(dt)
     storage.fuel = 0
     return true
   else
-    --storage.state = false
     return false
   end
 end 
 
 function update(dt)
   if storage.state then
-    generate(dt)
-    updateAnimationState()
+    storage.state = generate(dt)
   end
 
   if storage.fuel < self.fuelMax then
     getFuelItems()
   end
-
+  updateAnimationState()
   energy.update(dt)
 end

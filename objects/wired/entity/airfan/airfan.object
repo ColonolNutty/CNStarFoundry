@@ -30,7 +30,7 @@
       "type" : "DirectionalForceRegion",
       //-2, 0, 1, 5
       //x1, y1, x2, y2
-      "rectRegion" : [20, 20, -20, -20],
+      "rectRegion" : [-1, -2, 20, 2],
       "xTargetVelocity" : 400.0,
       "yTargetVelocity" : 0,
       "controlForce" : 210,
@@ -40,7 +40,7 @@
       "type" : "DirectionalForceRegion",
       //-1, 0, 2, 5
       //x1, y1, x2, y2
-      "rectRegion" : [-20, -20, 20, 20],
+      "rectRegion" : [-20, -2, 1, 2],
       "xTargetVelocity" : -400.0,
       "yTargetVelocity" : 0,
       "controlForce" : 210,

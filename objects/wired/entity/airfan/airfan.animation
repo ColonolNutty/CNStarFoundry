@@ -56,6 +56,7 @@
     }
   },
   "particleEmitters" : {
+	//right
     "fanwind" : {
       "emissionRate" : 15.0,
       "particles" : [
@@ -79,7 +80,7 @@
         }
       ]
     },
-    //need to use different offsets because BUGS
+    //need to use different offsets because BUGS LEFT
     "fanwindflip" : {
       "emissionRate" : 15.0,
       "particles" : [
@@ -87,7 +88,7 @@
           "particle" : {
             "type" : "ember",
             "size" : 1.0,
-            "position" : [5, 2.3],
+            "position" : [4, 2.3],
             "initialVelocity" : [10, 0],
             "finalVelocity" : [3.0, 0],
             "color" : [200, 200, 255, 150],

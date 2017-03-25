@@ -94,17 +94,16 @@ function update(dt)
       x2 = p[1]
       y2 = p[2] + 1
     end
+    sb.logInfo("Direction: " .. d)
+    sb.logInfo("current position of air fan:")
+    sb.logInfo("X1: " .. p[1])
+    sb.logInfo("Y1: " .. p[2])
+    sb.logInfo("Rect region of air fan:")
     sb.logInfo("1a: " .. x1)
     sb.logInfo("2a: " .. y1)
     sb.logInfo("3a: " .. x2)
     sb.logInfo("4a: " .. y2)
     region = {x1, y1, x2, y2};
-    local otherRegion = rect.flipX(region);
-    
-    sb.logInfo("1b: " .. otherRegion[1])
-    sb.logInfo("2b: " .. otherRegion[2])
-    sb.logInfo("3b: " .. otherRegion[3])
-    sb.logInfo("4b: " .. otherRegion[4])
     --sb.logInfo("D: " .. d)
     physics.setForceEnabled("right", false)
     physics.setForceEnabled("left", false)
