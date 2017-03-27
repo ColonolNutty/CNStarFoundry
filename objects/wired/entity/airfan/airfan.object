@@ -20,7 +20,7 @@
     }
   ],
   
-  "inputNodes" : [ [0, -2], [2, -2], [-2, -2], [-2, 2] ],
+  "inputNodes" : [ [0, -2] ],
 
   "scripts" : [ "airfan.lua", "/scripts/energy.lua" ],
   "scriptDelta" : 5,
