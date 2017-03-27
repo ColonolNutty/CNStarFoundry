@@ -15,8 +15,6 @@ function init(v)
   physics.setForceEnabled("left", false)
  
   setActive(storage.active)
-  -- self.affectWidth = config.getParameter("affectWidth")
-  -- self.fanPower = config.getParameter("fanPower")
   self.timer = 0
   self.st = 0
   onNodeConnectionChange(nil)
@@ -86,10 +84,10 @@ function update(dt)
     -- if d == 1 then
       -- x1 = p[1]
       -- y1 = p[2] - 1
-      -- x2 = p[1] + d * self.affectWidth
+      -- x2 = p[1] + d * 20
       -- y2 = p[2] + 1
     -- else
-      -- x1 = p[1] + d * self.affectWidth
+      -- x1 = p[1] + d * 20
       -- y1 = p[2] - 1
       -- x2 = p[1]
       -- y2 = p[2] + 1

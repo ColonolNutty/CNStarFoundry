@@ -8,6 +8,7 @@
   "description" : "Moves beings smoothly from one point to the next.",
   "shortdescription" : "Conveyor Belt",
   "race" : "generic",
+  "objectType" : "physics",
 
   "inventoryIcon" : "conveyorbelticon.png",
   "orientations" : [
@@ -22,8 +23,32 @@
 
   "inputNodes" : [ [0, 0] ],
 
-  "scripts" : [ "conveyorbelt.lua", "/scripts/entityProxy.lua", "/scripts/energy.lua" ],
+  "scripts" : [ "conveyorbelt.lua", "/scripts/energy.lua" ],
   "scriptDelta" : 5,
+
+  "physicsForces" : {
+    "right" : {
+      "type" : "DirectionalForceRegion",
+      //-2, 0, 1, 5
+      //x1, y1, x2, y2
+      "rectRegion" : [-1, 2, 5, 3],
+      "offset": [0, -1],
+      "xTargetVelocity" : 20.0,
+      "yTargetVelocity" : 0,
+      "controlForce" : 175,
+      "enabled" : false
+    },
+    "left" : {
+      "type" : "DirectionalForceRegion",
+      //-1, 0, 2, 5
+      //x1, y1, x2, y2
+      "rectRegion" : [-3, 2, 2, 3],
+      "xTargetVelocity" : -20.0,
+      "yTargetVelocity" : 0,
+      "controlForce" : 175,
+      "enabled" : false
+    }
+  },
 
   "animation" : "conveyorbelt.animation",
   "animationParts" : {
@@ -32,7 +57,7 @@
   "animationPosition" : [-16, 0],
 
   "moveSpeed" : 175,
-  "workSound" : "/sfx/tech/tech_hoverloop.wav",
+  "workSound" : "/sfx/tech/tech_hoverloop.ogg",
 
   "energyConsumptionRate" : 2,
   "energyCapacity" : 2

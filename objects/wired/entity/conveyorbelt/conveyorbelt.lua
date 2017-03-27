@@ -4,8 +4,9 @@ function init(v)
   setActive(storage.active)
   self.workSound = config.getParameter("workSound")
   self.moveSpeed = config.getParameter("moveSpeed")
-  self.st = 0
   onNodeConnectionChange(nil)
+  physics.setForceEnabled("right", false)
+  physics.setForceEnabled("left", false)
 end
 
 function die()
@@ -34,26 +35,28 @@ end
 function setActive(flag, dt)
   if not flag or energy.consumeEnergy(nil, true, dt or 0) then
     storage.active = flag
-    if flag then animator.setAnimationState("workState", "work")
-    else animator.setAnimationState("workState", "idle") end
+    if flag then 
+      animator.setAnimationState("workState", "work")
+    else
+      animator.setAnimationState("workState", "idle")
+    end
+  else
+    physics.setForceEnabled("right", false)
+    physics.setForceEnabled("left", false)
   end
 end
 
 function update(dt)
   energy.update(dt)
+  physics.setForceEnabled("right", false)
+  physics.setForceEnabled("left", false)
   if storage.active then
     if not energy.consumeEnergy(nil, nil, dt) then
       setActive(false, dt)
       return
     end
-
-    self.st = self.st + 1
-    if self.st > 7 then 
-      self.st = 0
-    elseif self.st == 3 then
-      animator.playImmediateSound(self.workSound)
-    end
-    local p = object.toAbsolutePosition({ -1.8, 1 })
-    object.setForceRegion({ p[1], p[2], p[1] + 3.6, p[2] }, { self.moveSpeed * object.direction(), 0})
+    
+    local d = object.direction();
+    physics.setForceEnabled((d > 0 and "right") or "left", true)
   end
 end

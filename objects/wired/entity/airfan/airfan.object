@@ -53,9 +53,6 @@
     "base" : "airfan.png"
   },
   "animationPosition" : [0, 0],
-
-  "affectWidth" : 20,
-  "fanPower" : 210,
   "blowSound" : "on",
 
   "energyConsumptionRate" : 5,

@@ -10,7 +10,10 @@
           "work" : {
             "frames" : 3,
             "mode" : "loop",
-            "cycle" : 0.2
+            "cycle" : 0.2,
+            "properties" : {
+              "persistentSound" : "/sfx/tech/tech_hoverloop.ogg"
+            }
           }
         }
       }
