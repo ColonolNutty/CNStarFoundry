@@ -5,28 +5,31 @@
   "parts" : [ "drone" ],
 
   "animation" : "itemdrone.animation",
-  "colors" : "/monsters/colors.config",
   "reversed" : true,
 
   "dropPools" : [],
 
   "baseParameters" : {
+    "damageTeamType" : "friendly",
+    "damageTeam" : 0,
+    "colors" : "generated",
+    
     "scripts" : [
-      "/monsters/itemdrone/behavior.lua",
       "/scripts/states/collectState.lua",
       "/scripts/states/stationState.lua",
       "/scripts/util.lua",
       "/scripts/vec2.lua",
       "/scripts/storageapi.lua",
       "/scripts/astarapi.lua",
-      "/scripts/statemachine.lua"
+      "/scripts/statemachine.lua",
+      "/monsters/itemdrone/behavior.lua"
     ],
 
     "scriptDelta" : 5,
 
     "metaBoundBox" : [-2.5, -2.5, 2.5, 2.5],
     "scale" : 1.0,
-
+    
     "movementSettings" : {
       "collisionPoly" : [ [-1.0, -1.0], [1.0, -1.0], [1.0, 1.0], [-1.0, 1.0] ],
 
@@ -35,6 +38,7 @@
       "runSpeed" : 2,
       "jumpSpeed" : 5,
       "flySpeed" : 15,
+      "gravityEnabled" : false,
       "airFriction" : 0.25,
       "airForce" : 50.0
     },
@@ -45,24 +49,61 @@
 
     "blockedSensors" : [ [1.5, -1.1], [1.5, -0.5], [1.5, 0.5], [1.5, 1.1] ],
 
+    "bodyMaterialKind" : "robotic",
+    
     "knockoutTime" : 1,
     "knockoutEffect" : "blink",
     "deathParticles" : "deathPoof",
     "deathNoise" : [ ],
     "turnHostileNoise" : [ ],
 
-    "statusParameters" : {
-      "baseMaxHealth" : 20,
-      "bodyMaterialKind" : "robotic",
-      "damageConfig" : "/monsters/itemdrone/damage.config"
+    "touchDamage" : {
+      "poly" : [ [-1.0, -2.0], [1.0, -2.0], [1.0, 2.0], [-1.0, 2.0] ],
+      "damage" : 3,
+
+      "teamType" : "enemy",
+      "damageSourceKind" : "electric",
+      "statusEffects" : [ ]
     },
 
-    "inateStatusEffects" : [
-      {
-        "kind" : "Protection",
-        "amount" : 1.0
+    "statusSettings" : {
+      "statusProperties" : {
+        "targetMaterialKind" : "robotic"
+      },
+
+      "appliesEnvironmentStatusEffects" : false,
+      "appliesWeatherStatusEffects" : true,
+      "minimumLiquidStatusEffectPercentage" : 0.1,
+      
+      "damageConfig" : "/monsters/itemdrone/damage.config",
+
+      "stats" : {
+        "maxHealth" : {
+          "baseValue" : 20
+        },
+        "protection" : {
+          "baseValue" : 1.0
+        },
+        "healthRegen" : {
+          "baseValue" : 1.0
+        },
+        "poisonStatusImmunity" : {
+          "baseValue" : 1.0
+        },
+        "fireStatusImmunity" : {
+          "baseValue" : 1.0
+        },
+        "iceStatusImmunity" : {
+          "baseValue" : 1.0
+        },
+        "electricStatusImmunity" : {
+          "baseValue" : 1.0
+        },
+        "wetImmunity" : {
+          "baseValue" : 1.0
+        }
       }
-    ],
+    },
 
     "mouthOffset" : [0, 0],
     "feetOffset" : [0, -8],

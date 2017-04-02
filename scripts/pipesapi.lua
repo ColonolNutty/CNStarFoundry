@@ -252,7 +252,11 @@ end
 -- @param direction vec2 - direction of the pipe tile
 -- @returns nil
 function pipes.validEntity(pipeName, entityId, position, direction)
-  return world.callScriptedEntity(entityId, "entityConnectsAt", pipeName, position, direction)
+  if world.entityExists(entityId) then
+    return world.callScriptedEntity(entityId, "entityConnectsAt", pipeName, position, direction)
+  else
+    return false
+  end
 end
 
 --- Walks through placed pipe tiles to find connected entities
@@ -285,12 +289,15 @@ function pipes.walkPipes(pipeName, startOffset, startDir)
     elseif not pipeDirections then
       --local connectedObjects = world.objectQuery(object.toAbsolutePosition(tile.pos), 2)
       local absTilePos = object.toAbsolutePosition(tile.pos)
-      local connectedObjects = world.entityLineQuery(absTilePos, {absTilePos[1] + 1, absTilePos[2] + 2})
+      local options = { includedTypes = {"object"}, withoutEntityId = entity.id()}
+      local connectedObjects = world.entityLineQuery(absTilePos, {absTilePos[1] + 1, absTilePos[2] + 2})--, options)
       if connectedObjects then
         for key,objectId in ipairs(connectedObjects) do
-          local entNode = pipes.validEntity(pipeName, objectId, object.toAbsolutePosition(tile.pos), tile.dir)
-          if objectId ~= object.id() and entNode and table.contains(validEntities, objectId) == false then
-            validEntities[#validEntities+1] = {id = objectId, nodeId = entNode, path = table.copy(tile.path)}
+          if objectId >= 0 then
+            local entNode = pipes.validEntity(pipeName, objectId, object.toAbsolutePosition(tile.pos), tile.dir)
+            if objectId ~= entity.id() and entNode and table.contains(validEntities, objectId) == false then
+              validEntities[#validEntities+1] = {id = objectId, nodeId = entNode, path = table.copy(tile.path)}
+            end
           end
         end
       end

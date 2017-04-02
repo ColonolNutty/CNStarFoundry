@@ -2,14 +2,12 @@
   "objectName" : "entityscanner",
   "colonyTags" : ["wired"],
   "rarity" : "Common",
-  "description" : "Collects useful data about entities.",
+  "description" : "It scans the health of entities switch it between max health (full heart) and current health (half heart).",
   "shortdescription" : "Entity Scanner",
   "race" : "generic",
   "category" : "wire",
   "price" : 500,
   "printable" : false,
-
-  "apexDescription" : "It's indicating that my power level... is over nine thousand.",
 
   "inventoryIcon" : "entityscannericon.png",
   "orientations" : [

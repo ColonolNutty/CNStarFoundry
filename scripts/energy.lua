@@ -427,18 +427,19 @@ function energy.energyNeedsQuery(energyNeeds)
   for i, entityId in ipairs(energy.sortedConnections) do
     if not energyNeeds[tostring(entityId)] and not energy.connections[entityId].blocked then
       local prevTotal = energyNeeds["total"]
-
-      local newEnergyNeeds = world.callScriptedEntity(entityId, "energy.getEnergyNeeds", energyNeeds)
-      if newEnergyNeeds then
-        energyNeeds = newEnergyNeeds
-      end
-      
-      -- if energyNeeds[tostring(entityId)] == nil then
-      --   world.logInfo("%s %d failed to add itself to energyNeeds table", world.callScriptedEntity(entityId, "config.getParameter", "objectName"), entityId)
-      -- end
-      
-      if energyNeeds["total"] > prevTotal then
-        energy.showTransferEffect(entityId)
+      if world.entityExists(entityId) then
+        local newEnergyNeeds = world.callScriptedEntity(entityId, "energy.getEnergyNeeds", energyNeeds)
+        if newEnergyNeeds then
+          energyNeeds = newEnergyNeeds
+        end
+        
+        -- if energyNeeds[tostring(entityId)] == nil then
+        --   world.logInfo("%s %d failed to add itself to energyNeeds table", world.callScriptedEntity(entityId, "config.getParameter", "objectName"), entityId)
+        -- end
+        
+        if energyNeeds["total"] > prevTotal then
+          energy.showTransferEffect(entityId)
+        end
       end
     end
   end

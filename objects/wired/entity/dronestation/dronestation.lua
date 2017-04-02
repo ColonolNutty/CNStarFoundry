@@ -19,7 +19,6 @@ end
 function die()
   storageApi.die()
   energy.die()
-  
 end
 
 function getLandingPos()
@@ -99,7 +98,7 @@ end
 function update(dt)
   local dt = dt
   pipes.update(dt)
-  energy.update()
+  energy.update(dt)
   if self.pushTimer > self.pushRate then
     for i,item in storageApi.getIterator() do
       local result = pushItem(1, item)

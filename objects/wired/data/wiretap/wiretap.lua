@@ -1,3 +1,5 @@
+
+
 function init(virtual)
   if not virtual then
     if storage.fingerpint == nil then
@@ -12,6 +14,7 @@ function init(virtual)
     -- Every Initialization
     datawire.init()
     object.setInteractive(true)
+    storage.currentData = ""
   end
 end
 
@@ -55,25 +58,32 @@ function logInfo(data, dataType)
     logString = "^white;" .. dataType .. " : " .. data
   end
   storage.prevData = data
+  storage.currentData = data
+  if not storage.currentData then
+    storage.currentData = ""
+  end
 
   -- I'm using some dirty 'features' of # here
   -- while the full, list will have keys 0-10,  # will still return 10
   -- This is just a poor-man's stack, with a max of 10 entries.
-  if #storage.logStack >= 10 then
-    for i = 1, 10, 1 do
-      storage.logStack[i - 1] = storage.logStack[i]
-    end
-    storage.logStack[10] = logString
-  else
-    storage.logStack[#storage.logStack + 1] = logString
-  end
+  --if #storage.logStack >= 10 then
+  --  for i = 1, 10, 1 do
+  --    storage.logStack[i - 1] = storage.logStack[i]
+  --  end
+  --  storage.logStack[10] = logString
+  --else
+  --  storage.logStack[#storage.logStack + 1] = logString
+ --end
 end
 
 function getPopupString()
   popupString = ""
-  for i = 1, #storage.logStack, 1 do
-    popupString = popupString.. "\n^green;" .. i .. ") ^white;" .. storage.logStack[i]
+  if storage.currentData then
+    popupString = popupString.. "\n^green;" .. 1 .. ") ^white;" .. storage.currentData
   end
+  --for i = 1, #storage.logStack, 1 do
+  --  popupString = popupString.. "\n^green;" .. i .. ") ^white;" .. storage.logStack[i]
+  --end
   if popupString == "" then
     return "^red;No Data Collected"
   else

@@ -8,12 +8,13 @@
   "category" : "wire",
   "printable" : false,
 
-  "apexDescription" : "Ejector",
-  "avianDescription" : "Ejector",
-  "floranDescription" : "Ejector",
-  "glitchDescription" : "Ejector",
-  "humanDescription" : "Ejector",
-  "hylotlDescription" : "Ejector",
+  "apexDescription" : "Items comes outta this, from the pipes",
+  "avianDescription" : "I can get access to things in the pipes from here",
+  "floranDescription" : "Sstuff comess out of the pipess from here",
+  "glitchDescription" : "Blasts items out",
+  "humanDescription" : "Items are ejected from the pipe system here",
+  "hylotlDescription" : "Items from the pipe system come from here",
+  "novakidDescription" : "Stuff in the pipes come out here",
 
   "inventoryIcon" : "ejector.png",
 

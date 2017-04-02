@@ -6,19 +6,20 @@ function init(virtual)
 
     self.detectArea = config.getParameter("detectArea")
     self.detectAreaOffset = config.getParameter("detectAreaOffset")
+    local objPosition = object.position()
     if type(self.detectArea) == "table" then
       --build rectangle for detection using object position and specified detectAreaOffset
       if type(self.detectAreaOffset) == "table" then
-        self.detectArea = {object.position()[1] + self.detectArea[1] + self.detectAreaOffset[1], object.position()[2] + self.detectArea[2] + self.detectAreaOffset[2]}
+        self.detectArea = {objPosition[1] + self.detectArea[1] + self.detectAreaOffset[1], objPosition[2] + self.detectArea[2] + self.detectAreaOffset[2]}
       else
-        self.detectArea = {object.position()[1] + self.detectArea[1], object.position()[2] + self.detectArea[2]}
+        self.detectArea = {objPosition[1] + self.detectArea[1], objPosition[2] + self.detectArea[2]}
       end
     end
 
     if type(self.detectAreaOffset) == "table" then
-      self.detectOrigin = {object.position()[1] + self.detectAreaOffset[1], object.position()[2] + self.detectAreaOffset[2]}
+      self.detectOrigin = {objPosition[1] + self.detectAreaOffset[1], objPosition[2] + self.detectAreaOffset[2]}
     else
-      self.detectOrigin = object.position()
+      self.detectOrigin = objPosition
     end
 
     self.modes = { "maxhp", "currenthp" }
@@ -59,8 +60,8 @@ function updateAnimationState()
 end
 
 function doDetect()
-  local entityIds = world.entityQuery(self.detectOrigin, self.detectArea, { notAnObject = true, order = "nearest" })
-  local nearestValid = firstValidEntity(entityIds)
+  local entityIds = world.entityQuery(self.detectOrigin, self.detectArea, { includedTypes = {"player", "monster", "npc"}, notAnObject = true, order = "nearest" })
+  local nearestValid = entityIds[1]
   onDetect(nearestValid)
 end
 
@@ -76,19 +77,6 @@ function onDetect(entityId)
   else
     datawire.sendData(0, "number", 0)
   end
-end
-  
-function firstValidEntity(entityIds)
-  local validTypes = {"player", "monster", "npc"}
-
-  for i, entityId in ipairs(entityIds) do
-    local entityType = world.entityType(entityIds[i])
-    for j, validType in ipairs(validTypes) do
-      if entityType == validType then return entityId end
-    end
-  end
-  
-  return false
 end
 
 function update(dt)

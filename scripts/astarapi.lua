@@ -92,7 +92,7 @@ function astarApi.addNode()
       if not left and not right then
         local tmpNode = Node(x, y)
         local fd = math.abs(astarApi.finalNode[1] - tmpNode[1]) < astarApi.maxDist and math.abs(astarApi.finalNode[2] - tmpNode[2]) < astarApi.maxDist
-        if fd and astarApi.isWalkable(tmpNode) then
+        if fd and not astarApi.isWalkable(tmpNode) then
           -- DEBUG
           --world.placeMaterial(n2v(tmpNode), "background", "ice")
           -- DEBUG
@@ -124,22 +124,22 @@ function astarApi.getNewFreeNode(node)
     y = node[2] - depth
       for x = node[1] - depth, node[1] + depth do
         local tmpNode = Node(x, y)
-        if astarApi.isWalkable(tmpNode) then return tmpNode end
+        if not astarApi.isWalkable(tmpNode) then return tmpNode end
       end
     y = node[2] + depth
       for x = node[1] - depth, node[1] + depth do
         local tmpNode = Node(x, y)
-        if astarApi.isWalkable(tmpNode) then return tmpNode end
+        if not astarApi.isWalkable(tmpNode) then return tmpNode end
       end
     x = node[1] - depth
       for y = node[2] - depth, node[2] + depth do
         local tmpNode = Node(x, y)
-        if astarApi.isWalkable(tmpNode) then return tmpNode end
+        if not astarApi.isWalkable(tmpNode) then return tmpNode end
       end
     x = node[1] + depth
       for y = node[2] - depth, node[2] + depth do
         local tmpNode = Node(x, y)
-        if astarApi.isWalkable(tmpNode) then return tmpNode end
+        if not astarApi.isWalkable(tmpNode) then return tmpNode end
       end  
   until (depth >= astarApi.searchDepth)
   return nil
@@ -150,11 +150,20 @@ end
 -- @return (Node) A walkable node or nil
 function astarApi.getWalkableNode(vec)
   local node = Node(vec[1], vec[2])
-  if not astarApi.isWalkable(node) then
+  if astarApi.isWalkable(node) then
     if astarApi.searchDepth > 0 then
       return astarApi.getNewFreeNode(node)
     else return nil end
   else return node end
+end
+
+function astarApi.isWalkable(node)
+  local one = astarApi.trect[1] + node[1]
+  local two = astarApi.trect[2] + node[2]
+  local three = astarApi.trect[3] + node[1]
+  local four = astarApi.trect[4] + node[2]
+  local region = { one, two, three, four }
+  return world.rectCollision(region)
 end
 
 --- Returns the reordered path from the starting node to the final node
@@ -229,7 +238,6 @@ function astarApi.setConfig(args)
   astarApi.tpt = args.triesPerTick or 100
   astarApi.tlimit = args.triesLimit or 3000
   astarApi.spd = args.moveSpeed or 4
-  astarApi.isWalkable = args.walkFunc or function(node) return not world.rectCollision({ astarApi.trect[1] + node[1], astarApi.trect[2] + node[2], astarApi.trect[3] + node[1], astarApi.trect[4] + node[2] }, true) end
 end
 
 --- Just an usage example, if you mind
@@ -237,16 +245,19 @@ end
 -- @param rect (rect4f) A rectangle to be used for collision testing
 -- @return (bool) A flag indicating whenever the path could be found
 function astarApi.flyTo(fdest, rect)
-  local dest = astarApi.floorVec(fdest)
+  local dest = fdest
   local f = (astarApi.pdest == nil) or (dest[1] ~= astarApi.pdest[1]) or (dest[2] ~= astarApi.pdest[2])
   if not astarApi.pdone or f then
-    if f or (astarApi.pth == nil) then astarApi.pth = coroutine.create(astarApi.getPath) end
+    if f or (astarApi.pth == nil) then
+      astarApi.pth = coroutine.create(astarApi.getPath)
+    end
     astarApi.pdest = dest
-    local res = { coroutine.resume(astarApi.pth, astarApi.floorVec(object.position()), dest, rect) }
-    if not res[1] then world.logInfo("%s", res)
+    local res = { coroutine.resume(astarApi.pth, astarApi.floorVec(mcontroller.position()), astarApi.floorVec(dest), rect) }
+    if not res[1] then
+      sb.logInfo("%s", res)
     elseif not res[2] then
       astarApi.pdone = false
-      entity.fly({ 0, 0 })
+      mcontroller.setVelocity({ 0, 0 })
       return true
     else
       astarApi.pdone = true
@@ -255,13 +266,11 @@ function astarApi.flyTo(fdest, rect)
     end
   end
   if astarApi.flyp == nil then return false end
-  local p = object.position()
-  if astarApi.pnode >= #astarApi.flyp then
-    entity.flyTo(fdest, true)
-  else
+  local p = mcontroller.position()
+  if astarApi.pnode < #astarApi.flyp then
     local n = astarApi.flyp[astarApi.pnode]
-    entity.fly(astarApi.dirVec({ n[1] - p[1] + 0.5, n[2] - p[2] + 0.5 }, astarApi.spd))
-    if world.magnitude(object.position(), n2v(astarApi.flyp[astarApi.pnode])) < 1.25 then
+    mcontroller.setVelocity(astarApi.dirVec({ n[1] - p[1], n[2] - p[2] }, astarApi.spd))
+    if world.magnitude(mcontroller.position(), n2v(astarApi.flyp[astarApi.pnode])) < 1.25 then
       astarApi.pnode = astarApi.pnode + 1
     end
   end
