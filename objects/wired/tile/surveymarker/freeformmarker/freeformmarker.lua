@@ -54,14 +54,14 @@ end
 
 function startScan()
   local scanInProgress = storage.timer > 0
-  if not scanInProgress and datawire.isOutputNodeConnected(0) then
+  if not scanInProgress and object.isOutputNodeConnected(0) then
     onTrigger()
     storage.isOrigin = true
 
     storage.scanTable = {}
     addScanCoords(object.position())
 
-    triggerConnectedMarkers("receiveSurveyTrigger", { self.markerType, object.id() })
+    triggerConnectedMarkers("receiveSurveyTrigger", { self.markerType, entity.id() })
   end
 end
 
@@ -90,11 +90,11 @@ function receiveSurveyResult(pos)
 end
 
 function finalizeSurvey()
-  --world.logInfo("received positions from %d markers: %s", #storage.scanTable, storage.scanTable)
+  --sb.logInfo("received positions from %d markers: %s", #storage.scanTable, storage.scanTable)
   
   local transmitSuccess = datawire.sendData(storage.scanTable, "area", "all")
   if transmitSuccess then
-    smashConnectedMarkers(object.id())
+    smashConnectedMarkers(entity.id())
   else
     storage.triggered = false
     storage.isOrigin = false
@@ -113,14 +113,18 @@ end
 function update(dt)
   datawire.update()
   
+  if storage.timer <= 0 then
+    return
+  end
+  
+  storage.timer = storage.timer - 1
   if storage.timer > 0 then
-    storage.timer = storage.timer - 1
-    if storage.timer <= 0 then
-      if storage.isOrigin then
-        finalizeSurvey()
-      else
-        storage.triggered = false
-      end
-    end
+    return
+  end
+  
+  if storage.isOrigin then
+    finalizeSurvey()
+  else
+    storage.triggered = false
   end
 end

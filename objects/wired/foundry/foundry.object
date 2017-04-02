@@ -8,7 +8,17 @@
   "race" : "generic",
   "interactAction" : "OpenCraftingInterface",
   "interactData" : {
-    "config" : "/interface/windowconfig/foundry.config",
+    "config" : "/interface/windowconfig/inventorstable.config",
+    "paneLayoutOverride" : {
+      "windowtitle" : {
+        "title" : "FOUNDRY",
+        "subtitle" : "  This gon' be gud!",
+        "icon" : {
+          "file" : "/interface/crafting/inventorstable.png"
+        }
+      }
+    },
+
     "filter" : [ "foundry" ]
   },
   "printable" : false,
