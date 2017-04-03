@@ -31,21 +31,22 @@
       "type" : "DirectionalForceRegion",
       //-2, 0, 1, 5
       //x1, y1, x2, y2
-      "rectRegion" : [-1, 2, 5, 3],
-      "offset": [0, -1],
-      "xTargetVelocity" : 20.0,
-      "yTargetVelocity" : 0,
+      "rectRegion" : [-2, 1, 2, 2],
+      "xTargetVelocity" : 4.0,
+      "yTargetVelocity" : -1,
       "controlForce" : 175,
+      "categoryBlacklist" : [ "player" ],
       "enabled" : false
     },
     "left" : {
       "type" : "DirectionalForceRegion",
       //-1, 0, 2, 5
       //x1, y1, x2, y2
-      "rectRegion" : [-3, 2, 2, 3],
-      "xTargetVelocity" : -20.0,
-      "yTargetVelocity" : 0,
+      "rectRegion" : [-2, 1, 2, 2],
+      "xTargetVelocity" : -4.0,
+      "yTargetVelocity" : -1,
       "controlForce" : 175,
+      "categoryBlacklist" : [ "player" ],
       "enabled" : false
     }
   },
