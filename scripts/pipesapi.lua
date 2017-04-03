@@ -1,3 +1,53 @@
+--PIPES
+StarFoundryPipesApi = {}
+local starFoundryPipes = {};
+local containerQuerys = {};
+
+function starFoundryPipes.createContainerSearch(sourceId, startPos, onFound, onEnd)
+  local search = {};
+  search.sourceId = sourceId;
+  search.current = {};
+  table.insert(search.current, startPos)
+  search.next = {};
+	query.onFound = onFound or function() return true end;
+	query.onEnd = onEnd or function() end;
+  query.alive = true
+  return query;
+end
+
+function StarFoundryPipesApi.searchForContainers(sourceEntityId, startPos, onContainersFound, onSearchEnd)
+  local query = starFoundryPipes.createContainerSearch(sourceEntityId, startPos, onContainersFound, onSearchEnd)
+  table.insert(containerQuerys, query)
+  return query;
+end
+
+function StarFoundryPipesApi.update()
+	for i = 1, #containerQuerys do
+		if starFoundryPipes.updateQuery(containerQuerys[i]) == false then
+			containerQuerys[i].active = false;
+			containerQuerys[i].onEnd();
+			table.remove(containerQuerys, i);
+			i = i - 1;
+		end
+	end
+end
+
+function starFoundryPipes.updateQuery(query)
+  --Treat the query as you would a linked list
+  if #query.currentNodes == 0 then
+    return false
+  end
+  for i = 1, #query.currentNodes do
+    local currentNode = query.currentNodes[i];
+    -- Check the container at the current node
+    -- Add pipes at current node
+  end
+  query.currentNodes = query.nextNodes;
+  query.nextNodes = {};
+	return query.alive;
+end
+
+
 --HOOKS
 
 --- Hook used for determining if an object connects to a specified position
@@ -6,16 +56,16 @@
 -- @param pipeDirection vec2 - direction of the pipe to see if the object connects
 -- @returns node ID if successful, false if unsuccessful
 function entityConnectsAt(pipeName, position, pipeDirection)
-  if pipes == nil or pipes.nodes[pipeName] == nil then
+  if pipes == nil or starFoundrystarFoundryPipes.nodes[pipeName] == nil then
     return false 
   end
   local entityPos = object.position()
   
-  for i,node in ipairs(pipes.nodes[pipeName]) do
+  for i,node in ipairs(starFoundrystarFoundryPipes.nodes[pipeName]) do
     local absNodePos = object.toAbsolutePosition(node.offset)
     local distance = world.distance(position, absNodePos)
-    if distance[1] == 0 and distance[2] == 0 and pipes.pipesConnect(node.dir, {pipeDirection}) then
-      return i
+    if distance[1] == 0 and distance[2] == 0 and starFoundrystarFoundryPipes.pipesConnect(node.dir, {pipeDirection}) then
+      return i 
     end
   end
   return false
@@ -45,10 +95,7 @@ function table.copy(table)
   return newTable
 end
 
---PIPES
-pipes = {}
-
-pipes.directions = {
+starFoundrystarFoundryPipes.directions = {
   horz = {{1,0}, {-1, 0}},
   vert = {{0, 1}, {0, -1}},
   b1 = {{1,0}, {0,1}},
@@ -66,27 +113,27 @@ pipes.directions = {
 }
 
 --- Initialize, always run this in init (when init args == false)
--- @param pipeTypes an array of pipe types (defined in itempipes.lua and liquidpipes.lua)
+-- @param pipeTypes an array of pipe types (defined in itemstarFoundryPipes.lua and liquidstarFoundryPipes.lua)
 -- @returns nil
-function pipes.init(pipeTypes)
+function starFoundrystarFoundryPipes.init(pipeTypes)
 
-  pipes.updateTimer = 1 --Should be set to the same as updateInterval so it gets entities on the first update
-  pipes.updateInterval = 1
+  starFoundrystarFoundryPipes.updateTimer = 1 --Should be set to the same as updateInterval so it gets entities on the first update
+  starFoundrystarFoundryPipes.updateInterval = 1
   
-  pipes.types = {}
-  pipes.nodes = {} 
-  pipes.nodeEntities = {}
+  starFoundrystarFoundryPipes.types = {}
+  starFoundrystarFoundryPipes.nodes = {} 
+  starFoundrystarFoundryPipes.nodeEntities = {}
   
   for _,pipeType in ipairs(pipeTypes) do
-    pipes.types[pipeType.pipeName] = pipeType
+    starFoundrystarFoundryPipes.types[pipeType.pipeName] = pipeType
   end
   
-  for pipeName,pipeType in pairs(pipes.types) do
-    pipes.nodes[pipeName] = config.getParameter(pipeType.nodesConfigParameter)
-    pipes.nodeEntities[pipeName] = {}
+  for pipeName,pipeType in pairs(starFoundrystarFoundryPipes.types) do
+    starFoundrystarFoundryPipes.nodes[pipeName] = config.getParameter(pipeType.nodesConfigParameter)
+    starFoundrystarFoundryPipes.nodeEntities[pipeName] = {}
   end
 
-  pipes.rejectNode = {}
+  starFoundrystarFoundryPipes.rejectNode = {}
 end
 
 --- Push, calls the put hook on the closest connected object that returns true
@@ -94,12 +141,12 @@ end
 -- @param nodeId number - ID of the node to push through
 -- @param args - The arguments to send to the put hook
 -- @returns Hook return if successful, false if unsuccessful
-function pipes.push(pipeName, nodeId, args)
-  if #pipes.nodeEntities[pipeName][nodeId] > 0 and not pipes.rejectNode[nodeId] then
-    for i,entity in ipairs(pipes.nodeEntities[pipeName][nodeId]) do
-      pipes.rejectNode[nodeId] = true
-      local entityReturn = world.callScriptedEntity(object.id, pipes.types[pipeName].hooks.put, args, object.nodeId)
-      pipes.rejectNode[nodeId] = false
+function starFoundrystarFoundryPipes.push(pipeName, nodeId, args)
+  if #starFoundrystarFoundryPipes.nodeEntities[pipeName][nodeId] > 0 and not starFoundrystarFoundryPipes.rejectNode[nodeId] then
+    for i,entity in ipairs(starFoundrystarFoundryPipes.nodeEntities[pipeName][nodeId]) do
+      starFoundrystarFoundryPipes.rejectNode[nodeId] = true
+      local entityReturn = world.callScriptedEntity(object.id, starFoundrystarFoundryPipes.types[pipeName].hooks.put, args, object.nodeId)
+      starFoundrystarFoundryPipes.rejectNode[nodeId] = false
       if entityReturn then return entityReturn end
     end
   end
@@ -111,12 +158,12 @@ end
 -- @param nodeId number - ID of the node to pull through
 -- @param args - The arguments to send to the hook
 -- @returns Hook return if successful, false if unsuccessful
-function pipes.pull(pipeName, nodeId, args)
-  if #pipes.nodeEntities[pipeName][nodeId] > 0 and not pipes.rejectNode[nodeId] then
-    for i,entity in ipairs(pipes.nodeEntities[pipeName][nodeId]) do
-      pipes.rejectNode[nodeId] = true
-      local entityReturn = world.callScriptedEntity(object.id, pipes.types[pipeName].hooks.get, args, object.nodeId)
-      pipes.rejectNode[nodeId] = false
+function starFoundrystarFoundryPipes.pull(pipeName, nodeId, args)
+  if #starFoundrystarFoundryPipes.nodeEntities[pipeName][nodeId] > 0 and not starFoundrystarFoundryPipes.rejectNode[nodeId] then
+    for i,entity in ipairs(starFoundrystarFoundryPipes.nodeEntities[pipeName][nodeId]) do
+      starFoundrystarFoundryPipes.rejectNode[nodeId] = true
+      local entityReturn = world.callScriptedEntity(object.id, starFoundrystarFoundryPipes.types[pipeName].hooks.get, args, object.nodeId)
+      starFoundrystarFoundryPipes.rejectNode[nodeId] = false
       if entityReturn then return entityReturn end
     end
   end
@@ -128,14 +175,14 @@ end
 -- @param nodeId number - ID of the node to peek through
 -- @param args - The arguments to send to the hook
 -- @returns Hook return if successful, false if unsuccessful
-function pipes.peekPush(pipeName, nodeId, args)
-  if #pipes.nodeEntities[pipeName][nodeId] > 0 and not pipes.rejectNode[nodeId] then
-    for i,entity in ipairs(pipes.nodeEntities[pipeName][nodeId]) do
-      pipes.rejectNode[nodeId] = true
-      local entityReturn = world.callScriptedEntity(object.id, pipes.types[pipeName].hooks.peekPut, args, object.nodeId)
-      pipes.rejectNode[nodeId] = false
+function starFoundrystarFoundryPipes.peekPush(pipeName, nodeId, args)
+  if #starFoundrystarFoundryPipes.nodeEntities[pipeName][nodeId] > 0 and not starFoundrystarFoundryPipes.rejectNode[nodeId] then
+    for i,entity in ipairs(starFoundrystarFoundryPipes.nodeEntities[pipeName][nodeId]) do
+      starFoundrystarFoundryPipes.rejectNode[nodeId] = true
+      local entityReturn = world.callScriptedEntity(object.id, starFoundrystarFoundryPipes.types[pipeName].hooks.peekPut, args, object.nodeId)
+      starFoundrystarFoundryPipes.rejectNode[nodeId] = false
       if entityReturn then return entityReturn end
-    end
+    end 
   end
   return false
 end
@@ -145,12 +192,12 @@ end
 -- @param nodeId number - ID of the node to peek through
 -- @param args - The arguments to send to the hook
 -- @returns Hook return if successful, false if unsuccessful
-function pipes.peekPull(pipeName, nodeId, args)
-  if #pipes.nodeEntities[pipeName][nodeId] > 0 and not pipes.rejectNode[nodeId] then
-    for i,entity in ipairs(pipes.nodeEntities[pipeName][nodeId]) do
-      pipes.rejectNode[nodeId] = true
-      local entityReturn = world.callScriptedEntity(object.id, pipes.types[pipeName].hooks.peekGet, args, object.nodeId)
-      pipes.rejectNode[nodeId] = false
+function starFoundrystarFoundryPipes.peekPull(pipeName, nodeId, args)
+  if #starFoundrystarFoundryPipes.nodeEntities[pipeName][nodeId] > 0 and not starFoundrystarFoundryPipes.rejectNode[nodeId] then
+    for i,entity in ipairs(starFoundrystarFoundryPipes.nodeEntities[pipeName][nodeId]) do
+      starFoundrystarFoundryPipes.rejectNode[nodeId] = true
+      local entityReturn = world.callScriptedEntity(object.id, starFoundrystarFoundryPipes.types[pipeName].hooks.peekGet, args, object.nodeId)
+      starFoundrystarFoundryPipes.rejectNode[nodeId] = false
       if entityReturn then return entityReturn end
     end
   end
@@ -161,7 +208,7 @@ end
 -- @param firstDirection vec2 - vector2 of direction to match
 -- @param secondDirections array of vec2s - List of directions to match against
 -- @returns true if the secondDirections can connect to the firstDirection
-function pipes.pipesConnect(firstDirection, secondDirections)
+function starFoundrystarFoundryPipes.pipesConnect(firstDirection, secondDirections)
   for _,secondDirection in ipairs(secondDirections) do
     if firstDirection[1] == -secondDirection[1] and firstDirection[2] == -secondDirection[2] then
       return true
@@ -175,9 +222,9 @@ end
 -- @param position vec2 - world position to check
 -- @param layer - layer to check ("foreground" or "background")
 -- @returns Hook return if successful, false if unsuccessful
-function pipes.tileDirections(pipeName, position, layer)
+function starFoundrystarFoundryPipes.tileDirections(pipeName, position, layer)
   local checkedTile = world.material(position, layer)
-  for _,tileType in ipairs(pipes.types[pipeName].tiles) do
+  for _,tileType in ipairs(starFoundrystarFoundryPipes.types[pipeName].tiles) do
     if checkedTile == tileType then
       return true
     end
@@ -191,20 +238,20 @@ end
 -- @param layerMode - layer to prioritise
 -- @param direction (optional) - direction to compare to, if specified it will return false if the pipe does not connect
 -- @returns Hook return if successful, false if unsuccessful
-function pipes.getPipeTileData(pipeName, position, direction)
+function starFoundrystarFoundryPipes.getPipeTileData(pipeName, position, direction)
   local fore = "foreground"
   local back = "background"
   
-  local foregroundCheck = pipes.tileDirections(pipeName, position, fore)
+  local foregroundCheck = starFoundryPipes.tileDirections(pipeName, position, fore)
   
   --Return relevant values
   if foregroundCheck then
-    return foregroundCheck, fore
+    return foregroundCheck
   end
   
-  local backgroundCheck = pipes.tileDirections(pipeName, position, back)
+  local backgroundCheck = starFoundryPipes.tileDirections(pipeName, position, back)
   if backgroundCheck then
-    return backgroundCheck, back
+    return backgroundCheck
   end
   return false
 end
@@ -212,16 +259,16 @@ end
 --- Gets all the connected entities for a pipe type
 -- @param pipeName string - name of the pipe type to use
 -- @returns list of connected entities with format {nodeId = {{id = 1, nodeId = 1, path = {{1,0},{2,0}}}}
-function pipes.getNodeEntities(pipeName)
+function starFoundryPipes.getNodeEntities(pipeName)
   local position = object.position()
   local nodeEntities = {}
   local nodesTable = {}
   
-  if pipes.nodes[pipeName] == nil then
+  if starFoundryPipes.nodes[pipeName] == nil then
     return {}
   end
-  for i,pipeNode in ipairs(pipes.nodes[pipeName]) do
-    nodeEntities[i] = pipes.walkPipes(pipeName, pipeNode.offset, pipeNode.dir)
+  for i,pipeNode in ipairs(starFoundryPipes.nodes[pipeName]) do
+    nodeEntities[i] = starFoundryPipes.walkPipes(pipeName, pipeNode.offset, pipeNode.dir)
   end
   return nodeEntities
   
@@ -230,21 +277,22 @@ end
 --- Should be run in main
 -- @param dt number - delta time
 -- @returns nil
-function pipes.update(dt)
-  local position = object.position()
-  pipes.updateTimer = pipes.updateTimer + dt
+--function starFoundryPipes.update(dt)
+	--starFoundryPipes.updateQuerys()
+  --local position = object.position()
+  --starFoundryPipes.updateTimer = starFoundryPipes.updateTimer + dt
   
-  if pipes.updateTimer >= pipes.updateInterval then
+  --if starFoundryPipes.updateTimer >= starFoundryPipes.updateInterval then
   
     --Get connected entities
-    for pipeName,pipeType in pairs(pipes.types) do
+  --  for pipeName,pipeType in pairs(starFoundryPipes.types) do
       --Get inbound
-      pipes.nodeEntities[pipeName] = pipes.getNodeEntities(pipeName)
-    end
+  --    starFoundryPipes.nodeEntities[pipeName] = starFoundryPipes.getNodeEntities(pipeName)
+  --  end
     
-    pipes.updateTimer = 0
-  end
-end
+  --  starFoundryPipes.updateTimer = 0
+  --end
+--end
 
 --- Calls a hook on the entity to see if it connects to the specified pipe
 -- @param pipeName string - name of pipe type to use
@@ -252,7 +300,7 @@ end
 -- @param position vec2 - position of the pipe tile
 -- @param direction vec2 - direction of the pipe tile
 -- @returns nil
-function pipes.validEntity(pipeName, entityId, position)
+function starFoundryPipes.validEntity(pipeName, entityId, position)
   if world.entityExists(entityId) then
     return world.callScriptedEntity(entityId, "entityConnectsAt", pipeName, position)
   else
@@ -265,40 +313,46 @@ end
 -- @param startOffset vec2 - Position *relative to the object* to start looking, should be set to a node's position
 -- @param startDir vec2 - Direction to start looking in, should be set to a node's direction
 -- @returns List of connected entities with ID, remote Node ID, and path info, sorted by nearest-first
-function pipes.walkPipes(pipeName, startOffset, startDir)
+function starFoundryPipes.walkPipes(pipeName, startOffset, startDir)
   local validEntities = {}
   local visitedTiles = {}
-  local tilesToVisit = {{pos = {startOffset[1] + startDir[1], startOffset[2] + startDir[2]}, path = {}}}
+  local tilesToVisit = {{pos = {startOffset[1] + startDir[1], startOffset[2] + startDir[2]}, path = {}, directionName = "initial"}}
   local prevPipe = nil
   --left, right, down up
   local directions = {{-1,0},{1,0},{0,-1},{0,1}}
+  local directionNames = {"left", "right","down","up"}
+  
+  sb.logInfo("Walking pipes")
   
   while #tilesToVisit > 0 do
     local tile = tilesToVisit[1]
-    if world.tileIsOccupied(tile.pos, true) or world.tileIsOccupied(tile.pos, false) then
-      local pipeExists = pipes.getPipeTileData(pipeName, object.toAbsolutePosition(tile.pos))
-      
-      --If a tile, add connected spaces to the visit list
-      if pipeExists then
+    local absTilePos = object.toAbsolutePosition(tile.pos)
+    if world.tileIsOccupied(absTilePos, true) or world.tileIsOccupied(absTilePos, false) then
+      --sb.logInfo("checking pipe x: " .. absTilePos[1])
+      --sb.logInfo("checking pipe y: " .. absTilePos[2])
+      visitedTiles[tile.pos[1].."."..tile.pos[2]] = true --Add to global visited
+      local currentTileIsPipe = starFoundryPipes.getPipeTileData(pipeName, absTilePos)
+      --sb.logInfo("Checking pipe direction " .. tile.directionName)
+      if currentTileIsPipe then
+        sb.logInfo(tile.directionName .. " Is Pipe")
         tile.path[#tile.path+1] = tile.pos --Add tile to the path
-        visitedTiles[tile.pos[1].."."..tile.pos[2]] = true --Add to global visited
         for _,direction in ipairs(directions) do
+          --If a pipe, add connected spaces to the visit list
           local newPos = {tile.pos[1] + direction[1], tile.pos[2] + direction[2]}
-          if visitedTiles[newPos[1].."."..newPos[2]] == nil then --Don't check the tile we just came from, and don't check already visited ones
-            local newTile = {pos = newPos, path = table.copy(tile.path)}
+          local isPrevTile = tile.prevTile and newPos[1] == tile.prevTile[1] and newPos[2] == tile.prevTile[2]
+          if not isPrevTile and visitedTiles[newPos[1] .. "." .. newPos[2]] == nil then --Don't check the tile we just came from, and don't check already visited ones
+            local newTile = {pos = newPos, path = table.copy(tile.path), directionName = directionNames[_], prevTile = tile}
             table.insert(tilesToVisit, 2, newTile)
           end
         end
-      --If not a tile or material, check for objects that might connect
       else
         --local connectedObjects = world.objectQuery(object.toAbsolutePosition(tile.pos), 2)
-        local absTilePos = object.toAbsolutePosition(tile.pos)
         local options = { withoutEntityId = entity.id()}
         local connectedObjects = world.objectLineQuery(absTilePos, {absTilePos[1] + 1, absTilePos[2] + 2}, options)
         if connectedObjects then
           for key,objectId in ipairs(connectedObjects) do
             if objectId >= 0 then
-              local entNode = pipes.validEntity(pipeName, objectId, object.toAbsolutePosition(tile.pos))
+              local entNode = starFoundryPipes.validEntity(pipeName, objectId, object.toAbsolutePosition(tile.pos))
               if objectId ~= entity.id() and entNode and table.contains(validEntities, objectId) == false then
                 validEntities[#validEntities+1] = {id = objectId, nodeId = entNode, path = table.copy(tile.path)}
               end
@@ -306,9 +360,13 @@ function pipes.walkPipes(pipeName, startOffset, startDir)
           end
         end
       end
+      sb.logInfo("done checking pipe x: " .. absTilePos[1])
+      sb.logInfo("done checking pipe y: " .. absTilePos[2])
       table.remove(tilesToVisit, 1)
     end
   end
+  
+  sb.logInfo("done checking pipes")
 
   table.sort(validEntities, function(a,b) return #a.path < #b.path end)
   return validEntities
