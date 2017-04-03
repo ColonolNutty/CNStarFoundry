@@ -178,10 +178,8 @@ end
 function pipes.tileDirections(pipeName, position, layer)
   local checkedTile = world.material(position, layer)
   for _,tileType in ipairs(pipes.types[pipeName].tiles) do
-    for orientation,directions in pairs(pipes.directions) do
-      if checkedTile == tileType .. orientation then
-        return directions
-      end
+    if checkedTile == tileType then
+      return true
     end
   end
   return false
@@ -193,19 +191,20 @@ end
 -- @param layerMode - layer to prioritise
 -- @param direction (optional) - direction to compare to, if specified it will return false if the pipe does not connect
 -- @returns Hook return if successful, false if unsuccessful
-function pipes.getPipeTileData(pipeName, position, layerMode, direction)
-  local layerSwitch = {foreground = "background", background = "foreground"}
+function pipes.getPipeTileData(pipeName, position, direction)
+  local fore = "foreground"
+  local back = "background"
   
-  layerMode = layerMode or "foreground"
-  
-  local firstCheck = pipes.tileDirections(pipeName, position, layerMode)
-  local secondCheck = pipes.tileDirections(pipeName, position, layerSwitch[layerMode])
+  local foregroundCheck = pipes.tileDirections(pipeName, position, fore)
   
   --Return relevant values
-  if firstCheck and (direction == nil or pipes.pipesConnect(direction, firstCheck)) then
-    return firstCheck, layerMode
-  elseif secondCheck and (direction == nil or pipes.pipesConnect(direction, secondCheck)) then
-    return secondCheck, layerSwitch[layerMode]
+  if foregroundCheck then
+    return foregroundCheck, fore
+  end
+  
+  local backgroundCheck = pipes.tileDirections(pipeName, position, back)
+  if backgroundCheck then
+    return backgroundCheck, back
   end
   return false
 end
@@ -218,7 +217,9 @@ function pipes.getNodeEntities(pipeName)
   local nodeEntities = {}
   local nodesTable = {}
   
-  if pipes.nodes[pipeName] == nil then return {} end
+  if pipes.nodes[pipeName] == nil then
+    return {}
+  end
   for i,pipeNode in ipairs(pipes.nodes[pipeName]) do
     nodeEntities[i] = pipes.walkPipes(pipeName, pipeNode.offset, pipeNode.dir)
   end
@@ -251,9 +252,9 @@ end
 -- @param position vec2 - position of the pipe tile
 -- @param direction vec2 - direction of the pipe tile
 -- @returns nil
-function pipes.validEntity(pipeName, entityId, position, direction)
+function pipes.validEntity(pipeName, entityId, position)
   if world.entityExists(entityId) then
-    return world.callScriptedEntity(entityId, "entityConnectsAt", pipeName, position, direction)
+    return world.callScriptedEntity(entityId, "entityConnectsAt", pipeName, position)
   else
     return false
   end
@@ -267,42 +268,46 @@ end
 function pipes.walkPipes(pipeName, startOffset, startDir)
   local validEntities = {}
   local visitedTiles = {}
-  local tilesToVisit = {{pos = {startOffset[1] + startDir[1], startOffset[2] + startDir[2]}, layer = "foreground", dir = startDir, path = {}}}
-  local layerMode = nil
+  local tilesToVisit = {{pos = {startOffset[1] + startDir[1], startOffset[2] + startDir[2]}, path = {}}}
+  local prevPipe = nil
+  --left, right, down up
+  local directions = {{-1,0},{1,0},{0,-1},{0,1}}
   
   while #tilesToVisit > 0 do
     local tile = tilesToVisit[1]
-    local pipeDirections, layerMode = pipes.getPipeTileData(pipeName, object.toAbsolutePosition(tile.pos), tile.layer, tile.dir)
-    
-    --If a tile, add connected spaces to the visit list
-    if pipeDirections then
-      tile.path[#tile.path+1] = tile.pos --Add tile to the path
-      visitedTiles[tile.pos[1].."."..tile.pos[2]] = true --Add to global visited
-      for _,dir in ipairs(pipeDirections) do
-        local newPos = {tile.pos[1] + dir[1], tile.pos[2] + dir[2]}
-        if not pipes.pipesConnect(dir, {tile.dir}) and visitedTiles[newPos[1].."."..newPos[2]] == nil then --Don't check the tile we just came from, and don't check already visited ones
-          local newTile = {pos = newPos, layer = layerMode, dir = dir, path = table.copy(tile.path)}
-          table.insert(tilesToVisit, 2, newTile)
+    if world.tileIsOccupied(tile.pos, true) or world.tileIsOccupied(tile.pos, false) then
+      local pipeExists = pipes.getPipeTileData(pipeName, object.toAbsolutePosition(tile.pos))
+      
+      --If a tile, add connected spaces to the visit list
+      if pipeExists then
+        tile.path[#tile.path+1] = tile.pos --Add tile to the path
+        visitedTiles[tile.pos[1].."."..tile.pos[2]] = true --Add to global visited
+        for _,direction in ipairs(directions) do
+          local newPos = {tile.pos[1] + direction[1], tile.pos[2] + direction[2]}
+          if visitedTiles[newPos[1].."."..newPos[2]] == nil then --Don't check the tile we just came from, and don't check already visited ones
+            local newTile = {pos = newPos, path = table.copy(tile.path)}
+            table.insert(tilesToVisit, 2, newTile)
+          end
         end
-      end
-    --If not a tile, check for objects that might connect
-    elseif not pipeDirections then
-      --local connectedObjects = world.objectQuery(object.toAbsolutePosition(tile.pos), 2)
-      local absTilePos = object.toAbsolutePosition(tile.pos)
-      local options = { includedTypes = {"object"}, withoutEntityId = entity.id()}
-      local connectedObjects = world.entityLineQuery(absTilePos, {absTilePos[1] + 1, absTilePos[2] + 2})--, options)
-      if connectedObjects then
-        for key,objectId in ipairs(connectedObjects) do
-          if objectId >= 0 then
-            local entNode = pipes.validEntity(pipeName, objectId, object.toAbsolutePosition(tile.pos), tile.dir)
-            if objectId ~= entity.id() and entNode and table.contains(validEntities, objectId) == false then
-              validEntities[#validEntities+1] = {id = objectId, nodeId = entNode, path = table.copy(tile.path)}
+      --If not a tile or material, check for objects that might connect
+      else
+        --local connectedObjects = world.objectQuery(object.toAbsolutePosition(tile.pos), 2)
+        local absTilePos = object.toAbsolutePosition(tile.pos)
+        local options = { withoutEntityId = entity.id()}
+        local connectedObjects = world.objectLineQuery(absTilePos, {absTilePos[1] + 1, absTilePos[2] + 2}, options)
+        if connectedObjects then
+          for key,objectId in ipairs(connectedObjects) do
+            if objectId >= 0 then
+              local entNode = pipes.validEntity(pipeName, objectId, object.toAbsolutePosition(tile.pos))
+              if objectId ~= entity.id() and entNode and table.contains(validEntities, objectId) == false then
+                validEntities[#validEntities+1] = {id = objectId, nodeId = entNode, path = table.copy(tile.path)}
+              end
             end
           end
         end
       end
+      table.remove(tilesToVisit, 1)
     end
-    table.remove(tilesToVisit, 1)
   end
 
   table.sort(validEntities, function(a,b) return #a.path < #b.path end)

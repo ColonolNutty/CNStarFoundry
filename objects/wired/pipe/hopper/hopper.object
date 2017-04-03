@@ -11,13 +11,6 @@
   "printable" : false,
   "subtitle" : "",
 
-  "apexDescription" : "Hopper",
-  "avianDescription" : "Hopper",
-  "floranDescription" : "Hopper",
-  "glitchDescription" : "Hopper",
-  "humanDescription" : "Hopper",
-  "hylotlDescription" : "Hopper",
-
   "inventoryIcon" : "hopper.png",
 
   "orientations" : [

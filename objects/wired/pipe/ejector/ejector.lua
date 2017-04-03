@@ -19,6 +19,13 @@ function update(dt, args)
   checkDirs[2] = {1, 0}
   checkDirs[3] = {0, 1}
   
+  local translatePositions = {}
+  translatePositions[0] = {0,0}
+  translatePositions[1] = {1,0}
+  translatePositions[2] = {1,1}
+  translatePositions[3] = {0,1}
+  
+  
 
   if #pipes.nodeEntities["item"] <= 0 then
     return
@@ -27,9 +34,17 @@ function update(dt, args)
   local angle = 0
   for i= 0, 3 do
     angle = (math.pi / 2) * i
+    if(i == 0) then
+    
+    elseif i == 1 then
+    
+    elseif i == 2 then
+    
+    end
     if #pipes.nodeEntities["item"][i+1] > 0 then
       animator.resetTransformationGroup("ejector")
       animator.rotateTransformationGroup("ejector", angle)
+      animator.translateTransformationGroup("ejector", translatePositions[i])
       self.usedNode = i + 1
     elseif i == 3 then --Not connected to an object, look for pipes instead
       for i= 0, 3 do
@@ -39,6 +54,7 @@ function update(dt, args)
         if pipeDirections then
           animator.resetTransformationGroup("ejector")
           animator.rotateTransformationGroup("ejector", angle)
+          animator.translateTransformationGroup("ejector", translatePositions[i])
           self.usedNode = i + 1
         end
       end
