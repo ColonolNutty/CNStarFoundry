@@ -28,9 +28,8 @@
   "physicsForces" : {
     "right" : {
       "type" : "DirectionalForceRegion",
-      //-2, 0, 1, 5
-      //x1, y1, x2, y2
-      "rectRegion" : [0, -2, 20, 2],
+      //left, down, right, up (from bottom left of object or the origin)
+      "rectRegion" : [0, 0, 13, 4],
       "xTargetVelocity" : 210.0,
       "yTargetVelocity" : 0,
       "controlForce" : 210,
@@ -38,9 +37,8 @@
     },
     "left" : {
       "type" : "DirectionalForceRegion",
-      //-1, 0, 2, 5
-      //x1, y1, x2, y2
-      "rectRegion" : [-20, -2, 3, 2],
+      //left, down, right, up (from bottom left of object or the origin)
+      "rectRegion" : [-13, 0, 3, 4],
       "xTargetVelocity" : -210.0,
       "yTargetVelocity" : 0,
       "controlForce" : 210,
