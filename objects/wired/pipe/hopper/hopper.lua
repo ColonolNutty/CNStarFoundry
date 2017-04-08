@@ -30,7 +30,8 @@ function update(dt, args)
     if activeQuery ~= nil then
       activeQuery.active = false;
     end
-    return
+    pickupDroppedItems();
+    return;
   end
   local pos = object.position();
   if activeQuery == nil then
@@ -77,4 +78,26 @@ function onContainerNotFound()
   end
   --Removes the items
   world.containerTakeAll(entity.id());
+end
+
+function pickupDroppedItems()
+  local itemDropList = findItemDrops();
+  for i, itemId in ipairs(itemDropList) do
+    sb.logInfo("checking item: " .. itemId);
+    if storage.ignoreIds[itemId] then
+      return;
+    end
+    local item = world.takeItemDrop(itemId, entity.id())
+    if item == nil then
+      return;
+    end
+    local fitCount = world.containerItemsCanFit(entity.id(), item)
+    if fitCount ~= nil and fitCount == item.count then
+      sb.logInfo("adding item");
+        world.containerAddItems(entity.id(), item);
+    else
+      sb.logInfo("ejecting item");
+      ejectItem(item);
+    end
+  end
 end
