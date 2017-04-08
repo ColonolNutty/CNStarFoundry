@@ -20,7 +20,6 @@ end
 function update(dt, args)
   StarFoundryPipesApi.update()
   --local shouldUpdate = storage.timer > storage.pickupCooldown and (isItemNodeConnected(1) or isItemNodeConnected(2))
-  local result = false;
   local items = world.containerItems(entity.id())
   local itemCount = 0;
   for key, item in pairs(items) do
@@ -70,7 +69,6 @@ function onContainerFound(container)
 end
 
 function onContainerNotFound()
-  activeQuery.active = false
   activeQuery = nil
   local items = world.containerItems(entity.id());
   for key, item in pairs(items) do
@@ -83,7 +81,6 @@ end
 function pickupDroppedItems()
   local itemDropList = findItemDrops();
   for i, itemId in ipairs(itemDropList) do
-    sb.logInfo("checking item: " .. itemId);
     if storage.ignoreIds[itemId] then
       return;
     end
@@ -93,10 +90,8 @@ function pickupDroppedItems()
     end
     local fitCount = world.containerItemsCanFit(entity.id(), item)
     if fitCount ~= nil and fitCount == item.count then
-      sb.logInfo("adding item");
         world.containerAddItems(entity.id(), item);
     else
-      sb.logInfo("ejecting item");
       ejectItem(item);
     end
   end

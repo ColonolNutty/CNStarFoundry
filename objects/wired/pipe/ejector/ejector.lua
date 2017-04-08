@@ -1,85 +1,43 @@
+require "/scripts/pipes/itempipes.lua"
+require "/scripts/pipesapi.lua"
+
+local activeQuery = nil;
+
 function init(virtual)
   if not virtual then
-    pipes.init({itemPipe})
+    storage.pipeTypes = itemPipe.tiles;
+    
     local objPosition = object.position()
-    self.dropPoint = {objPosition[1] + 0.5, objPosition[2] + 0.5} --Temporarily spawn inside until someone bothers adding several drop points based on orientation
+    storage.dropPoint = {objPosition[1] + 0.5, objPosition[2] + 0.5}
     
-    self.usedNode = 0
+    storage.usedNode = 0
   end
 end
 
---------------------------------------------------------------------------------
 function update(dt, args)
-  pipes.update(dt)
+  StarFoundryPipesApi.update()
   
-  local position = object.position()
-  local checkDirs = {}
-  checkDirs[0] = {-1, 0}
-  checkDirs[1] = {0, -1}
-  checkDirs[2] = {1, 0}
-  checkDirs[3] = {0, 1}
-  
-  local translatePositions = {}
-  translatePositions[0] = {0,0}
-  translatePositions[1] = {1,0}
-  translatePositions[2] = {1,1}
-  translatePositions[3] = {0,1}
-  
-  
-
-  if #pipes.nodeEntities["item"] <= 0 then
-    return
-  end
-  
-  local angle = 0
-  for i= 0, 3 do
-    angle = (math.pi / 2) * i
-    if(i == 0) then
-    
-    elseif i == 1 then
-    
-    elseif i == 2 then
-    
-    end
-    if #pipes.nodeEntities["item"][i+1] > 0 then
-      animator.resetTransformationGroup("ejector")
-      animator.rotateTransformationGroup("ejector", angle)
-      animator.translateTransformationGroup("ejector", translatePositions[i])
-      self.usedNode = i + 1
-    elseif i == 3 then --Not connected to an object, look for pipes instead
-      for i= 0, 3 do
-        angle = (math.pi / 2) * i
-        local tilePos = {position[1] + checkDirs[i][1], position[2] + checkDirs[i][2]}
-        local pipeDirections = pipes.getPipeTileData("item", tilePos, "foreground", checkDirs[i])
-        if pipeDirections then
-          animator.resetTransformationGroup("ejector")
-          animator.rotateTransformationGroup("ejector", angle)
-          animator.translateTransformationGroup("ejector", translatePositions[i])
-          self.usedNode = i + 1
-        end
-      end
-    end
+  if activeQuery == nil then
+    activeQuery = StarFoundryPipesApi.searchForContainers(entity.id(), object.position(), onContainerFound, onContainerNotFound, storage.pipeTypes)
+    activeQuery.active = true;
   end
 end
 
-function beforeItemPut(item, nodeId)
-  if nodeId == self.usedNode then
-    return true
-  end
+function ejectItem(item)
+  world.spawnItem(item.name, storage.dropPoint, item.count)
 end
 
-function onItemPut(item, nodeId)
-  --sb.logInfo(item)
-  --sb.logInfo(nodeId)
-  local itemPut = item and nodeId == self.usedNode
-  if itemPut then
-    local position = object.position()
-    --sb.logInfo("Putting item %s", item[1])
-    if next(item.data) == nil then 
-      world.spawnItem(item.name, self.dropPoint, item.count)
-    else
-      world.spawnItem(item.name, self.dropPoint, item.count, item.data)
-    end
+function onContainerFound(container)
+  local containerId = container.id;
+  local containerItems = world.containerItems(containerId);
+  for _,item in pairs(containerItems) do
+    sb.logInfo("consuming " .. item.name .. " at: " .. _ - 1);
+    world.containerConsumeAt(containerId, _ - 1, item.count)
+    ejectItem(item);
   end
-  return itemPut
+  return true;
+end
+
+function onContainerNotFound()
+  activeQuery = nil;
 end
