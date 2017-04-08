@@ -12,7 +12,6 @@ end
 function StarFoundryPipesApi.update()
 	for i = 1, #containerQuerys do
 		if starFoundryPipes.updateQuery(containerQuerys[i]) == false then
-      sb.logInfo("removing container query");
 			containerQuerys[i].active = false;
 			containerQuerys[i].onEnd();
 			table.remove(containerQuerys, i);
@@ -28,6 +27,7 @@ function starFoundryPipes.createContainerSearch(sourceId, startPos, onFound, onE
   table.insert(search.current, startPos);
   search.next = {};
   search.pipeList = {};
+  search.searchedContainerIds = {};
   search.pipeTypes = pipeTypes;
 	search.onFound = onFound or function() return true end;
 	search.onEnd = onEnd or function() end;
@@ -41,50 +41,41 @@ function starFoundryPipes.updateQuery(search)
   end
   --Treat the search as you would a linked list
   if #search.current == 0 then
-    sb.logInfo("current is empty");
     return false;
   end
   for i = 1, #search.current do
     local currentNode = search.current[i];
-    sb.logInfo("current node x: " .. currentNode[1])
-    sb.logInfo("current node y: " .. currentNode[2])
     -- Check the container at the current node and see if it can be used
     if starFoundryPipes.containerIsValid(currentNode, search) ~= true then
-      sb.logInfo("container not valid ");
       return false;
     end
     -- Add pipes at current node
     starFoundryPipes.findPipes(currentNode, search);
   end
-  sb.logInfo("setting next");
   search.current = search.next;
   search.next = {};
 	return search.alive;
 end
 
 function starFoundryPipes.containerIsValid(position, search)
-    sb.logInfo("excluding id: " .. search.sourceId);
     local containerIds = world.objectQuery(position, 5, { withoutEntityId = search.sourceId, order = "nearest"});
     for i = 1, #containerIds do
       local containerId = containerIds[i];
       local containerSize = world.containerSize(containerId)
-      sb.logInfo("Looking at container: " .. containerId);
-      sb.logInfo("Container Size: " .. containerSize);
-      if containerId ~= nil and containerId ~= search.sourceId and containerSize ~= nil and starFoundryPipes.doesContainerContainPosition(containerId, position) then
-        sb.logInfo("found container");
-        local container = { id = containerId };
-        if search.onFound(container) ~= true then
-          sb.logInfo("container couldn't fit items");
-          return false;
+      if containerId ~= nil and containerId ~= search.sourceId and starFoundryPipes.shouldSearchContainer(search.searchedContainerIds, containerId) then
+        if containerSize ~= nil and starFoundryPipes.doesContainerContainPosition(containerId, position) then
+            table.insert(search.searchedContainerIds, containerId)
+            local container = { id = containerId };
+            if search.onFound(container) ~= true then
+              return false;
+            end
         end
       end
     end
-    sb.logInfo("container is valid");
     return true;
 end
 
 function starFoundryPipes.doesContainerContainPosition(containerId, position)
-  sb.logInfo("Check if container contains " );
   local containerPosition = world.entityPosition(containerId);
   local containerSpaces = world.objectSpaces(containerId);
   local posX = position[1];
@@ -131,4 +122,14 @@ function starFoundryPipes.checkPipeType(position, search)
     end
   end
   return false;
+end
+
+function starFoundryPipes.shouldSearchContainer(containerList, containerId)
+  for i = 1, #containerList do
+    local containerSearched = containerList[i]
+    if containerSearched == containerId then
+      return false;
+    end
+  end
+  return true;
 end

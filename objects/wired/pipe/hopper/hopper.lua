@@ -28,7 +28,6 @@ function update(dt, args)
   end
   if itemCount <= 0 then
     if activeQuery ~= nil then
-      sb.logInfo("setting active to false")
       activeQuery.active = false;
     end
     return
@@ -46,44 +45,30 @@ function findItemDrops()
   return world.itemDropQuery(pos, {pos[1] + 2, pos[2] + 1})
 end
 
--- function canPushItem(item)
---   return peekPushItem(1, item) or peekPushItem(2, item)
--- end
-
 function ejectItem(item)
   local itemDropId = world.spawnItem(item.name, storage.dropPoint, item.count)
   storage.ignoreIds[itemDropId] = true
-
-  -- world.logInfo("ejected item with id %s", itemDropId)
-  -- world.logInfo(item)
 end
 
 function onContainerFound(container)
-  sb.logInfo("container found " .. container.id);
-  sb.logInfo("My Id " .. entity.id());
   local items = world.containerItems(entity.id());
   local containerId = container.id;
   local totalcount = 0;
   for key, item in pairs(items) do
     local fitCount = world.containerItemsCanFit(containerId, item)
-    sb.logInfo("container fit count " .. fitCount);
     if fitCount ~= nil and fitCount == item.count then
-        sb.logInfo("container can fit my item");
         totalcount = totalcount + item.count;
         world.containerAddItems(containerId, item);
         world.containerConsume(entity.id(), item);
     end
   end
   if totalcount <= 0 then
-    sb.logInfo("no items were removed from self");
     return true;
   end
-  sb.logInfo("on found is false");
   return false;
 end
 
 function onContainerNotFound()
-  sb.logInfo("container not found");
   activeQuery.active = false
   activeQuery = nil
   local items = world.containerItems(entity.id());
