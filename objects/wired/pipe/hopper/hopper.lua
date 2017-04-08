@@ -1,52 +1,44 @@
+require "/scripts/pipes/itempipes.lua"
+require "/scripts/pipesapi.lua"
+
+local activeQuery = nil;
+
 function init(virtual)
   if not virtual then
-    pipes.init({itemPipe})
+    storage.pipeTypes = itemPipe.tiles;
 
-    self.timer = 0
-    self.pickupCooldown = 0.2
+    storage.timer = 0
+    storage.pickupCooldown = 0.2
 
-    self.ignoreIds = {}
+    storage.ignoreIds = {}
     local objPosition = object.position()
-    self.dropPoint = {objPosition[1] + 1, objPosition[2] + 1.5}
+    storage.dropPoint = {world.xwrap(objPosition[1] + 1), objPosition[2] + 1.5}
   end
 end
 
 --------------------------------------------------------------------------------
 function update(dt, args)
-  pipes.update(dt)
-  local shouldUpdate = self.timer > self.pickupCooldown and (isItemNodeConnected(1) or isItemNodeConnected(2))
-  if shouldUpdate then
-    --Try to push from inventory first
-    local result = false;
-    local items = world.containerItems(entity.id())
-    for key, item in pairs(items) do
-      result = pushItem(1, item) or pushItem(2, item)
-      if result then
-        if result ~= true then
-          item.count = result --amount accepted
-        end
-        world.containerConsume(entity.id(), item)
-        break
-      end
-    end
-
-    --If inventory fails
-    if not result then
-      local itemDropList = findItemDrops()
-      if #itemDropList > 0 then
-        for i, itemId in ipairs(itemDropList) do
-          if not self.ignoreIds[itemId] then
-            local item = world.takeItemDrop(itemId, entity.id())
-            if item then
-              outputItem(item)
-            end
-          end
-        end
-      end
-    end
-    self.timer = 0
+  StarFoundryPipesApi.update()
+  --local shouldUpdate = storage.timer > storage.pickupCooldown and (isItemNodeConnected(1) or isItemNodeConnected(2))
+  local result = false;
+  local items = world.containerItems(entity.id())
+  local itemCount = 0;
+  for key, item in pairs(items) do
+    itemCount = itemCount + item.count;
   end
-  self.timer = self.timer + dt
+  if itemCount <= 0 then
+    if activeQuery ~= nil then
+      sb.logInfo("setting active to false")
+      activeQuery.active = false;
+    end
+    return
+  end
+  local pos = object.position();
+  if activeQuery == nil then
+    activeQuery = StarFoundryPipesApi.searchForContainers(entity.id(), pos, onContainerFound, onContainerNotFound, storage.pipeTypes)
+  else
+    activeQuery.active = true;
+  end
 end
 
 function findItemDrops()
@@ -58,31 +50,46 @@ end
 --   return peekPushItem(1, item) or peekPushItem(2, item)
 -- end
 
-function outputItem(item)
-  -- try to push to both nodes (in a dangerous and confusing way!)
-  local result = pushItem(1, item) or pushItem(2, item)
-  
-  -- pushed only some of the item
-  if result and result ~= true then
-    item.count = item.count - result
-    ejectItem(item)
-  end
-  
-  -- failed to push item
-  if not result then
-    ejectItem(item)
-  end
-end
-
 function ejectItem(item)
-  local itemDropId
-  if next(item.data) == nil then
-    itemDropId = world.spawnItem(item.name, self.dropPoint, item.count)
-  else
-    itemDropId = world.spawnItem(item.name, self.dropPoint, item.count, item.data)
-  end
-  self.ignoreIds[itemDropId] = true
+  local itemDropId = world.spawnItem(item.name, storage.dropPoint, item.count)
+  storage.ignoreIds[itemDropId] = true
 
   -- world.logInfo("ejected item with id %s", itemDropId)
   -- world.logInfo(item)
+end
+
+function onContainerFound(container)
+  sb.logInfo("container found " .. container.id);
+  sb.logInfo("My Id " .. entity.id());
+  local items = world.containerItems(entity.id());
+  local containerId = container.id;
+  local totalcount = 0;
+  for key, item in pairs(items) do
+    local fitCount = world.containerItemsCanFit(containerId, item)
+    sb.logInfo("container fit count " .. fitCount);
+    if fitCount ~= nil and fitCount == item.count then
+        sb.logInfo("container can fit my item");
+        totalcount = totalcount + item.count;
+        world.containerAddItems(containerId, item);
+        world.containerConsume(entity.id(), item);
+    end
+  end
+  if totalcount <= 0 then
+    sb.logInfo("no items were removed from self");
+    return true;
+  end
+  sb.logInfo("on found is false");
+  return false;
+end
+
+function onContainerNotFound()
+  sb.logInfo("container not found");
+  activeQuery.active = false
+  activeQuery = nil
+  local items = world.containerItems(entity.id());
+  for key, item in pairs(items) do
+    ejectItem(item)
+  end
+  --Removes the items
+  world.containerTakeAll(entity.id());
 end
