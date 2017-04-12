@@ -4,7 +4,7 @@
     { "item" : "energycrystal", "count" : 1 }
   ],
   "output" : {
-    "item" : "relay",
+    "item" : "relayCNS",
     "count" : 1
   },
   "groups" : [ "foundry", "all", "energy" ]

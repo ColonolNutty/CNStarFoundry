@@ -1,7 +1,7 @@
 {
   "input" : [ ],
   "output" : {
-    "item" : "relay",
+    "item" : "relayCNS",
     "count" : 1
   },
   "groups" : [ "mod", "sfmod" ]

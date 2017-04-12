@@ -1,5 +1,5 @@
 {
-  "objectName" : "relay",
+  "objectName" : "relayCNS",
   "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Transfers energy between devices within range.",
@@ -9,11 +9,11 @@
   "price" : 1000,
   "printable" : false,
 
-  "inventoryIcon" : "relayicon.png",
+  "inventoryIcon" : "relayCNSicon.png",
   "orientations" : [
     {
 	  //left
-      "image" : "relay.png:wall",
+      "image" : "relayCNS.png:wall",
 
       "collision" : "solid",
       "anchors" : [ "left" ],
@@ -28,7 +28,7 @@
     },
     {
 	  //right
-      "image" : "relay.png:wall",
+      "image" : "relayCNS.png:wall",
       "imagePosition" : [1, 0],
 
       "collision" : "solid",
@@ -40,7 +40,7 @@
     },
     {
 	  //bottom
-      "image" : "relay.png:wall",
+      "image" : "relayCNS.png:wall",
       "imagePosition" : [1, 0],
 
       "collision" : "solid",
@@ -52,7 +52,7 @@
     },
     {
 	  //top
-      "image" : "relay.png:wall",
+      "image" : "relayCNS.png:wall",
       "imagePosition" : [1, 0],
 
       "collision" : "solid",
@@ -64,7 +64,7 @@
     },
     {
 
-      "image" : "relay.png:air",
+      "image" : "relayCNS.png:air",
       "imagePosition" : [0, 0],
       "anchors" : [ ],
       "fgAnchors" : [ ],
@@ -73,15 +73,15 @@
     }
   ],
 
-  "scripts" : [ "/scripts/energy.lua", "relay.lua" ],
+  "scripts" : [ "/scripts/energy.lua", "relayCNS.lua" ],
   "scriptDelta" : 5,
 
   "spaceScan" : 0.5,
   "imagePosition" : [0, 0],
 
-  "animation" : "relay.animation",
+  "animation" : "relayCNS.animation",
   "animationParts" : {
-    "relay" : "relay.png"
+    "relay" : "relayCNS.png"
   },
   "animationPosition" : [0, 0]
 }

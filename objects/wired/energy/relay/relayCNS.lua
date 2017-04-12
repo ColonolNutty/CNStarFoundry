@@ -19,7 +19,7 @@ function onEnergyNeedsCheck(energyNeeds)
 end
 
 function update(dt)
-  energy.update()
+  energy.update(dt)
 end
 
 function setRelayVariant(newTag)
