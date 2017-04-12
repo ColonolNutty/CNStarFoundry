@@ -31,7 +31,6 @@ function onContainerFound(container)
   local containerId = container.id;
   local containerItems = world.containerItems(containerId);
   for _,item in pairs(containerItems) do
-    sb.logInfo("consuming " .. item.name .. " at: " .. _ - 1);
     world.containerConsumeAt(containerId, _ - 1, item.count)
     ejectItem(item);
   end
