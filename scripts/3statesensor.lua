@@ -1,3 +1,5 @@
+local enableDebug = false;
+
 function init(virtual)
   if not virtual then
     self.detectThresholdHigh = config.getParameter("detectThresholdHigh")
@@ -17,10 +19,10 @@ function getSample()
 end
 
 function update(dt)
-  datawire.update(dt)
+  datawire.update()
   
   local sample = getSample()
-  datawire.sendData(sample, "number", "all", dt)
+  datawire.sendData(sample, "number", "all")
 
   if sample >= self.detectThresholdLow then
     object.setOutputNodeLevel(0, true)

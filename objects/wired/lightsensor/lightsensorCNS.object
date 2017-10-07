@@ -1,5 +1,5 @@
 {
-  "objectName" : "lightsensor",
+  "objectName" : "lightsensorCNS",
   "colonyTags" : ["wired"],
   "rarity" : "Common",
   "description" : "Activates the bottom node in dim light and the top node in bright light.",
@@ -9,39 +9,39 @@
   "price" : 1000,
   "printable" : false,
 
-  "inventoryIcon" : "lightsensoricon.png",
+  "inventoryIcon" : "lightsensorCNSicon.png",
 
   "orientations" : [
     {
-      "image" : "lightsensor.png:default.min",
+      "image" : "lightsensorCNS.png:default.min",
       "imagePosition" : [0, 0],
 
       "spaceScan" : 0.1,
       "anchors" : [ "background" ]
     },
     {
-      "image" : "lightsensor.png:default.min",
+      "image" : "lightsensorCNS.png:default.min",
       "imagePosition" : [0, 0],
 
       "spaceScan" : 0.1,
       "anchors" : [ "bottom" ]
     },
     {
-      "image" : "lightsensor.png:default.min",
+      "image" : "lightsensorCNS.png:default.min",
       "imagePosition" : [0, 0],
 
       "spaceScan" : 0.1,
       "anchors" : [ "top" ]
     },
     {
-      "image" : "lightsensor.png:default.min",
+      "image" : "lightsensorCNS.png:default.min",
       "imagePosition" : [0, 0],
 
       "spaceScan" : 0.1,
       "anchors" : [ "left" ]
     },
     {
-      "image" : "lightsensor.png:default.min",
+      "image" : "lightsensorCNS.png:default.min",
       "imagePosition" : [0, 0],
 
       "spaceScan" : 0.1,
@@ -49,12 +49,12 @@
     }
   ],
 
-  "scripts" : [ "/scripts/datawire.lua", "/scripts/3statesensor.lua", "lightsensor.lua" ],
+  "scripts" : [ "/scripts/datawire.lua", "/scripts/3statesensor.lua", "lightsensorCNS.lua" ],
   "scriptDelta" : 10,
 
   "animation" : "/objects/wired/3statesensor.animation",
   "animationParts" : {
-    "sensor" : "lightsensor.png"
+    "sensor" : "lightsensorCNS.png"
   },
   "animationPosition" : [0, 0],
 

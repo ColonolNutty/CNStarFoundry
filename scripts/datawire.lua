@@ -1,3 +1,5 @@
+local enableDebug = false;
+
 datawire = {}
 
 --- this should be called by the implementing object in its own init()
@@ -34,14 +36,14 @@ end
 --- Creates connection tables for inbound and outbound nodes
 function datawire.createConnectionTable()
   datawire.outboundConnections = {}
-	  --sb.logInfo("(datawire) creating outputs ")
+  logData("(datawire) creating outputs ")
   local i = 0
   while i < object.outputNodeCount() do
-	--sb.logInfo("(datawire) found some outputs")
+    logData("(datawire) found some outputs")
     local connInfo = object.getOutputNodeIds(i)
     local entityIds = {}
     for k, v in pairs(connInfo) do
-	  --sb.logInfo("(datawire) creating outputs with " .. k)
+      logData("(datawire) creating outputs with " .. k)
       entityIds[#entityIds + 1] = k
     end
     datawire.outboundConnections[i] = entityIds
@@ -49,23 +51,23 @@ function datawire.createConnectionTable()
   end
 
   datawire.inboundConnections = {}
-  --sb.logInfo("(datawire) creating inputs")
+  logData("(datawire) creating inputs")
   local connInfos
   i = 0
   while i < object.inputNodeCount() do
-	--sb.logInfo("(datawire) found some inputs")
+    logData("(datawire) found some inputs")
     connInfos = object.getInputNodeIds(i)
     for j, connInfo in pairs(connInfos) do
       datawire.inboundConnections[j] = i
-	  --sb.logInfo("(datawire) creating inputs with " .. j)
-	  --sb.logInfo("(datawire) creating inputs with " .. connInfo)
+      logData("(datawire) creating inputs with " .. j)
+      logData("(datawire) creating inputs with " .. connInfo)
     end
     i = i + 1
   end
 
-  --world.logInfo(string.format("%s (id %d) created connection tables for %d outbound and %d inbound nodes", config.getParameter("objectName"), object.id(), object.outputNodeCount(), object.outputNodeCount()))
-  --world.logInfo("outbound: %s", datawire.outboundConnections)
-  --world.logInfo("inbound: %s", datawire.inboundConnections)
+  logData(string.format("%s (id %d) created connection tables for %d outbound and %d inbound nodes", config.getParameter("objectName"), entity.id(), object.outputNodeCount(), object.outputNodeCount()))
+  logData("outbound: %s", datawire.outboundConnections)
+  logData("inbound: %s", datawire.inboundConnections)
 end
 
 --- determine whether there is a valid recipient on the specified outbound node
@@ -83,23 +85,23 @@ end
 function datawire.sendData(data, dataType, nodeId)
   -- don't transmit if connection tables haven't been built
   if not datawire.initialized then
-	--sb.logInfo("Not ready yet")
+    logData("Not ready yet")
     return false
   end
   
-  --sb.logInfo("(datawire) Sending data")
+  logData("(datawire) Sending data")
 
   local transmitSuccess = false
 
   if nodeId == "all" then
     for k, v in pairs(datawire.outboundConnections) do
-	  --sb.logInfo("(datawire) Sending data to output " .. k)
+      logData("(datawire) Sending data to output " .. k)
       transmitSuccess = datawire.sendData(data, dataType, k) or transmitSuccess
     end
   else
     if datawire.outboundConnections[nodeId] and #datawire.outboundConnections[nodeId] > 0 then 
       for i, entityId in ipairs(datawire.outboundConnections[nodeId]) do
-	    ----sb.logInfo("sending data to " .. entityId)
+        logData("sending data to " .. entityId)
         if entityId ~= entity.id() then
           transmitSuccess = world.callScriptedEntity(entityId, "datawire.receiveData", { data, dataType, entity.id() }) or transmitSuccess
         end
@@ -107,10 +109,10 @@ function datawire.sendData(data, dataType, nodeId)
     end
   end
 
-  -- if not transmitSuccess then
-  --   world.logInfo(string.format("DataWire: %s (id %d) FAILED to send data of type %s", config.getParameter("objectName"), object.id(), dataType))
-  --   world.logInfo(data)
-  -- end
+  if not transmitSuccess then
+    logData(string.format("DataWire: %s (id %d) FAILED to send data of type %s", config.getParameter("objectName"), entity.id(), dataType))
+    logData(data)
+  end
 
   return transmitSuccess
 end
@@ -119,36 +121,40 @@ end
 -- @param data (args[1]) the data received
 -- @param dataType (args[2]) the data type received ("boolean", "number", "string", "area", etc.)
 -- @param sourceEntityId (args[3]) the id of the sending entity, which can be use for an imperfect node association
+-- @param sourceName (args[4]) the name of the object sending data
 -- @returns true if valid data was received
 function datawire.receiveData(args)
   --unpack args
   local data = args[1]
   local dataType = args[2]
   local sourceEntityId = args[3]
+  local sourceName = world.callScriptedEntity(sourceEntityId, "config.getParameter", "objectName")
   
-  ----sb.logInfo("receiving " .. data .. " from " .. sourceEntityId .. " in " .. entity.id() .. " my name is " .. object.name())
+  logData("receiving " .. data .. " from " .. sourceEntityId .. " in " .. entity.id() .. " my name is " .. object.name())
 
-  ----sb.logInfo("%s %d sent me this %s %s", world.callScriptedEntity(sourceEntityId, "config.getParameter", "objectName"), sourceEntityId, dataType, data)
+  logData("%s %d sent me this %s %s", sourceName, sourceEntityId, dataType, data)
 
   --convert entityId to nodeId
   local nodeId = datawire.inboundConnections[sourceEntityId]
   
   if nodeId == nil then
-	----sb.logInfo("Data not received from: " .. world.callScriptedEntity(sourceEntityId, "config.getParameter", "objectName"))
-   
-
+    logData("Data not received from: " .. sourceName)
     return false
   elseif validateData and validateData(data, dataType, nodeId, sourceEntityId) then
     if onValidDataReceived then
       onValidDataReceived(data, dataType, nodeId, sourceEntityId)
     end
 
-    -- world.logInfo(string.format("DataWire: %s received data of type %s from %d", config.getParameter("objectName"), dataType, sourceEntityId))
-
+    logData(string.format("DataWire: %s received data of type %s from %d", config.getParameter("objectName"), dataType, sourceEntityId))
     return true
   else
-    -- world.logInfo("DataWire: %s received INVALID data of type %s from entity %d: %s", config.getParameter("objectName"), dataType, sourceEntityId, data)
-    
+    logData("DataWire: %s received INVALID data of type %s from entity %d: %s", config.getParameter("objectName"), dataType, sourceEntityId, data)
     return false
+  end
+end
+
+function logData(msg)
+  if enableDebug then
+    sb.logInfo(msg)
   end
 end
