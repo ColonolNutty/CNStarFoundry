@@ -37,7 +37,7 @@
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "laserdiode" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "layerswap" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "levitationpad" } },
-	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "lightsensorCNS" } },
+	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "lightsensorCNSF" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "linkdisplay" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "linkdisplaysmall" } },
 	{ "op": "add", "path": "/defaultBlueprints/tier1/-", "value": { "item" : "liquidextractor" } },

@@ -3,6 +3,6 @@
     { "item" : "laserdiode", "count" : 1 },
     { "item" : "siliconboard", "count" : 1 }
   ],
-  "output" : { "item" : "lightsensorCNS", "count" : 1 },
+  "output" : { "item" : "lightsensorCNSF", "count" : 1 },
   "groups" : [ "foundry", "all", "logic" ]
 }
