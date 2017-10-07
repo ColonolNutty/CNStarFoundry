@@ -16,10 +16,10 @@ function die()
   local position = object.position()
   if energy.getEnergy() == 0 then
     world.spawnItem("cnsfbattery", {position[1] + 0.5, position[2] + 1}, 1)
-  elseif energy.getUnusedCapacity() == 0 then
-    world.spawnItem("fullbattery", {position[1] + 0.5, position[2] + 1}, 1, {savedEnergy=energy.getEnergy()})
+  elseif not energy.canReceiveEnergy() then
+    world.spawnItem("fullbattery", {position[1] + 0.5, position[2] + 1}, 1, { savedEnergy = energy.getEnergy()})
   else
-    world.spawnItem("cnsfbattery", {position[1] + 0.5, position[2] + 1}, 1, {savedEnergy=energy.getEnergy()})
+    world.spawnItem("cnsfbattery", {position[1] + 0.5, position[2] + 1}, 1, { savedEnergy = energy.getEnergy()})
   end
 
   energy.die()

@@ -1,4 +1,5 @@
 energy = {}
+local energyInternalAPI = {}
 
 -- Initializes the energy module (MUST BE CALLED IN OBJECT init() FUNCTION)
 function energy.init(args)
@@ -107,7 +108,7 @@ function energy.update(dt)
       energy.collisionBlocks = {}
       local pos = object.position()
       for i, block in ipairs(collisionBlocks) do
-        local blockHash = energy.blockHash({block[1] + pos[1], block[2] + pos[2]})
+        local blockHash = energyInternalAPI.blockHash({block[1] + pos[1], block[2] + pos[2]})
         energy.collisionBlocks[blockHash] = true
       end
     end
@@ -132,16 +133,6 @@ end
 -- Returns how much energy the object currently holds
 function energy.getEnergy()
   return storage.curEnergy
-end
-
--- sets the current energy pool (and provides a place to update animations, etc.)
-function energy.setEnergy(amount)
-  if amount ~= energy.getEnergy() then
-    storage.curEnergy = amount
-    if onEnergyChange then
-      onEnergyChange(amount)
-    end
-  end
 end
 
 -- gets the available energy to send
@@ -176,11 +167,11 @@ end
 function energy.addEnergy(amount)
   local newEnergy = energy.getEnergy() + amount
   if newEnergy <= energy.getCapacity() then
-    energy.setEnergy(newEnergy)
+    energyInternalAPI.setEnergy(newEnergy)
     return amount
   else
     local addedEnergy = energy.getUnusedCapacity()
-    energy.setEnergy(energy.getCapacity())
+    energyInternalAPI.setEnergy(energy.getCapacity())
     return addedEnergy
   end
 end
@@ -190,10 +181,10 @@ end
 function energy.removeEnergy(amount, entityId)
   local newEnergy = energy.getEnergy() - amount
   if newEnergy <= 0 then
-    energy.setEnergy(0)
+    energyInternalAPI.setEnergy(0)
     return amount + newEnergy
   else
-    energy.setEnergy(newEnergy)
+    energyInternalAPI.setEnergy(newEnergy)
     return amount
   end
 end
@@ -228,143 +219,41 @@ function energy.canReceiveEnergy()
   return energy.getUnusedCapacity() > 0
 end
 
--- compute all the configuration stuff for the connection and projectile effect
--- TODO: divide rather than duplicate this work between connecting objects
-function energy.makeConnectionConfig(entityId)
-  local config = {}
-  local srcPos = energy.getProjectileSourcePosition()
-  local tarPos = world.callScriptedEntity(entityId, "energy.getProjectileSourcePosition")
-  config.aimVector = world.distance(tarPos, srcPos) --{tarPos[1] - srcPos[1], tarPos[2] - srcPos[2]}
-  config.srcPos = srcPos
-  config.tarPos = tarPos
-  
-  config.distance = world.magnitude(srcPos, tarPos)
-  config.speed = (config.distance / 1.2) -- denominator must == projectile's timeToLive
-  -- Just leaving the code for solid collision checking there, not not using it for now
-  config.blocked = energy.checkLoS(srcPos, tarPos, entityId)
-  --config.blocked = world.lineCollision(srcPos, tarPos) -- world.lineCollision is marginally faster
-  config.isRelay = world.callScriptedEntity(entityId, "energy.isRelay")
-  -- if config.isRelay then
-  --   world.logInfo("%s %d thinks %d is a relay", entity.objectName, entity.id(), entityId)
-  -- else
-  --   world.logInfo("%s %d thinks %d is NOT a relay", entity.objectName, entity.id(), entityId)
-  -- end
-  return config
-end
-
--- Check line of sight from one position to another
-function energy.checkLoS(srcPos, tarPos, entityId)
-  local ignoreBlocksSrc = energy.getCollisionBlocks()
-  local ignoreBlocksTar = world.callScriptedEntity(entityId, "energy.getCollisionBlocks")
-  if ignoreBlocksSrc or ignoreBlocksTar or srcPos[1] < energy.linkRange or tarPos[1] < energy.linkRange then
-    local collisionBlocks = world.collisionBlocksAlongLine(srcPos, tarPos)
-    return energy.checkCollisionBlocks(collisionBlocks, ignoreBlocksSrc, ignoreBlocksTar)
-  else
-    return world.lineCollision(srcPos, tarPos)
-  end
-end
-
--- Check collision with collision blocks filtered out
-function energy.checkCollisionBlocks(collisionBlocks, ignoreBlocksSrc, ignoreBlocksTar)
-  for i, colBlock in ipairs(collisionBlocks) do
-    local colBlockHash = energy.blockHash(colBlock)
-    if not ((ignoreBlocksSrc and ignoreBlocksSrc[colBlockHash]) or (ignoreBlocksTar and ignoreBlocksTar[colBlockHash])) then
-      --this block is not ignored by either side
-      return true
-    end
-  end
-
-  --default to false if all blocks are ignored
-  return false
-end
-
--- Get collision blocks of this entity
-function energy.getCollisionBlocks()
-  return energy.collisionBlocks
-end
-
--- Get a stringified representation of a block
-function energy.blockHash(blockPos)
-  return string.format("%d,%d", blockPos[1], blockPos[2])
-end
-
 -- get the source position for the visual effect (TODO: replace with something better)
 function energy.getProjectileSourcePosition()
   return energy.nodePosition
 end
 
---adds appropriate entries into energy.connections and energy.sortedConnections
-function energy.addToConnectionTable(entityId)
-  if energy.connections[entityId] == nil then
-    local cConfig = energy.makeConnectionConfig(entityId)
-    energy.connections[entityId] = cConfig
-
-    --insert into the proper place in sortedConnections (ordered by distance, with receivers before relays)
-    local insertIndex = false
-    for i, cId in ipairs(energy.sortedConnections) do
-      local cConfig2 = energy.connections[cId]
-      if cConfig.isRelay == cConfig2.isRelay then
-        -- world.logInfo("comparing distance %f to %f", cConfig.distance, cConfig2.distance)
-        if cConfig.distance < cConfig2.distance then
-          -- if cConfig.isRelay then
-          --   world.logInfo("inserting relays in order of distance")
-          -- else
-          --   world.logInfo("inserting non-relays in order of distance")
-          -- end
-          insertIndex = i
-          break
-        end
-      elseif cConfig2.isRelay and not cConfig.isRelay then
-        -- world.logInfo("inserting after relay")
-        insertIndex = i
-        break
-      end
-    end
-    if not insertIndex then
-      -- world.logInfo("inserting at end")
-      insertIndex = #energy.sortedConnections + 1
-    end
-    table.insert(energy.sortedConnections, tonumber(insertIndex), entityId)
-  end
-end
-
 -- connects to the specified entity id
 function energy.connect(entityId)
-  energy.addToConnectionTable(entityId)
+  if(not world.entityExists(entityId)) then
+    energy.disconnect(entityId)
+    return 
+  end
+  energyInternalAPI.addToConnectionTable(entityId)
   world.callScriptedEntity(entityId, "energy.onConnect", entity.id())
 end
 
 -- callback for energy.connect
 function energy.onConnect(entityId)
   -- if self.energyInitialized then
-    energy.addToConnectionTable(entityId)
+    energyInternalAPI.addToConnectionTable(entityId)
   -- else
   --   world.logInfo("%s %d wasn't initialized at connection time! hopefully we'll connect later...", entity.objectName, entity.id())
   -- end
 end
 
--- removes the appropriate entries from energy.connections and energy.sortedConnections
-function energy.removeFromConnectionTable(entityId)
-  energy.connections[entityId] = nil
-  for i, cId in ipairs(energy.sortedConnections) do
-    if cId == entityId then
-      table.remove(energy.sortedConnections, i)
-      break
-    end
-  end
-  -- world.logInfo("%s %d disconnected from %d:", entity.objectName, entity.id(), entityId)
-  -- world.logInfo(energy.sortedConnections)
-end
-
 -- disconnects from the specified entity id
 function energy.disconnect(entityId)
-  world.callScriptedEntity(entityId, "energy.onDisconnect", entity.id())
-  energy.removeFromConnectionTable(entityId)
+  if(world.entityExists(entityId)) then
+    world.callScriptedEntity(entityId, "energy.onDisconnect", entity.id())
+  end
+  energyInternalAPI.removeFromConnectionTable(entityId)
 end
 
 -- callback for energy.disconnect
 function energy.onDisconnect(entityId)
-  energy.removeFromConnectionTable(entityId)
+  energyInternalAPI.removeFromConnectionTable(entityId)
 end
 
 -- Returns a list of connected entity id's
@@ -397,7 +286,7 @@ end
 -- performs periodic LoS checks on connected entities
 function energy.checkConnections()
   for entityId, pConfig in pairs(energy.connections) do
-    energy.connections[entityId].blocked = energy.checkLoS(pConfig.srcPos, pConfig.tarPos, entityId)
+    energy.connections[entityId].blocked = energyInternalAPI.checkLoS(pConfig.srcPos, pConfig.tarPos, entityId)
   end
 end
 
@@ -438,7 +327,7 @@ function energy.energyNeedsQuery(energyNeeds)
         -- end
         
         if energyNeeds["total"] > prevTotal then
-          energy.showTransferEffect(entityId)
+          energyInternalAPI.showTransferEffect(entityId)
         end
       end
     end
@@ -505,8 +394,128 @@ function energy.sendEnergy(amount)
   -- world.logInfo("%s %d successfully sent %d energy", entity.objectName, entity.id(), totalSent)
 end
 
+-------------------------------------------------
+
+-- sets the current energy pool (and provides a place to update animations, etc.)
+function energyInternalAPI.setEnergy(amount)
+  if amount ~= energy.getEnergy() then
+    storage.curEnergy = amount
+    if onEnergyChange then
+      onEnergyChange(amount)
+    end
+  end
+end
+
+-- compute all the configuration stuff for the connection and projectile effect
+-- TODO: divide rather than duplicate this work between connecting objects
+function energyInternalAPI.makeConnectionConfig(entityId)
+  local config = {}
+  local srcPos = energy.getProjectileSourcePosition()
+  local tarPos = world.callScriptedEntity(entityId, "energy.getProjectileSourcePosition")
+  config.aimVector = world.distance(tarPos, srcPos) --{tarPos[1] - srcPos[1], tarPos[2] - srcPos[2]}
+  config.srcPos = srcPos
+  config.tarPos = tarPos
+  
+  config.distance = world.magnitude(srcPos, tarPos)
+  config.speed = (config.distance / 1.2) -- denominator must == projectile's timeToLive
+  -- Just leaving the code for solid collision checking there, not not using it for now
+  config.blocked = energyInternalAPI.checkLoS(srcPos, tarPos, entityId)
+  --config.blocked = world.lineCollision(srcPos, tarPos) -- world.lineCollision is marginally faster
+  config.isRelay = world.callScriptedEntity(entityId, "energy.isRelay")
+  -- if config.isRelay then
+  --   world.logInfo("%s %d thinks %d is a relay", entity.objectName, entity.id(), entityId)
+  -- else
+  --   world.logInfo("%s %d thinks %d is NOT a relay", entity.objectName, entity.id(), entityId)
+  -- end
+  return config
+end
+
+-- Check line of sight from one position to another
+function energyInternalAPI.checkLoS(srcPos, tarPos, entityId)
+  local ignoreBlocksSrc = energyInternalAPI.getCollisionBlocks()
+  local ignoreBlocksTar = world.callScriptedEntity(entityId, "energyInternalAPI.getCollisionBlocks")
+  if ignoreBlocksSrc or ignoreBlocksTar or srcPos[1] < energy.linkRange or tarPos[1] < energy.linkRange then
+    local collisionBlocks = world.collisionBlocksAlongLine(srcPos, tarPos)
+    return energyInternalAPI.checkCollisionBlocks(collisionBlocks, ignoreBlocksSrc, ignoreBlocksTar)
+  else
+    return world.lineCollision(srcPos, tarPos)
+  end
+end
+
+-- Check collision with collision blocks filtered out
+function energyInternalAPI.checkCollisionBlocks(collisionBlocks, ignoreBlocksSrc, ignoreBlocksTar)
+  for i, colBlock in ipairs(collisionBlocks) do
+    local colBlockHash = energyInternalAPI.blockHash(colBlock)
+    if not ((ignoreBlocksSrc and ignoreBlocksSrc[colBlockHash]) or (ignoreBlocksTar and ignoreBlocksTar[colBlockHash])) then
+      --this block is not ignored by either side
+      return true
+    end
+  end
+
+  --default to false if all blocks are ignored
+  return false
+end
+
+-- Get collision blocks of this entity
+function energyInternalAPI.getCollisionBlocks()
+  return energy.collisionBlocks
+end
+
+-- Get a stringified representation of a block
+function energyInternalAPI.blockHash(blockPos)
+  return string.format("%d,%d", blockPos[1], blockPos[2])
+end
+
+--adds appropriate entries into energy.connections and energy.sortedConnections
+function energyInternalAPI.addToConnectionTable(entityId)
+  if energy.connections[entityId] == nil then
+    local cConfig = energyInternalAPI.makeConnectionConfig(entityId)
+    energy.connections[entityId] = cConfig
+
+    --insert into the proper place in sortedConnections (ordered by distance, with receivers before relays)
+    local insertIndex = false
+    for i, cId in ipairs(energy.sortedConnections) do
+      local cConfig2 = energy.connections[cId]
+      if cConfig.isRelay == cConfig2.isRelay then
+        -- world.logInfo("comparing distance %f to %f", cConfig.distance, cConfig2.distance)
+        if cConfig.distance < cConfig2.distance then
+          -- if cConfig.isRelay then
+          --   world.logInfo("inserting relays in order of distance")
+          -- else
+          --   world.logInfo("inserting non-relays in order of distance")
+          -- end
+          insertIndex = i
+          break
+        end
+      elseif cConfig2.isRelay and not cConfig.isRelay then
+        -- world.logInfo("inserting after relay")
+        insertIndex = i
+        break
+      end
+    end
+    if not insertIndex then
+      -- world.logInfo("inserting at end")
+      insertIndex = #energy.sortedConnections + 1
+    end
+    table.insert(energy.sortedConnections, tonumber(insertIndex), entityId)
+  end
+end
+
+-- removes the appropriate entries from energy.connections and energy.sortedConnections
+function energyInternalAPI.removeFromConnectionTable(entityId)
+  energy.connections[entityId] = nil
+  for i, cId in ipairs(energy.sortedConnections) do
+    if cId == entityId then
+      table.remove(energy.sortedConnections, i)
+      break
+    end
+  end
+  -- world.logInfo("%s %d disconnected from %d:", entity.objectName, entity.id(), entityId)
+  -- world.logInfo(energy.sortedConnections)
+end
+
 -- display a visual indicator of the energy transfer
-function energy.showTransferEffect(entityId)
+function energyInternalAPI.showTransferEffect(entityId)
   if not energy.transferShown[entityId] then
     local config = energy.connections[entityId]
     world.spawnProjectile("energytransfer", config.srcPos, entity.id(), config.aimVector, false, { speed=config.speed })

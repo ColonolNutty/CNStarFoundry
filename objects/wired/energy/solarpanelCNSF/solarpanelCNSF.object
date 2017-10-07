@@ -1,7 +1,7 @@
 {
-  "objectName" : "solarpanel",
+  "objectName" : "solarpanelCNSF",
   "rarity" : "Common",
-  "description" : "Generates energy without the waste of resources.",
+  "description" : "Generates energy without wasting resources.",
   "shortdescription" : "Solar Panel",
   "race" : "generic",
   "category" : "other",
@@ -14,28 +14,29 @@
   "humanDescription" : "todo",
   "hylotlDescription" : "todo",
 
-  "inventoryIcon" : "solarpanelicon.png",
+  "inventoryIcon" : "solarpanelCNSFicon.png",
   "orientations" : [
     {
-      "dualImage" : "solarpanel.png:solar.on",
+      "dualImage" : "solarpanelCNSF.png:solar.on",
       "imagePosition" : [-16, 0],
 
       "spaceScan" : 0.1,
       "anchors" : [ "bottom" ]
     }
   ],
-  "animation" : "solarpanel.animation",
+  "animation" : "solarpanelCNSF.animation",
   "animationParts" : {
-    "solar" : "solarpanel.png"
+    "solar" : "solarpanelCNSF.png"
   },
   "animationPosition" : [-16, 0],
 
   "scripts" : [
     "/scripts/energy.lua",
-    "solarpanel.lua"
+    "solarpanelCNSF.lua"
   ],
   "scriptDelta" : 120,
 
+  "energySendFreq": 2,
   "lightLevelThreshold" : 0.5,
   "energySendRate" : 1,
   "energyGenerationRate" : 1,

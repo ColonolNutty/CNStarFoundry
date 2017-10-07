@@ -5,9 +5,6 @@
     { "item" : "energycrystal", "count" : 1 },
     { "item" : "laserdiode", "count" : 1 }
   ],
-  "output" : {
-    "item" : "solarpanel",
-    "count" : 1
-  },
+  "output" : { "item" : "solarpanelCNSF", "count" : 1 },
   "groups" : [ "foundry", "all", "energy" ]
 }
